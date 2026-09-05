@@ -1,0 +1,214 @@
+// Light theme — Canonical v3.2 semantic mapping.
+// Every key here also exists in themes/_dark.scss; only the values differ.
+
+@use "../mixins" as *;
+
+@mixin light-theme-tokens {
+  color-scheme: light;
+
+  // ---- Brand / accent -------------------------------------------------
+  // Light anchor is locked at Electric Blue 7. header.ut may override
+  // --fluent-primary from UCI; tints below follow it through the brand ramp.
+  --fluent-primary: var(--ref-electric-blue-7);
+  --fluent-primary-hover: var(--ref-electric-blue-8);
+  --fluent-primary-active: var(--ref-electric-blue-9);
+  --fluent-primary-lightest: var(--ref-electric-blue-0); // brand-layer-0
+  --fluent-primary-lighter: var(--ref-electric-blue-1); // brand-layer-1
+  --fluent-primary-light: var(--ref-electric-blue-2); // brand-layer-2
+
+  // Functional accent — selection, focus, checked, current. Named apart from
+  // brand even though Light maps both to the same anchor.
+  --fluent-accent: var(--fluent-primary);
+  --fluent-accent-text: var(--ref-electric-blue-7);
+  --fluent-accent-soft: var(--ref-electric-blue-0);
+
+  --fluent-selection-bg: var(--ref-electric-blue-0);
+  --fluent-selection-text: var(--fluent-text);
+  --fluent-selection-border: var(--fluent-primary);
+
+  // ---- Neutrals -------------------------------------------------------
+  --fluent-white: #ffffff;
+  --fluent-black: #000000;
+
+  --fluent-bg-page: var(--ref-canvas-light); // page canvas
+  --fluent-bg: var(--ref-neutral-0); // surface-1 (chrome / cards)
+  --fluent-bg-card: var(--ref-neutral-0);
+  --fluent-bg-secondary: var(--ref-canvas-light); // surface-2 (nested)
+  --fluent-bg-hover: rgba(133, 133, 133, 0.1);
+  --fluent-bg-active: rgba(133, 133, 133, 0.2);
+
+  // ---- Text -----------------------------------------------------------
+  // #1A1A1A carries the "black body text" role; pure #000 is not used.
+  --fluent-text: var(--ref-text-light);
+  --fluent-text-secondary: var(--ref-neutral-interactive-9); // #3D3D3D
+  --fluent-text-muted: var(--ref-status-gray-7); // #636363 — smallest body-safe
+  --fluent-text-disabled: var(--ref-status-gray-7); // body-safe on all surfaces
+  --fluent-text-subtle: var(--ref-neutral-interactive-6); // #858585 graphics only
+  --fluent-text-on-primary: var(--ref-neutral-0);
+  // Text roles consume accent-text, not the raw accent: with the Canonical
+  // default the two are the same #024AD8, but a user-chosen accent may be too
+  // light for body text, and accent-text is the darkened, legible stop.
+  --fluent-text-link: var(--fluent-accent-text);
+  --fluent-text-link-hover: var(--fluent-primary-hover);
+
+  // ---- Borders --------------------------------------------------------
+  // border-subtle carries non-critical separation; border-control is for
+  // boundaries that are the only cue a control exists (>= 3:1).
+  --fluent-border: rgba(37, 44, 69, 0.1);
+  --fluent-border-hover: rgba(37, 44, 69, 0.18);
+  --fluent-border-strong: rgba(37, 44, 69, 0.18);
+  --fluent-border-control: var(--ref-neutral-interactive-6);
+  --fluent-border-active: var(--fluent-primary);
+
+  // ---- Feedback: bg / graphic / text triads ---------------------------
+  --fluent-success: var(--ref-status-green-6);
+  --fluent-success-light: var(--ref-status-green-0);
+  --fluent-success-text: var(--ref-status-green-11);
+  --fluent-warning: var(--ref-status-orange-6);
+  --fluent-warning-light: var(--ref-status-orange-0);
+  --fluent-warning-text: var(--ref-status-orange-11);
+  --fluent-warning-hover: var(--ref-status-orange-6);
+  --fluent-warning-active: var(--ref-status-orange-11);
+  --fluent-caution: var(--ref-status-yellow-6);
+  --fluent-caution-light: var(--ref-status-yellow-0);
+  --fluent-caution-text: var(--ref-status-yellow-11);
+  --fluent-error: var(--ref-status-red-6);
+  --fluent-error-light: var(--ref-status-red-0);
+  --fluent-error-text: var(--ref-status-red-11);
+  --fluent-error-hover: var(--ref-delete-8);
+  --fluent-error-active: var(--ref-delete-9);
+  --fluent-error-dark: var(--ref-status-red-11);
+  --fluent-info: var(--ref-status-gray-7);
+  --fluent-info-light: var(--ref-status-gray-0);
+  --fluent-info-text: var(--ref-status-gray-11);
+  --fluent-purple: var(--ref-status-purple-6); // Help — its own semantic
+  --fluent-purple-light: var(--ref-status-purple-0);
+  --fluent-help-text: var(--ref-status-purple-11);
+
+  // ---- Action pairings (not feedback states) --------------------------
+  --fluent-confirm-bg: var(--ref-confirm-7);
+  --fluent-confirm-bg-hover: var(--ref-confirm-8);
+  --fluent-confirm-bg-active: var(--ref-confirm-9);
+  --fluent-confirm-fg: var(--ref-neutral-0);
+  --fluent-delete-bg: var(--ref-status-red-0);
+  --fluent-delete-fg: var(--ref-delete-7);
+  --fluent-delete-bg-hover: var(--ref-delete-1);
+  --fluent-delete-fg-hover: var(--ref-delete-8);
+  --fluent-delete-bg-active: var(--ref-delete-2);
+  --fluent-delete-fg-active: var(--ref-delete-9);
+
+  // ---- Chart categories — never inherit brand or feedback -------------
+  --fluent-chart-1: var(--ref-accent-700);
+  --fluent-chart-2: var(--ref-blue-800);
+  --fluent-chart-3: var(--ref-cyan-800);
+  --fluent-chart-4: var(--ref-yellow-800);
+  --fluent-chart-5: var(--ref-magenta-800);
+  --fluent-chart-6: var(--ref-green-800);
+
+  // ---- Elevation ------------------------------------------------------
+  --fluent-shadow-sm: 0 10px 28px rgba(38, 48, 78, 0.08);
+  --fluent-shadow-md: 0 10px 28px rgba(38, 48, 78, 0.08);
+  --fluent-shadow-medium: 0 10px 28px rgba(38, 48, 78, 0.08);
+  --fluent-shadow-lg: 0 18px 48px rgba(38, 48, 78, 0.18);
+  --fluent-shadow-xl: 0 28px 72px rgba(38, 48, 78, 0.22);
+
+  // ---- Shell ----------------------------------------------------------
+  --fluent-sidebar-bg: var(--ref-neutral-0);
+  --fluent-sidebar-item-hover: var(--fluent-bg-secondary);
+  --fluent-sidebar-item-active: var(--ref-electric-blue-0);
+  --fluent-nav-active-fg: var(--fluent-accent-text);
+  --fluent-nav-active-rail: var(--fluent-primary);
+  --fluent-header-bg: var(--ref-neutral-0);
+  --fluent-header-text: var(--fluent-text);
+
+  // ---- Inputs ---------------------------------------------------------
+  // Idle border matches the information-card stroke; focus is the global
+  // field recipe: exact brand border + soft brand ring.
+  --fluent-input-border: var(--fluent-border);
+  --fluent-input-border-hover: var(--fluent-border-strong);
+  --fluent-input-border-bottom: var(--fluent-border);
+  --fluent-input-border-bottom-hover: var(--fluent-border-strong);
+  --fluent-input-border-bottom-focus: var(--fluent-primary);
+  --fluent-field-focus-border: var(--fluent-primary);
+  --fluent-field-focus-ring: var(--ref-electric-blue-0);
+  --fluent-input-bg: var(--ref-neutral-0);
+  --fluent-input-bg-disabled: var(--ref-canvas-light);
+  --fluent-input-bg-hover: var(--ref-neutral-0);
+  --fluent-calendar-picker-invert: 0;
+
+  // ---- Buttons --------------------------------------------------------
+  // Primary is a fixed four-role pairing; no gradient, no brightness filter.
+  --fluent-btn-primary-bg: var(--fluent-primary);
+  --fluent-btn-primary-bg-hover: var(--fluent-primary-hover);
+  --fluent-btn-primary-bg-active: var(--fluent-primary-active);
+  --fluent-btn-secondary-bg: var(--ref-neutral-0);
+  --fluent-btn-secondary-bg-hover: var(--ref-neutral-0);
+  --fluent-btn-secondary-bg-active: var(--fluent-bg-active);
+  --fluent-btn-secondary-border: var(--fluent-border);
+  --fluent-btn-secondary-border-hover: var(--fluent-border-strong);
+  --fluent-btn-secondary-border-active: var(--fluent-border-strong);
+  --fluent-button-text: var(--fluent-text-secondary);
+
+  // ---- Surfaces -------------------------------------------------------
+  --fluent-card-bg: var(--ref-neutral-0);
+  --fluent-card-border: transparent; // elevated surfaces carry no persistent stroke
+  --fluent-card-shadow: var(--fluent-shadow-sm);
+
+  --fluent-table-header-bg: var(--ref-canvas-light);
+  --fluent-table-row-hover: var(--ref-canvas-light);
+  --fluent-table-row-selected: var(--ref-electric-blue-0);
+  --fluent-table-border: var(--fluent-border);
+
+  --fluent-modal-bg: var(--ref-neutral-0);
+  --fluent-modal-overlay: rgba(20, 25, 40, 0.42);
+
+  --fluent-tab-indicator-color: var(--fluent-accent-text);
+
+  // ---- Selection controls --------------------------------------------
+  --fluent-checkbox-border: var(--ref-neutral-interactive-6);
+  --fluent-checkbox-bg: var(--ref-neutral-0);
+  --fluent-checkbox-checked-bg: var(--fluent-accent);
+  --fluent-checkbox-checked-border: var(--fluent-accent);
+  --fluent-checkbox-hover-border: var(--ref-neutral-interactive-9);
+
+  // ---- Scrollbar ------------------------------------------------------
+  --fluent-scrollbar-thumb-bg: var(--ref-neutral-300);
+  --fluent-scrollbar-thumb-bg-hover: var(--ref-neutral-450);
+  --fluent-scrollbar-thumb-horizontal-bg: rgba(37, 44, 69, 0.18);
+  --fluent-scrollbar-thumb-horizontal-bg-hover: rgba(37, 44, 69, 0.35);
+
+  // ---- Progress / badge / toast --------------------------------------
+  --fluent-progress-bg: var(--ref-canvas-light);
+  --fluent-progress-bar-bg: var(--fluent-primary);
+  --fluent-badge-bg: var(--fluent-primary);
+  --fluent-badge-text: var(--ref-neutral-0);
+  --fluent-toast-bg: var(--ref-neutral-0);
+  --fluent-toast-shadow: var(--fluent-shadow-lg);
+
+  // ---- Login ----------------------------------------------------------
+  --fluent-login-bg: rgba(255, 255, 255, 0.92);
+  --fluent-login-border: transparent;
+  --fluent-login-icon-color: var(--fluent-text-muted);
+
+  // ---- Tooltip / dropdown --------------------------------------------
+  --fluent-tooltip-bg: var(--ref-text-light);
+  --fluent-tooltip-text: var(--ref-neutral-0);
+  --fluent-dropdown-bg: var(--ref-neutral-0);
+  --fluent-dropdown-border: transparent;
+  --fluent-dropdown-shadow: var(--fluent-shadow-lg);
+  --fluent-dropdown-option-hover: var(--fluent-bg-hover);
+  --fluent-dropdown-option-selected: var(--ref-electric-blue-0);
+  --fluent-cbi-dropdown-active: var(--ref-electric-blue-0);
+
+  // ---- Focus ----------------------------------------------------------
+  --fluent-focus-color: var(--fluent-primary);
+  --fluent-focus-inner-color: var(--ref-neutral-0);
+}
+
+:root {
+  @include light-theme-tokens;
+}
+
+@include theme-light {
+  @include light-theme-tokens;
+}

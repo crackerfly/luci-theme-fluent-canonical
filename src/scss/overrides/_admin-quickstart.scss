@@ -1,0 +1,150 @@
+// ============================================================
+// QUICKSTART OVERRIDE — Variable Forwarding & Dark Mode Adapter
+// ============================================================
+@use "overrides-utils" as *;
+@use "../mixins" as *;
+@use "../themes/light" as *;
+// ── 1. Light Mode Variable Forwarding ───────────────────────
+body[data-page^="admin-quickstart"],
+body[data-page^="admin-network_guide"],
+body[data-page^="admin-nas-raid"],
+body[data-page^="admin-network-interfaceconfig"] {
+  .network_container {
+    canvas {
+      filter: invert(1) hue-rotate(180deg) contrast(1.25) brightness(1.1);
+    }
+  }
+  #actioner {
+    z-index: 9999;
+
+    form {
+      background-color: var(--fluent-card-bg) !important;
+    }
+  }
+
+  #actioner > form,
+  > #{$override-dialog-root},
+  > #{$override-root} {
+    --flow-bg-color: var(--fluent-card-bg);
+    --flow-span-color: var(--fluent-text-secondary);
+    --card-bg-color: var(--fluent-card-bg);
+    --card-box-shadow: var(--fluent-card-shadow);
+    --app-container_title-color: var(--fluent-text);
+    --app-container_status-label_block: var(--fluent-text-secondary);
+    --item-label_key-span-color: var(--fluent-text-secondary);
+    --item-label_value-span-color: var(--fluent-text);
+    --app-container_status-label_bg: var(--fluent-bg-hover);
+    --item_btn-border: 1px solid var(--fluent-primary);
+    --item_btn-color: var(--fluent-primary);
+    --tit-color: var(--fluent-text);
+    --popup-bg-color: var(--fluent-modal-bg);
+    --tag-bg-color: var(--fluent-bg-hover);
+    --gradient-bg-color: linear-gradient(90deg, transparent 0%, var(--fluent-card-bg) 62%, var(--fluent-card-bg) 100%);
+    --breadcrumbs-tit-color: var(--fluent-text-secondary);
+    --breadcrumbs-tit-color1: var(--fluent-text);
+    --border-color: var(--fluent-card-border);
+    --SystemUpdateBanner-bg-color: var(--fluent-bg-hover);
+    --SystemUpdateBanner-border-color: var(--fluent-card-border);
+    --btn-border-color: var(--fluent-border);
+    --card-txt-color: var(--fluent-text);
+    --SystemInfo-bg-color: var(--fluent-card-bg);
+  }
+}
+
+// ── 2. Dark Mode Inversion Hack (Light Baseline -> Filter Invert) ──
+@include theme-dark {
+  body[data-page^="admin-network_guide"] {
+    .title {
+      color: var(--fluent-text) !important;
+    }
+    .desc {
+      color: var(--fluent-text-secondary) !important;
+    }
+    .title,
+    .desc,
+    code {
+      background-color: unset !important;
+    }
+  }
+  body[data-page^="admin-quickstart"] {
+    #actioner > form,
+    > #{$override-dialog-root},
+    > #{$override-root} {
+      color-scheme: dark !important;
+      @include light-theme-tokens;
+
+      // PRE-INVERTED baseline. The plugin's own markup cannot consume theme
+      // tokens, so this block is authored in the pre-image of the container's
+      // `filter: invert(1) hue-rotate(180deg)` below: each literal is the
+      // colour that RENDERS as the Canonical dark token named in its comment.
+      //
+      // Values were solved numerically against the CSS Filter Effects
+      // hue-rotate matrix and verified in Chromium at ΔE 0.00 — do not
+      // hand-tweak them. To retarget, invert the desired display colour with
+      // the same transform rather than eyeballing a replacement.
+      --flow-bg-color: #e4eaf6; // renders #101622 (surface-1)
+      --flow-span-color: #3d455b; // renders #B2BAD0 (text-secondary)
+      --card-bg-color: #e4eaf6; // renders #101622 (surface-1)
+      --card-box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.4); // renders a black shadow
+      --app-container_title-color: #0a0d1b; // renders #EEF1FF (text-primary)
+      --app-container_status-label_block: #3d455b; // renders #B2BAD0 (text-secondary)
+      --item-label_key-span-color: #3d455b; // renders #B2BAD0 (text-secondary)
+      --item-label_value-span-color: #0a0d1b; // renders #EEF1FF (text-primary)
+      --app-container_status-label_bg: #dee5f3; // renders #141B29 (surface-2)
+      --item_btn-border: 1px solid #7062dc; // renders #9385FF (accent-text)
+      --item_btn-color: #7062dc; // renders #9385FF (accent-text)
+      --tit-color: #0a0d1b; // renders #EEF1FF (text-primary)
+      --popup-bg-color: #e4eaf6; // renders #101622 (surface-1)
+      --tag-bg-color: #dee5f3; // renders #141B29 (surface-2)
+      --gradient-bg-color: linear-gradient(
+        90deg,
+        rgba(228, 234, 246, 0) 0%,
+        rgba(228, 234, 246, 0.8) 62%,
+        rgba(228, 234, 246, 1) 100%
+      ); // renders a fade to #101622 (surface-1)
+      --breadcrumbs-tit-color: #3d455b; // renders #B2BAD0 (text-secondary)
+      --breadcrumbs-tit-color1: #0a0d1b; // renders #EEF1FF (text-primary)
+      --border-color: #cfd6e6; // renders #232A3A (border over surface-1)
+      --SystemUpdateBanner-bg-color: #dee5f3; // renders #141B29 (surface-2)
+      --SystemUpdateBanner-border-color: #cfd6e6; // renders #232A3A (border)
+      --btn-border-color: #cfd6e6; // renders #232A3A (border)
+      --card-txt-color: #0a0d1b; // renders #EEF1FF (text-primary)
+      --SystemInfo-bg-color: #e4eaf6; // renders #101622 (surface-1)
+
+      background-color: #f1f4fb; // renders #080B12 (bg-canvas)
+      color: #0a0d1b; // renders #EEF1FF (text-primary)
+      border-radius: var(--fluent-card-radius);
+
+      filter: invert(1) hue-rotate(180deg);
+      transition: filter var(--fluent-duration-normal) var(--fluent-easing-standard);
+
+      // ── 2.1 Re-invert Real Media, Avatars & Hardware Illustrations ──
+      #main > div > div:nth-child(1) > div:has(> a:first-child):has(svg),
+      #main > div > .card-container > .feature-card > div > .header > div > svg,
+      img,
+      canvas,
+      div.network-containers .model_btn {
+        filter: invert(1) hue-rotate(180deg);
+      }
+      .del-button,
+      .footer-btn,
+      .app-back,
+      .btn-pink {
+        filter: invert(1) hue-rotate(180deg) !important;
+        background: var(--fluent-error) !important;
+        color: var(--fluent-text-on-primary) !important;
+        border-color: var(--fluent-error) !important;
+      }
+      // ── 2.2 Re-invert Buttons to Restore Authentic Fluent Colors ──
+      .cbi-button,
+      .modal-button.confirm,
+      .add-button,
+      .app-next {
+        filter: invert(1) hue-rotate(180deg) !important;
+        background: var(--fluent-primary) !important;
+        color: var(--fluent-text-on-primary) !important;
+        border-color: var(--fluent-primary) !important;
+      }
+    }
+  }
+}

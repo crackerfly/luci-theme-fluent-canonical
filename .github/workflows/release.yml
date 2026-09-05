@@ -1,0 +1,264 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v1.0.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    name: Prepare release source
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: ${{ env.TAG }}
+
+      - id: meta
+        name: Resolve release version
+        run: |
+          VERSION="${TAG#v}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Using release version ${VERSION} from ${TAG}"
+
+      - name: Sync version files
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          sed -i "s/^PKG_VERSION:=.*/PKG_VERSION:=${VERSION}/" package/luci-theme-fluent/Makefile
+          sed -i "s/^PKG_VERSION:=.*/PKG_VERSION:=${VERSION}/" package/luci-theme-fluent-lite/Makefile
+          sed -i "s/^PKG_VERSION:=.*/PKG_VERSION:=${VERSION}/" package/luci-mod-fluentdashboard/Makefile
+          sed -i "s/^  \"version\": \"[^\"]*\",/  \"version\": \"${VERSION}\",/" package.json
+          grep '^PKG_VERSION:=' package/luci-theme-fluent/Makefile
+          grep '^PKG_VERSION:=' package/luci-theme-fluent-lite/Makefile
+          grep '^PKG_VERSION:=' package/luci-mod-fluentdashboard/Makefile
+          grep '^  "version":' package.json
+
+      - name: Commit version bump
+        if: github.event_name == 'push'
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          TAG_COMMIT=$(git rev-list -n 1 "$TAG")
+          BRANCH=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin --contains "$TAG_COMMIT" | grep -Ev '^origin/HEAD$' | sed 's#^origin/##' | head -1)
+          BRANCH=${BRANCH:-$DEFAULT_BRANCH}
+          git checkout "$BRANCH"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package/luci-theme-fluent/Makefile package/luci-theme-fluent-lite/Makefile package/luci-mod-fluentdashboard/Makefile package.json
+          if git diff --cached --quiet; then
+            echo "Version files already match ${TAG}; nothing to commit."
+          else
+            git commit -m "chore: sync release version ${TAG}"
+            git push origin HEAD:"$BRANCH"
+          fi
+
+      - name: Pack prepared source
+        run: tar --exclude=.git -czf "$RUNNER_TEMP/release-source.tar.gz" .
+
+      - name: Upload prepared source
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-source-${{ env.TAG }}
+          path: ${{ runner.temp }}/release-source.tar.gz
+
+  assets:
+    name: Build minified assets
+    needs: prepare
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      RSBUILD_MINIFY: "true"
+    steps:
+      - name: Download prepared source
+        uses: actions/download-artifact@v8
+        with:
+          name: release-source-${{ env.TAG }}
+
+      - name: Extract prepared source
+        run: tar -xzf release-source.tar.gz
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Build full and lite CSS & JS
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run build
+          pnpm run build:lite
+
+      - name: Verify built assets and lite size reduction
+        run: |
+          test -s package/luci-theme-fluent/htdocs/luci-static/fluent/css/fluent.css
+          test -s package/luci-theme-fluent/htdocs/luci-static/resources/menu-fluent.js
+          test -s package/luci-theme-fluent/htdocs/luci-static/resources/view/fluent-config.js
+          test -s package/luci-theme-fluent-lite/htdocs/luci-static/fluent/css/fluent.css
+          test -s package/luci-theme-fluent-lite/htdocs/luci-static/resources/menu-fluent.js
+          test -s package/luci-theme-fluent-lite/htdocs/luci-static/resources/view/fluent-config.js
+          test -s package/luci-mod-fluentdashboard/htdocs/luci-static/resources/view/fluentdashboard/index.js
+          test -s package/luci-mod-fluentdashboard/htdocs/luci-static/resources/view/fluentdashboard/index.css
+          grep -q '"require network"' package/luci-mod-fluentdashboard/htdocs/luci-static/resources/view/fluentdashboard/index.js
+          grep -q 'return main;' package/luci-mod-fluentdashboard/htdocs/luci-static/resources/view/fluentdashboard/index.js
+          full_size=$(cat package/luci-theme-fluent/htdocs/luci-static/fluent/css/fluent.css package/luci-theme-fluent/htdocs/luci-static/resources/menu-fluent.js package/luci-theme-fluent/htdocs/luci-static/resources/view/fluent-config.js | wc -c)
+          lite_size=$(cat package/luci-theme-fluent-lite/htdocs/luci-static/fluent/css/fluent.css package/luci-theme-fluent-lite/htdocs/luci-static/resources/menu-fluent.js package/luci-theme-fluent-lite/htdocs/luci-static/resources/view/fluent-config.js | wc -c)
+          test "${lite_size}" -lt "${full_size}"
+          echo "Full assets: ${full_size} bytes"
+          echo "Lite assets: ${lite_size} bytes"
+
+      - name: Upload full assets
+        uses: actions/upload-artifact@v7
+        with:
+          name: fluent-assets-full-${{ env.TAG }}
+          path: |
+            package/luci-theme-fluent/htdocs/luci-static/fluent/css/fluent.css
+            package/luci-theme-fluent/htdocs/luci-static/resources/menu-fluent.js
+            package/luci-theme-fluent/htdocs/luci-static/resources/view/fluent-config.js
+
+      - name: Upload lite assets
+        uses: actions/upload-artifact@v7
+        with:
+          name: fluent-assets-lite-${{ env.TAG }}
+          path: |
+            package/luci-theme-fluent-lite/htdocs/luci-static/fluent/css/fluent.css
+            package/luci-theme-fluent-lite/htdocs/luci-static/resources/menu-fluent.js
+            package/luci-theme-fluent-lite/htdocs/luci-static/resources/view/fluent-config.js
+
+      - name: Upload dashboard assets
+        uses: actions/upload-artifact@v7
+        with:
+          name: fluent-dashboard-assets-${{ env.TAG }}
+          path: |
+            package/luci-mod-fluentdashboard/htdocs/luci-static/resources/view/fluentdashboard/index.js
+            package/luci-mod-fluentdashboard/htdocs/luci-static/resources/view/fluentdashboard/index.css
+
+  release:
+    name: Build & Publish (${{ matrix.version }}, ${{ matrix.variant }})
+    needs: [prepare, assets]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['24.10.7', '25.12.4']
+        variant: [full, lite]
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+    steps:
+      - name: Download prepared source
+        uses: actions/download-artifact@v8
+        with:
+          name: release-source-${{ env.TAG }}
+
+      - name: Extract prepared source
+        run: tar -xzf release-source.tar.gz
+
+      - name: Download full assets
+        uses: actions/download-artifact@v8
+        with:
+          name: fluent-assets-full-${{ env.TAG }}
+          path: package/luci-theme-fluent/htdocs/luci-static
+
+      - name: Download lite assets
+        uses: actions/download-artifact@v8
+        with:
+          name: fluent-assets-lite-${{ env.TAG }}
+          path: package/luci-theme-fluent-lite/htdocs/luci-static
+
+      - name: Download dashboard assets
+        uses: actions/download-artifact@v8
+        with:
+          name: fluent-dashboard-assets-${{ env.TAG }}
+          path: package/luci-mod-fluentdashboard/htdocs/luci-static/resources/view/fluentdashboard
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y zstd wget
+
+      - name: Prepare package sources
+        run: |
+          mkdir -p ${HOME}/builder/packages
+          cp -r "$PWD/package/luci-theme-fluent" "${HOME}/builder/packages/luci-theme-fluent"
+          cp -r "$PWD/package/luci-theme-fluent-lite" "${HOME}/builder/packages/luci-theme-fluent-lite"
+          cp -r "$PWD/package/luci-mod-fluentdashboard" "${HOME}/builder/packages/luci-mod-fluentdashboard"
+
+      - name: Build packages
+        run: |
+          chmod +x .github/workflows/build.sh
+          bash .github/workflows/build.sh "${{ matrix.version }}" "${{ matrix.variant }}"
+
+      - name: Collect built packages
+        run: |
+          mkdir -p release
+          cp ${HOME}/builder/output/luci-theme-fluent${{ matrix.variant == 'lite' && '-lite' || '' }}*.ipk release/ 2>/dev/null || true
+          cp ${HOME}/builder/output/luci-theme-fluent${{ matrix.variant == 'lite' && '-lite' || '' }}*.apk release/ 2>/dev/null || true
+          if [ "${{ matrix.variant }}" = "full" ]; then
+            cp ${HOME}/builder/output/luci-mod-fluentdashboard*.ipk release/ 2>/dev/null || true
+            cp ${HOME}/builder/output/luci-mod-fluentdashboard*.apk release/ 2>/dev/null || true
+            cp ${HOME}/builder/output/luci-i18n-fluent*.ipk release/ 2>/dev/null || true
+            cp ${HOME}/builder/output/luci-i18n-fluent*.apk release/ 2>/dev/null || true
+          fi
+          echo "Built packages:"
+          ls -lh release/
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-${{ env.TAG }}-openwrt-${{ matrix.version }}-${{ matrix.variant }}
+          path: release/*
+
+  publish:
+    name: Create GitHub Release
+    needs: release
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Download all release artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts/
+          pattern: release-${{ env.TAG }}-*
+          merge-multiple: true
+
+      - name: List all packages
+        run: |
+          echo "All packages for release ${{ env.TAG }}:"
+          find artifacts/ -type f \( -name "*.ipk" -o -name "*.apk" \) -exec ls -lh {} \;
+
+      - name: Generate Release Notes
+        run: |
+          python src/script/generate_release_notes.py \
+            --tag "${{ env.TAG }}" \
+            --repo "${{ github.repository }}" \
+            --version "${{ env.TAG }}" \
+            --commit "${{ github.sha }}" \
+            --dir "artifacts" \
+            --output "release_notes.md"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ env.TAG }}
+          name: "Release ${{ env.TAG }}"
+          body_path: release_notes.md
+          files: |
+            artifacts/**/*.ipk
+            artifacts/**/*.apk
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

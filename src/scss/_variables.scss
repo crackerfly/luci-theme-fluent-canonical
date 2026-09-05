@@ -1,0 +1,333 @@
+// Design tokens — Canonical v3.2 colour contract on FluentUI 2 geometry.
+//
+// Three layers, later layers may only reference earlier ones:
+//   1. Reference  --ref-*      theme-independent raw ramps and locked anchors
+//   2. Semantic   --fluent-*   role names, mapped per theme in themes/_light|_dark
+//   3. Component  --fluent-*   fixed pairings (button triad, nav rail, chart series)
+//
+// Components must consume layer 2/3 only. Never read --ref-* from a component rule.
+@use "mixins" as *;
+
+:root {
+  // ============================================================
+  // REFERENCE — Canonical v3.2 (DTCG source: canonical-colors 3.2.0)
+  // sRGB baseline is unconditional; OKLCH is a positive @supports override.
+  // ============================================================
+
+  // Neutrals
+  --ref-neutral-0: #ffffff;
+  --ref-neutral-50: #f7f8fc;
+  --ref-neutral-75: #f3f5fa;
+  --ref-neutral-90: #eef1ff;
+  --ref-neutral-100: #eef1f7;
+  --ref-neutral-200: #d8deea;
+  --ref-neutral-300: #b2bad0;
+  --ref-neutral-400: #9aa4ba;
+  --ref-neutral-450: #8d97ab;
+  --ref-neutral-500: #7a8396;
+  --ref-neutral-550: #69748b;
+  --ref-neutral-600: #596277;
+  --ref-neutral-700: #4d566c;
+  --ref-neutral-800: #1a2232;
+  --ref-neutral-850: #141b29;
+  --ref-neutral-900: #101622;
+  --ref-neutral-925: #0b0f18;
+  --ref-neutral-950: #080b12;
+
+  // Brand — Light anchor is locked at Electric Blue 7 (#024AD8)
+  --ref-electric-blue-0: #e4eefa;
+  --ref-electric-blue-1: #c9e0fc;
+  --ref-electric-blue-2: #b2d2ff;
+  --ref-electric-blue-7: #024ad8;
+  --ref-electric-blue-8: #103fb2;
+  --ref-electric-blue-9: #0e3191;
+
+  // Accent — Dark brand anchor is locked at #9058FC; #9385FF is the readable text stop
+  --ref-accent-400: #9385ff;
+  --ref-accent-500: #7d6cff;
+  --ref-accent-700: #5142c2;
+
+  // Light neutral interactive / canvas anchors
+  --ref-canvas-light: #f2fbff;
+  --ref-text-light: #1a1a1a;
+  --ref-neutral-interactive-6: #858585;
+  --ref-neutral-interactive-8: #525252;
+  --ref-neutral-interactive-9: #3d3d3d;
+
+  // Six feedback families — Shade 0 background, 6/7 graphic, 11 text
+  --ref-status-red-0: #ffe5e0;
+  --ref-status-red-6: #e43c36;
+  --ref-status-red-11: #5e0a0a;
+  --ref-status-green-0: #cbfcde;
+  --ref-status-green-6: #00995d;
+  --ref-status-green-11: #014426;
+  --ref-status-orange-0: #ffe9d9;
+  --ref-status-orange-6: #d86102;
+  --ref-status-orange-11: #602700;
+  --ref-status-yellow-0: #fff1ce;
+  --ref-status-yellow-6: #bd7801;
+  --ref-status-yellow-11: #573100;
+  --ref-status-purple-0: #f0e7ff;
+  --ref-status-purple-6: #9058fc;
+  --ref-status-purple-11: #381a76;
+  --ref-status-gray-0: #fafafa;
+  --ref-status-gray-7: #636363;
+  --ref-status-gray-11: #212121;
+
+  // Dark feedback stops
+  --ref-success-400: #32d395;
+  --ref-warning-400: #ff9865;
+  --ref-danger-400: #ff6f7f;
+  --ref-yellow-400: #f2c14e;
+  --ref-blue-400: #5d8eff;
+
+  // Action pairings — Confirm / Delete are actions, not feedback states
+  --ref-confirm-7: #027d4b;
+  --ref-confirm-8: #017043;
+  --ref-confirm-9: #01633a;
+  --ref-delete-1: #ffcdc4;
+  --ref-delete-2: #ffb0a4;
+  --ref-delete-7: #c92b28;
+  --ref-delete-8: #ae2320;
+  --ref-delete-9: #921a19;
+
+  // Chart categories — never inherit brand or feedback semantics
+  --ref-blue-800: #1d4fa8;
+  --ref-cyan-400: #49d7e7;
+  --ref-cyan-800: #0b6473;
+  --ref-magenta-400: #d66ad2;
+  --ref-magenta-800: #8a2e80;
+  --ref-green-400: #78d48a;
+  --ref-green-800: #216b35;
+  --ref-yellow-800: #7b5700;
+
+  // ============================================================
+  // TYPOGRAPHY
+  // ============================================================
+  --fluent-font-family:
+    "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto,
+    "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Helvetica Neue", sans-serif;
+  --fluent-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+  --fluent-font-size-base: 14px; // body, inputs, table cells
+  --fluent-font-size-xs: 10px; // eyebrow / semantic ordinal only
+  --fluent-font-size-sm: 12px; // caption, chip, helper
+  --fluent-font-size-md: 16px; // H3
+  --fluent-font-size-lg: 20px;
+  --fluent-font-size-xl: 24px;
+  --fluent-font-size-xxl: 28px; // H1
+  --fluent-font-size-xxxl: 40px;
+
+  --fluent-font-weight-regular: 400;
+  --fluent-font-weight-normal: 400;
+  --fluent-font-weight-semibold: 600;
+  --fluent-font-weight-bold: 700;
+
+  --fluent-line-height-tight: 1.2;
+  --fluent-line-height-normal: 1.43; // 20px at 14px — buttons, nav, tabs
+  --fluent-line-height-relaxed: 1.57; // 22px at 14px — body, table rows
+
+  // ============================================================
+  // SPACING (2px even grid)
+  // ============================================================
+  --fluent-space-unit: 4px;
+  --fluent-space-xxs: 2px;
+  --fluent-space-xs: 4px;
+  --fluent-space-sm: 8px;
+  --fluent-space-md: 12px;
+  --fluent-space-lg: 16px;
+  --fluent-space-xl: 24px;
+  --fluent-space-xxl: 32px;
+  --fluent-space-xxxl: 48px;
+
+  // ============================================================
+  // RADIUS — nested radii step down by at least 2px
+  // NOTE: header.ut overrides --fluent-radius-sm/-md at runtime from the UCI
+  // `border_radius` option (default 8 → md 8px, sm 4px). The values below are
+  // the build-time defaults and must stay in sync with fluent-defaults.ts.
+  // ============================================================
+  --fluent-radius-xs: 4px; // small badges
+  --fluent-radius-sm: 4px; // = border_radius / 2
+  --fluent-radius-md: 8px; // = border_radius — inputs, buttons, inset surfaces
+  --fluent-radius-card: 10px; // nav items, KPI tiles
+  --fluent-radius-lg: 12px; // top-level panels, popovers
+  --fluent-radius-xl: 16px; // modals
+  --fluent-radius-circular: 10000px;
+  --fluent-radius-round: 50%;
+
+  // ============================================================
+  // MOTION
+  // ============================================================
+  --fluent-duration-fast: 120ms; // hover / press
+  --fluent-duration-normal: 180ms; // controls, overlays
+  --fluent-duration-slow: 280ms; // content reflow
+  --fluent-duration-slower: 400ms;
+  --fluent-easing-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --fluent-easing-decelerate: cubic-bezier(0, 0, 0, 1);
+  --fluent-easing-accelerate: cubic-bezier(1, 0, 1, 1);
+  --fluent-easing-easy-ease: cubic-bezier(0.33, 0, 0.67, 1);
+
+  // ============================================================
+  // Z-INDEX
+  // ============================================================
+  --fluent-zindex-actions: 1000;
+  --fluent-zindex-menu: 1050;
+  --fluent-zindex-modal: 1100;
+  --fluent-zindex-tooltip: 1200;
+  --fluent-zindex-toast: 1300;
+  --fluent-zindex-dropdown: 1500;
+
+  // ============================================================
+  // COMPONENT GEOMETRY
+  // ============================================================
+  --fluent-sidebar-width: 260px;
+  --fluent-sidebar-collapsed-width: 48px;
+  --fluent-header-height: 58px;
+  --fluent-nav-item-height: 52px;
+
+  --fluent-control-height: 36px;
+  --fluent-btn-height: var(--fluent-control-height);
+  --fluent-btn-padding: 0 12px;
+  --fluent-btn-icon-size: 34px;
+  --fluent-input-height: var(--fluent-control-height);
+
+  --fluent-card-radius: var(--fluent-radius-lg);
+  --fluent-card-padding: 18px;
+  --fluent-modal-radius: var(--fluent-radius-xl);
+  --fluent-modal-padding: var(--fluent-space-xl);
+
+  @include mobile-only {
+    --fluent-modal-padding: var(--fluent-space-lg);
+  }
+
+  --fluent-tab-height: 44px;
+  --fluent-tab-indicator-height: 2px;
+  --fluent-table-row-height: 44px;
+
+  --fluent-checkbox-size: 18px;
+  --fluent-switch-width: 36px;
+  --fluent-switch-height: 20px;
+  --fluent-switch-thumb-size: 16px;
+  --fluent-switch-thumb-offset: 2px;
+
+  --fluent-scrollbar-width: 6px;
+  --fluent-scrollbar-track-bg: transparent;
+  --fluent-progress-height: 4px;
+  --fluent-badge-radius: var(--fluent-radius-circular);
+  --fluent-toast-radius: var(--fluent-radius-lg);
+  --fluent-dropdown-max-height-limit: 350px;
+  --fluent-dropdown-max-height: var(--fluent-dropdown-max-height-limit);
+
+  --fluent-zonebadge-text: #111111;
+
+  // ============================================================
+  // BRAND RAMP — derived from the runtime accent so UCI `primary`
+  // customisation keeps working for tints and soft layers.
+  // The Primary button triad does NOT read this ramp; see themes/_light.
+  // ============================================================
+  --fluent-brand-10: color-mix(in srgb, var(--fluent-primary) 10%, #000000);
+  --fluent-brand-20: color-mix(in srgb, var(--fluent-primary) 20%, #000000);
+  --fluent-brand-30: color-mix(in srgb, var(--fluent-primary) 30%, #000000);
+  --fluent-brand-40: color-mix(in srgb, var(--fluent-primary) 40%, #000000);
+  --fluent-brand-50: color-mix(in srgb, var(--fluent-primary) 50%, #000000);
+  --fluent-brand-60: color-mix(in srgb, var(--fluent-primary) 65%, #000000);
+  --fluent-brand-70: color-mix(in srgb, var(--fluent-primary) 80%, #000000);
+  --fluent-brand-80: var(--fluent-primary);
+  --fluent-brand-90: color-mix(in srgb, var(--fluent-primary) 90%, #ffffff);
+  --fluent-brand-100: color-mix(in srgb, var(--fluent-primary) 80%, #ffffff);
+  --fluent-brand-110: color-mix(in srgb, var(--fluent-primary) 70%, #ffffff);
+  --fluent-brand-120: color-mix(in srgb, var(--fluent-primary) 60%, #ffffff);
+  --fluent-brand-130: color-mix(in srgb, var(--fluent-primary) 45%, #ffffff);
+  --fluent-brand-140: color-mix(in srgb, var(--fluent-primary) 30%, #ffffff);
+  --fluent-brand-150: color-mix(in srgb, var(--fluent-primary) 15%, #ffffff);
+  --fluent-brand-160: color-mix(in srgb, var(--fluent-primary) 5%, #ffffff);
+}
+
+// OKLCH progressive enhancement — positive @supports only, never a bare
+// duplicate declaration (a legacy engine would invalidate the consumer).
+@supports (color: oklch(50% 0 0)) {
+  :root {
+    --ref-neutral-0: oklch(1 0 0);
+    --ref-neutral-90: oklch(0.96 0.019 276.35);
+    --ref-neutral-200: oklch(0.8996 0.0176 264.48);
+    --ref-neutral-300: oklch(0.7897 0.0324 269.74);
+    --ref-neutral-400: oklch(0.718 0.034 266.07);
+    --ref-neutral-450: oklch(0.675 0.0317 264.34);
+    --ref-neutral-550: oklch(0.5582 0.0382 265.01);
+    --ref-neutral-800: oklch(0.2521 0.0327 263.72);
+    --ref-neutral-850: oklch(0.2223 0.0295 263.69);
+    --ref-neutral-900: oklch(0.2003 0.0259 263.72);
+    --ref-neutral-925: oklch(0.1689 0.02 265.79);
+    --ref-neutral-950: oklch(0.1498 0.0161 265.8);
+
+    --ref-electric-blue-0: oklch(0.9451 0.0194 252.88);
+    --ref-electric-blue-1: oklch(0.8986 0.0458 253.42);
+    --ref-electric-blue-2: oklch(0.8558 0.0718 256.93);
+    --ref-electric-blue-7: oklch(0.4765 0.2251 262.42);
+    --ref-electric-blue-8: oklch(0.4215 0.1888 263.46);
+    --ref-electric-blue-9: oklch(0.3618 0.1627 264.16);
+
+    --ref-accent-400: oklch(0.6846 0.1746 286.06);
+    --ref-accent-500: oklch(0.6246 0.2101 283.74);
+    --ref-accent-700: oklch(0.4748 0.191 281.59);
+
+    --ref-canvas-light: oklch(0.9825 0.0109 225.98);
+    --ref-text-light: oklch(0.2178 0 0);
+    --ref-neutral-interactive-6: oklch(0.6167 0 0);
+    --ref-neutral-interactive-8: oklch(0.4386 0 0);
+    --ref-neutral-interactive-9: oklch(0.36 0 0);
+
+    --ref-status-red-0: oklch(0.9416 0.0295 30.64);
+    --ref-status-red-6: oklch(0.6092 0.2056 27.34);
+    --ref-status-red-11: oklch(0.3109 0.1159 27.32);
+    --ref-status-green-0: oklch(0.949 0.0643 158.05);
+    --ref-status-green-6: oklch(0.6011 0.1427 157.18);
+    --ref-status-green-11: oklch(0.3404 0.081 156.6);
+    --ref-status-orange-0: oklch(0.9475 0.0322 58.4);
+    --ref-status-orange-6: oklch(0.6301 0.1709 48.04);
+    --ref-status-orange-11: oklch(0.3492 0.0949 48.11);
+    --ref-status-yellow-0: oklch(0.9603 0.048 88.81);
+    --ref-status-yellow-6: oklch(0.6309 0.1365 69.86);
+    --ref-status-yellow-11: oklch(0.3532 0.0793 64.96);
+    --ref-status-purple-0: oklch(0.9421 0.0334 302.75);
+    --ref-status-purple-6: oklch(0.6093 0.231 294.17);
+    --ref-status-purple-11: oklch(0.3235 0.1451 290.84);
+    --ref-status-gray-0: oklch(0.9851 0 0);
+    --ref-status-gray-7: oklch(0.4997 0 0);
+    --ref-status-gray-11: oklch(0.2478 0 0);
+
+    --ref-success-400: oklch(0.7717 0.1573 161.8);
+    --ref-warning-400: oklch(0.7771 0.1404 46.33);
+    --ref-danger-400: oklch(0.7208 0.1756 15.86);
+    --ref-yellow-400: oklch(0.8341 0.141 85.43);
+    --ref-blue-400: oklch(0.6673 0.1756 264.5);
+
+    --ref-confirm-7: oklch(0.5192 0.1229 157.06);
+    --ref-confirm-8: oklch(0.48 0.1134 157.26);
+    --ref-confirm-9: oklch(0.4398 0.1046 156.88);
+    --ref-delete-1: oklch(0.8895 0.0584 30.07);
+    --ref-delete-2: oklch(0.8297 0.0949 28.82);
+    --ref-delete-7: oklch(0.5462 0.1945 27.32);
+    --ref-delete-8: oklch(0.4899 0.1754 27.5);
+    --ref-delete-9: oklch(0.4293 0.1554 27.15);
+
+    --ref-blue-800: oklch(0.4486 0.1532 260.94);
+    --ref-cyan-400: oklch(0.8107 0.1202 205.92);
+    --ref-cyan-800: oklch(0.4634 0.0782 213.08);
+    --ref-magenta-400: oklch(0.6872 0.1848 328.76);
+    --ref-magenta-800: oklch(0.4674 0.1585 332.39);
+    --ref-green-400: oklch(0.7938 0.137 148.85);
+    --ref-green-800: oklch(0.4685 0.1118 148.9);
+    --ref-yellow-800: oklch(0.4825 0.0997 80.69);
+  }
+}
+
+// ============================================================
+// RUNTIME-OVERRIDABLE VIA UCI (injected inline by header.ut)
+// --fluent-primary, --fluent-bg, --fluent-bg-card, --fluent-sidebar-bg,
+// --fluent-font-weight, --fluent-font-size, --fluent-sidebar-width,
+// --fluent-header-height, --fluent-radius-sm, --fluent-radius-md,
+// --fluent-control-height, --fluent-card-shadow, --fluent-transition-*,
+// --fluent-progressbar-font-color, --fluent-blur-*
+// Keep the defaults above in sync with src/web/resources/fluent-defaults.ts.
+// ============================================================
