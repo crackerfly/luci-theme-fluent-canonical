@@ -22,7 +22,7 @@ fi
 # colour the user actually picked is never touched. A revision stamp keeps this
 # to a single pass, so a later downgrade of a token by the user sticks.
 # ---------------------------------------------------------------------------
-TOKEN_REV=3
+TOKEN_REV=4
 
 migrate_token() { # <option> <previous default> <new default>
 	cur="$(uci -q get "fluent.@global[0].$1")"
@@ -47,8 +47,10 @@ if [ "$(uci -q get fluent.@global[0].token_rev)" != "$TOKEN_REV" ]; then
 	migrate_token dark_progressbar_font '#d6d9e5' '#EEF1FF'
 	# Geometry
 	migrate_token border_radius         '4'  '8'
-	migrate_token control_height        '32' '36'
 	migrate_token header_height         '48' '58'
+	# rev 3 moved controls to 36px; rev 4 settles them at 32px, so both the
+	# original 32 and the interim 36 land on the current default.
+	migrate_token control_height        '36' '32'
 
 	uci set fluent.@global[0].token_rev="$TOKEN_REV"
 	uci commit fluent

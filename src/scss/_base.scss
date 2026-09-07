@@ -93,6 +93,27 @@ p {
   margin-bottom: var(--fluent-space-lg);
 }
 
+// ── Rule / divider ──────────────────────────────────────────
+// The reset zeroes hr's margins too, so System → Reboot's
+// `<p>…</p><hr><button>Perform reboot</button>` put the divider hard against
+// the button. A divider only reads as a divider with air on both sides.
+hr {
+  height: 0;
+  margin-block: var(--fluent-space-lg);
+  border: 0;
+  // The separator token, NOT --fluent-card-border: cards are elevated surfaces
+  // whose border token is transparent by design, which would make the rule
+  // itself invisible.
+  border-top: 1px solid var(--fluent-border);
+}
+
+// `#view` is a flex column, so margins do not collapse there: a paragraph's
+// own 16px bottom margin would stack with the rule's 16px top margin and the
+// divider would sit closer to what follows it than to what precedes it.
+p + hr {
+  margin-block-start: 0;
+}
+
 a {
   color: var(--fluent-text-link);
   text-decoration: none;

@@ -185,10 +185,12 @@
   --fluent-header-height: 58px;
   --fluent-nav-item-height: 52px;
 
-  --fluent-control-height: 36px;
+  // One control height for every button, input, select and textarea row.
+  // Overridable per install through the UCI `control_height` setting.
+  --fluent-control-height: 32px;
   --fluent-btn-height: var(--fluent-control-height);
   --fluent-btn-padding: 0 12px;
-  --fluent-btn-icon-size: 34px;
+  --fluent-btn-icon-size: var(--fluent-control-height);
   --fluent-input-height: var(--fluent-control-height);
 
   --fluent-card-radius: var(--fluent-radius-lg);

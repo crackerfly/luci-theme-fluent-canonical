@@ -68,6 +68,12 @@
   &[open] {
     border-color: var(--fluent-btn-secondary-border-active) !important;
     border-bottom-color: var(--fluent-btn-secondary-border-active) !important;
+    // The Secondary stroke is an inset shadow now, and the dropdown's focus
+    // recipe sets box-shadow, so restate the stroke here or focus would erase
+    // it. Composed, not replaced: inner stroke first, then the soft ring.
+    box-shadow:
+      inset 0 0 0 1px var(--fluent-btn-secondary-border-active),
+      0 0 0 4px var(--fluent-field-focus-ring) !important;
     outline: none;
   }
 

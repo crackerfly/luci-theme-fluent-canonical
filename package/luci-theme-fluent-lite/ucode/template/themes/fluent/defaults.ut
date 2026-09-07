@@ -13,7 +13,7 @@
   defaults.font_weight = "normal";
   defaults.font_size = "14";
   defaults.border_radius = "8";
-  defaults.control_height = "36";
+  defaults.control_height = "32";
   defaults.sidebar_width = "260";
   defaults.header_height = "58";
   defaults.login_bg = "microsoft";

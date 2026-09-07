@@ -51,7 +51,7 @@
 // tools/views.js `LogreadBox`, and the same shape in many app packages. As
 // inline-block boxes on a shared text baseline they do two wrong things: the
 // label text ends up ~3px from its control (well under the 8px minimum) and a
-// 36px control does not centre against its ~20px label, so the row is visibly
+// 32px control does not centre against its ~20px label, so the row is visibly
 // ragged.
 //
 // Lay any *unclassed* wrapper that mixes a label with a control out as a flex
@@ -59,10 +59,16 @@
 // every CBI container carries a class, so only these ad-hoc wrappers match.
 // The children need !important because LuCI's margins are inline styles.
 // ============================================================
-#maincontent div:not([class]):is(
-  :has(> label + :is(input, select, button, .btn, .cbi-button)),
-  :has(> :is(input, select) + label)
-) {
+// Each shape gets its OWN rule rather than one `:is(:has(), :has())` selector.
+// A selector list is all-or-nothing: if an engine cannot parse any part of it
+// the whole rule is dropped, and `:has()` nested inside `:is()` is exactly the
+// construct with the patchiest support. Separate rules degrade one at a time.
+#maincontent div:not([class]):has(> label + input),
+#maincontent div:not([class]):has(> label + select),
+#maincontent div:not([class]):has(> label + button),
+#maincontent div:not([class]):has(> label + .btn),
+#maincontent div:not([class]):has(> input + label),
+#maincontent div:not([class]):has(> select + label) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -80,6 +86,22 @@
   > label {
     color: var(--fluent-text-secondary);
   }
+}
+
+// ============================================================
+// SECTION TITLE RHYTHM
+//
+// Status → Overview wraps every card title as
+//   <div class="cbi-title"><h3>CPU Load<span class="label">Hide</span></h3></div>
+//   <div>…card body…</div>
+// The h3 is the only child of `.cbi-title`, so the heading rhythm in _base.scss
+// (which needs the heading itself to have a following sibling) can never fire
+// and every Overview card rendered its title flush against its content. The gap
+// belongs on the wrapper. `.cbi-title` is emitted by exactly one LuCI view, so
+// this stays tightly scoped.
+// ============================================================
+#maincontent .cbi-title {
+  margin-block-end: var(--fluent-space-md);
 }
 
 .cbi-section-error {

@@ -595,7 +595,7 @@ const FLUENT_DEFAULTS = {
     font_weight: "normal",
     font_size: "14",
     border_radius: "8",
-    control_height: "36",
+    control_height: "32",
     sidebar_width: "260",
     header_height: "58",
     login_bg: "microsoft",

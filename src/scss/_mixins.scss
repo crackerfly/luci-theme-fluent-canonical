@@ -157,9 +157,15 @@ $breakpoint-xxl: 1400px;
 
 // ============================================================
 // BUTTON BASE
-// Height 36px, radius 8px, padding 0 12px.
+// Height 32px, radius 8px, padding 0 12px.
+//
+// The base carries NO border. Outlined variants draw their stroke with an
+// inset box-shadow instead, so every button — filled, tonal or outlined —
+// has an identical 32px box and an identical content box: a variant or state
+// change can never move the label by the width of a border.
+//
 // Every variant and every state keeps the label at 14/20px, weight 400 —
-// emphasis comes from colour, surface and border, never from font weight.
+// emphasis comes from colour, surface and stroke, never from font weight.
 // ============================================================
 %button-base {
   display: inline-flex;
@@ -172,13 +178,14 @@ $breakpoint-xxl: 1400px;
   font-size: var(--fluent-font-size-base);
   font-weight: var(--fluent-font-weight-regular);
   line-height: var(--fluent-line-height-normal);
-  border: 1px solid transparent;
+  border: 0;
   border-radius: var(--fluent-radius-md);
   cursor: pointer;
   user-select: none;
   text-decoration: none;
   transition:
     background var(--fluent-duration-fast) var(--fluent-easing-standard),
+    box-shadow var(--fluent-duration-fast) var(--fluent-easing-standard),
     border-color var(--fluent-duration-fast) var(--fluent-easing-standard),
     color var(--fluent-duration-fast) var(--fluent-easing-standard);
 
@@ -191,7 +198,7 @@ $breakpoint-xxl: 1400px;
   &:disabled {
     color: var(--fluent-text-muted);
     background: var(--fluent-bg-secondary);
-    border-color: transparent;
+    box-shadow: none;
     cursor: not-allowed;
     pointer-events: none;
   }
@@ -214,16 +221,14 @@ $breakpoint-xxl: 1400px;
   @extend %button-base;
   background: var(--fluent-btn-primary-bg);
   color: var(--fluent-text-on-primary);
-  border-color: var(--fluent-btn-primary-bg);
+  box-shadow: none;
 
   &:hover {
     background: var(--fluent-btn-primary-bg-hover);
-    border-color: var(--fluent-btn-primary-bg-hover);
   }
 
   &:active {
     background: var(--fluent-btn-primary-bg-active);
-    border-color: var(--fluent-btn-primary-bg-active);
   }
 }
 
@@ -231,20 +236,23 @@ $breakpoint-xxl: 1400px;
   @extend %button-primary;
 }
 
+// Outlined variant. The stroke is an INNER stroke — an inset box-shadow, not a
+// border — so it is painted inside the 32px box and costs the content box
+// nothing. Hover and active only repaint it; nothing reflows.
 %button-secondary {
   @extend %button-base;
   background: var(--fluent-btn-secondary-bg);
   color: var(--fluent-text);
-  border-color: var(--fluent-btn-secondary-border);
+  box-shadow: inset 0 0 0 1px var(--fluent-btn-secondary-border);
 
   &:hover {
     background: var(--fluent-btn-secondary-bg-hover);
-    border-color: var(--fluent-btn-secondary-border-hover);
+    box-shadow: inset 0 0 0 1px var(--fluent-btn-secondary-border-hover);
   }
 
   &:active {
     background: var(--fluent-btn-secondary-bg-active);
-    border-color: var(--fluent-btn-secondary-border-active);
+    box-shadow: inset 0 0 0 1px var(--fluent-btn-secondary-border-active);
   }
 }
 
@@ -256,7 +264,7 @@ $breakpoint-xxl: 1400px;
   @extend %button-base;
   background: transparent;
   color: var(--fluent-text);
-  border-color: transparent;
+  box-shadow: none;
 
   &:hover {
     background: var(--fluent-bg-hover);
@@ -284,18 +292,16 @@ $breakpoint-xxl: 1400px;
 
   background: var(--fluent-delete-bg)#{$i};
   color: var(--fluent-delete-fg)#{$i};
-  border-color: transparent#{$i};
+  box-shadow: none#{$i};
 
   &:hover {
     background: var(--fluent-delete-bg-hover)#{$i};
     color: var(--fluent-delete-fg-hover)#{$i};
-    border-color: transparent#{$i};
   }
 
   &:active {
     background: var(--fluent-delete-bg-active)#{$i};
     color: var(--fluent-delete-fg-active)#{$i};
-    border-color: transparent#{$i};
   }
 }
 

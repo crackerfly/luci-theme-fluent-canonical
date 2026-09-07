@@ -49,16 +49,14 @@
   &.cbi-button-positive {
     background: var(--fluent-confirm-bg);
     color: var(--fluent-confirm-fg);
-    border-color: transparent;
+    box-shadow: none;
 
     &:hover {
       background: var(--fluent-confirm-bg-hover);
-      border-color: transparent;
     }
 
     &:active {
       background: var(--fluent-confirm-bg-active);
-      border-color: transparent;
     }
   }
 
@@ -131,7 +129,7 @@
   &[disabled] {
     background: var(--fluent-bg-secondary);
     color: var(--fluent-text-muted);
-    border-color: transparent;
+    box-shadow: none;
     cursor: not-allowed;
     pointer-events: none;
   }
@@ -149,15 +147,24 @@
 .cbi-button-up + .cbi-button-down {
   margin-left: 2px;
 }
-.btns:has(> .cbi-button) {
+.btns {
   display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--fluent-space-sm);
   margin-bottom: var(--fluent-space-md);
 }
 
-.control-group:not(:has(> :not(.cbi-button))) {
-  display: flex;
+// LuCI's input-group wrapper: `<span class="control-group"><input><button>OK`.
+// It ships with no spacing of its own, so the control and its button rendered
+// flush against each other (System → Software's Filter/Clear and the
+// Download-and-install field). One flat rule, no :has() — the wrapper class is
+// the contract, and the password field re-declares `gap: 0` in
+// components/_password.scss to keep its reveal button merged with the field.
+.control-group {
+  display: inline-flex;
   flex-wrap: wrap;
-  gap: 8px;
   align-items: center;
+  gap: var(--fluent-space-sm);
+  max-width: 100%;
 }

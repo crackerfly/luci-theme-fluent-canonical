@@ -348,6 +348,27 @@ body.fluent-log-fullscreen {
   overflow: hidden !important;
 }
 
-// The syslog/dmesg filter rows are ad-hoc inline toolbars; they are laid out by
-// the generic `.fluent inline toolbar` rule in components/_cbi-forms.scss,
-// which covers every page that emits the same shape rather than just these two.
+// The syslog/dmesg filter rows are ad-hoc inline toolbars. The generic rule in
+// components/_cbi-forms.scss covers every page that emits the same shape, but
+// it is built on :has(), so this page — the one the defect was reported on —
+// also gets a plain structural rule that needs no :has() at all and cannot be
+// dropped by an engine that parses the generic one differently.
+//
+// LuCI's tools/views.js LogreadBox hard-codes `margin: 0 5px` on every label
+// and `margin-bottom: 10px` on the facility <select>; as baseline-aligned
+// inline boxes the two selects then sit ~10px apart vertically. Inline styles
+// can only be beaten with !important.
+body[data-page^="admin-status-logs"] #content_syslog > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fluent-space-sm);
+
+  > * {
+    margin: 0 !important;
+  }
+
+  > label {
+    color: var(--fluent-text-secondary);
+  }
+}
