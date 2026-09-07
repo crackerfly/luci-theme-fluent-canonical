@@ -347,3 +347,7 @@ body[data-page^="admin-status-logs-dmesg"] {
 body.fluent-log-fullscreen {
   overflow: hidden !important;
 }
+
+// The syslog/dmesg filter rows are ad-hoc inline toolbars; they are laid out by
+// the generic `.fluent inline toolbar` rule in components/_cbi-forms.scss,
+// which covers every page that emits the same shape rather than just these two.

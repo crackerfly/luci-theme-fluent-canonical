@@ -7,7 +7,7 @@
 // Checkmark SVG for table/context checkboxes
 // Data URIs cannot reference CSS variables, so fill colors are hardcoded
 $checkmark-svg-white: url("../assets/checkmark-white.svg");
-$checkmark-svg-disabled: url("../assets/checkmark-disabled.svg");
+$checkmark-svg-disabled: url("../assets/checkmark-disabled.svg"); // fill = --fluent-text-disabled (#636363)
 
 // ============================================================
 // FLUENT UI SWITCH (default for checkboxes outside tables)

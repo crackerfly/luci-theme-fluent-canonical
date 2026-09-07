@@ -1,7 +1,7 @@
 .fluent-dashboard {
   --fluent-dashboard-border: var(--fluent-card-border, var(--inputborder-color, color-mix(in srgb, currentColor 16%, transparent)));
   --fluent-dashboard-muted: var(--fluent-text-secondary, color-mix(in srgb, currentColor 68%, transparent));
-  --fluent-dashboard-surface: var(--fluent-card-bg, rgba(var(--primary-rgbbody, 255, 255, 255), 0.7));
+  --fluent-dashboard-surface: var(--fluent-card-bg, rgba(var(--primary-rgbbody, 255, 255, 255), .7));
   --fluent-dashboard-shadow: var(--fluent-card-shadow, 0 .1rem .3rem var(--input-boxcolor, color-mix(in srgb, CanvasText 8%, transparent)));
   color: var(--fluent-text, CanvasText);
   container-type: inline-size;
@@ -12,6 +12,7 @@
 }
 
 .fluent-dashboard__header {
+  z-index: 0;
   color: highlighttext;
   background: linear-gradient(120deg, Highlight, color-mix(in srgb, Highlight 68%, CanvasText));
   border-radius: .75rem;
@@ -21,9 +22,8 @@
   margin-block-end: 1rem;
   padding: 1.25rem;
   display: flex;
-  z-index: 0;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
 }
 
 .fluent-dashboard__header h1, .fluent-dashboard__header p {
@@ -239,4 +239,3 @@
     transition: none;
   }
 }
-

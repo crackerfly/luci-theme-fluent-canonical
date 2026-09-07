@@ -47,22 +47,22 @@ __webpack_require__.d(__webpack_exports__, {
 ;// CONCATENATED MODULE: ./web/resources/fluent-defaults.ts
 const FLUENT_DEFAULTS = {
     mode: "auto",
-    primary: "#0078d4",
-    dark_primary: "#4da6ff",
-    progressbar_font: "#2e2b60",
-    dark_progressbar_font: "#d6d9e5",
-    page_bg: "#fafafa",
-    card_bg: "#ffffff",
-    sidebar_bg: "#f3f3f3",
-    dark_page_bg: "#1b1b1b",
-    dark_card_bg: "#2d2d2d",
-    dark_sidebar_bg: "#1f1f1f",
+    primary: "#024AD8",
+    dark_primary: "#9058FC",
+    progressbar_font: "#1A1A1A",
+    dark_progressbar_font: "#EEF1FF",
+    page_bg: "#F2FBFF",
+    card_bg: "#FFFFFF",
+    sidebar_bg: "#FFFFFF",
+    dark_page_bg: "#080B12",
+    dark_card_bg: "#101622",
+    dark_sidebar_bg: "#0B0F18",
     font_weight: "normal",
     font_size: "14",
-    border_radius: "4",
-    control_height: "32",
+    border_radius: "8",
+    control_height: "36",
     sidebar_width: "260",
-    header_height: "48",
+    header_height: "58",
     login_bg: "microsoft",
     blur: "40",
     transparency: "0.8",
@@ -76,6 +76,7 @@ const FLUENT_DEFAULTS = {
     tab_animation: "1",
     prefers_reduced_motion: "1",
     loading_bar: "1",
+    sticky_action_bar: "1",
     uci_changes_preview: "1",
     direction_mode: "auto",
     progressbar_text_position: "top-start"
@@ -84,6 +85,7 @@ const fluentFlagDefault = (r)=>"1" === r;
 
 ;// CONCATENATED MODULE: ./web/resources/view/fluent-config/shared.ts
 let shared_e = L.form;
+
 const omitDefaultValue = (e)=>{
     let t = e.parse.bind(e);
     e.parse = (r)=>e.isActive(r) && e.formvalue(r) === e.default ? e.isValid(r) ? (e.remove(r), Promise.resolve()) : t(r) : t(r);
@@ -101,99 +103,163 @@ const transparencySteps = [
     0.9,
     1
 ];
-let shared_t = "fluent-live-preview", shared_r = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i, shared_a = {
+let shared_r = "fluent-live-preview", shared_l = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i, shared_s = {
     primary: {
-        cssVar: "--fluent-primary",
+        cssVars: [
+            "--fluent-primary"
+        ],
         isDark: !1
     },
     dark_primary: {
-        cssVar: "--fluent-primary",
+        cssVars: [
+            "--fluent-primary"
+        ],
         isDark: !0
     },
     page_bg: {
-        cssVar: "--fluent-bg",
+        cssVars: [
+            "--fluent-bg-page"
+        ],
         isDark: !1
     },
     dark_page_bg: {
-        cssVar: "--fluent-bg",
-        isDark: !0
+        cssVars: [
+            "--fluent-bg-page"
+        ],
+        isDark: !0,
+        derived: {
+            "--fluent-modal-overlay": "color-mix(in srgb, %s 68%, transparent)"
+        }
     },
     card_bg: {
-        cssVar: "--fluent-bg-card",
-        isDark: !1
+        cssVars: [
+            "--fluent-bg",
+            "--fluent-bg-card"
+        ],
+        isDark: !1,
+        derived: {
+            "--fluent-bg-secondary": "color-mix(in srgb, %s 96%, #000000)",
+            "--fluent-bg-hover": "color-mix(in srgb, %s 96%, #000000)",
+            "--fluent-bg-active": "color-mix(in srgb, %s 92%, #000000)",
+            "--fluent-header-bg": "%s",
+            "--fluent-input-bg": "%s",
+            "--fluent-input-bg-hover": "%s",
+            "--fluent-input-bg-disabled": "color-mix(in srgb, %s 96%, #000000)",
+            "--fluent-modal-bg": "%s",
+            "--fluent-dropdown-bg": "%s",
+            "--fluent-table-header-bg": "color-mix(in srgb, %s 96%, #000000)",
+            "--fluent-table-row-hover": "color-mix(in srgb, %s 96%, #000000)"
+        }
     },
     dark_card_bg: {
-        cssVar: "--fluent-bg-card",
-        isDark: !0
+        cssVars: [
+            "--fluent-bg",
+            "--fluent-bg-card"
+        ],
+        isDark: !0,
+        derived: {
+            "--fluent-bg-secondary": "color-mix(in srgb, %s 94%, #ffffff)",
+            "--fluent-bg-hover": "color-mix(in srgb, %s 94%, #ffffff)",
+            "--fluent-bg-active": "color-mix(in srgb, %s 90%, #ffffff)",
+            "--fluent-header-bg": "%s",
+            "--fluent-input-bg": "%s",
+            "--fluent-input-bg-hover": "%s",
+            "--fluent-input-bg-disabled": "color-mix(in srgb, %s 94%, #ffffff)",
+            "--fluent-modal-bg": "%s",
+            "--fluent-dropdown-bg": "%s",
+            "--fluent-table-header-bg": "color-mix(in srgb, %s 94%, #ffffff)",
+            "--fluent-table-row-hover": "color-mix(in srgb, %s 94%, #ffffff)",
+            "--fluent-tooltip-bg": "color-mix(in srgb, %s 88%, #ffffff)"
+        }
     },
     sidebar_bg: {
-        cssVar: "--fluent-sidebar-bg",
+        cssVars: [
+            "--fluent-sidebar-bg"
+        ],
         isDark: !1
     },
     dark_sidebar_bg: {
-        cssVar: "--fluent-sidebar-bg",
+        cssVars: [
+            "--fluent-sidebar-bg"
+        ],
         isDark: !0
     },
     progressbar_font: {
-        cssVar: "--fluent-progressbar-font-color",
+        cssVars: [
+            "--fluent-progressbar-font-color"
+        ],
         isDark: !1
     },
     dark_progressbar_font: {
-        cssVar: "--fluent-progressbar-font-color",
+        cssVars: [
+            "--fluent-progressbar-font-color"
+        ],
         isDark: !0
     }
-}, shared_l = new globalThis.Map();
-const configureHexColorValue = (s, o, n = !1)=>{
-    s.validate = (e, t)=>!e || shared_r.test(String(t)) || _("Expecting: %s").format(_("valid HEX color value")), s.render = (i, c, u)=>{
-        let d = shared_e.Value.prototype.render.call(s, i, c, u), p = ()=>{
-            let e = document.querySelector(`[id^="widget.cbid.fluent."][id$=".${o}"]`);
+}, shared_a = new globalThis.Map();
+const configureHexColorValue = (o, n, i = !1)=>{
+    o.validate = (e, t)=>!e || shared_l.test(String(t)) || _("Expecting: %s").format(_("valid HEX color value")), o.render = (f, u, d)=>{
+        let c = shared_e.Value.prototype.render.call(o, f, u, d), b = ()=>{
+            let e = document.querySelector(`[id^="widget.cbid.fluent."][id$=".${n}"]`);
             e && ((e, t)=>{
                 if ("true" === e.dataset.fluentColorPicker) return;
-                let a = e.parentElement;
-                if (!a) return;
+                let r = e.parentElement;
+                if (!r) return;
                 e.dataset.fluentColorPicker = "true", e.classList.add("fluent-color-field__text");
-                let l = document.createElement("div");
-                l.className = "fluent-color-field";
-                let s = document.createElement("label");
-                s.className = "fluent-color-swatch", s.title = _("Choose color");
+                let s = document.createElement("div");
+                s.className = "fluent-color-field";
+                let a = document.createElement("label");
+                a.className = "fluent-color-swatch", a.title = _("Choose color");
                 let o = document.createElement("input");
                 o.type = "color", o.className = "fluent-color-swatch__input", o.setAttribute("aria-label", _("Choose color"));
                 let n = document.createElement("span");
                 n.className = "fluent-color-swatch__preview";
                 let i = (e)=>{
-                    shared_r.test(e) && (o.value = e, n.style.backgroundColor = e);
+                    shared_l.test(e) && (o.value = e, n.style.backgroundColor = e);
                 };
                 i(e.value), o.addEventListener("input", ()=>{
-                    e.value = o.value, n.style.backgroundColor = o.value, shared_r.test(o.value) && t(o.value);
+                    e.value = o.value, n.style.backgroundColor = o.value, shared_l.test(o.value) && t(o.value);
                 }), e.addEventListener("input", ()=>{
-                    i(e.value), shared_r.test(e.value) && t(e.value);
-                }), s.appendChild(o), s.appendChild(n), a.insertBefore(l, e), l.appendChild(e), l.appendChild(s);
-            })(e, (e)=>((e, r)=>{
-                    let s = shared_a[e];
-                    if (!s) return;
-                    let o = `${s.isDark ? "dark" : "light"}|${s.cssVar}`;
-                    shared_l.set(o, {
-                        selector: s.isDark ? ':root[data-theme="dark"]' : ":root",
-                        cssVar: s.cssVar,
-                        value: r
-                    }), (()=>{
-                        let e, r = ((e = document.getElementById(shared_t)) || ((e = document.createElement("style")).id = shared_t, document.head.appendChild(e)), e), a = new globalThis.Map();
-                        for (let e of shared_l.values()){
-                            let t = a.get(e.selector) ?? [];
-                            t.push(`${e.cssVar}: ${e.value};`), a.set(e.selector, t);
+                    i(e.value), shared_l.test(e.value) && t(e.value);
+                }), a.appendChild(o), a.appendChild(n), r.insertBefore(s, e), s.appendChild(e), s.appendChild(a);
+            })(e, (e)=>((e, l)=>{
+                    let o = shared_s[e];
+                    if (!o) return;
+                    let n = o.isDark ? ':root[data-theme="dark"]' : ":root", i = o.isDark ? "dark" : "light";
+                    for (let e of o.cssVars)shared_a.set(`${i}|${e}`, {
+                        selector: n,
+                        cssVar: e,
+                        value: l
+                    });
+                    if (o.derived) {
+                        let r = FLUENT_DEFAULTS[e], s = "string" != typeof r || r.toLowerCase() !== l.toLowerCase();
+                        for (let [e, t] of Object.entries(o.derived)){
+                            let r = `${i}|${e}`;
+                            s ? shared_a.set(r, {
+                                selector: n,
+                                cssVar: e,
+                                value: t.replaceAll("%s", l)
+                            }) : shared_a.delete(r);
+                        }
+                    }
+                    (()=>{
+                        let e, t = ((e = document.getElementById(shared_r)) || ((e = document.createElement("style")).id = shared_r, document.head.appendChild(e)), e), l = new globalThis.Map();
+                        for (let e of shared_a.values()){
+                            let t = l.get(e.selector) ?? [];
+                            t.push(`${e.cssVar}: ${e.value};`), l.set(e.selector, t);
                         }
                         let s = "";
-                        for (let [e, t] of a)s += `${e} { ${t.join(" ")} }\n`;
-                        r.textContent = s;
+                        for (let [e, t] of l)s += `${e} { ${t.join(" ")} }\n`;
+                        t.textContent = s;
                     })();
-                })(o, e));
+                })(n, e));
         };
-        return n ? requestAnimationFrame(p) : setTimeout(p, 0), d;
+        return i ? requestAnimationFrame(b) : setTimeout(b, 0), c;
     };
 };
-const createModeSubtabs = (t, r, a)=>{
-    let l = t.taboption(r, shared_e.SectionValue, a, shared_e.TypedSection, "global").subsection;
-    return l.anonymous = !0, l.addremove = !1, l.tab("light", _("Light mode")), l.tab("dark", _("Dark mode")), l;
+const createModeSubtabs = (t, r, l)=>{
+    let s = t.taboption(r, shared_e.SectionValue, l, shared_e.TypedSection, "global").subsection;
+    return s.anonymous = !0, s.addremove = !1, s.tab("light", _("Light mode")), s.tab("dark", _("Dark mode")), s;
 };
 
 ;// CONCATENATED MODULE: ./web/resources/view/fluent-config/tabs/advanced.ts
@@ -308,12 +374,16 @@ const registerGeneralTab = (l, r = !0)=>{
         r.default = fluentFlagDefault(FLUENT_DEFAULTS.custom_select) ? r.enabled : r.disabled, omitDefaultValue(r);
     }
     {
+        let r = l.taboption("general", general_e.Flag, "sticky_action_bar", _("Keep action bar visible while scrolling"), _("Keep Save, Apply, and Reset actions fixed at the bottom of the viewport while scrolling."));
+        r.default = fluentFlagDefault(FLUENT_DEFAULTS.sticky_action_bar) ? r.enabled : r.disabled, omitDefaultValue(r);
+    }
+    {
         let o = l.taboption("general", general_e.ListValue, "progressbar_text_position", _("Progress bar text position"));
         o.value("top-start", _("Above bar, start")), o.value("bottom-start", _("Below bar, start")), o.value("top-end", _("Above bar, end")), o.value("bottom-end", _("Below bar, end")), o.default = FLUENT_DEFAULTS.progressbar_text_position, omitDefaultValue(o), o.description = _("Position of progress-bar labels relative to the bar. Start/end alignment follows the text direction (LTR or RTL).");
     }
 };
 
-;// CONCATENATED MODULE: ../node_modules/.pnpm/@lazulikao+luci-types@https_cfc1ec583b455be203cca2d0660c10a7/node_modules/@lazulikao/luci-types/src/jsx/jsx-factory.ts
+;// CONCATENATED MODULE: ./node_modules/@lazulikao/luci-types/src/jsx/jsx-factory.ts
 const Fragment = Symbol.for("jsx.fragment");
 function jsx_factory_e(e, t) {
     let { children: n, ...r } = null === t || "object" != typeof t || Array.isArray(t) ? {} : t, o = function e(t, n = []) {
@@ -358,7 +428,7 @@ function jsxDEV(t, n) {
     return jsx_factory_e(t, n);
 }
 
-;// CONCATENATED MODULE: ../node_modules/.pnpm/@lazulikao+luci-types@https_cfc1ec583b455be203cca2d0660c10a7/node_modules/@lazulikao/luci-types/src/jsx/jsx-runtime.ts
+;// CONCATENATED MODULE: ./node_modules/@lazulikao/luci-types/src/jsx/jsx-runtime.ts
 
 
 ;// CONCATENATED MODULE: ./web/resources/view/fluent-config/tabs/login.tsx
@@ -398,7 +468,7 @@ let login_p = new Set([
     "webp",
     "mp4",
     "webm"
-]), b = (e)=>e.split(".").pop()?.toLowerCase() ?? "", m = (e)=>login_p.has(b(e)), login_f = (e)=>e >= 1048576 ? `${(e / 1024 / 1024).toFixed(1)} GiB` : e >= 1024 ? `${(e / 1024).toFixed(1)} MiB` : `${e} KiB`, h = (e, t)=>{
+]), login_b = (e)=>e.split(".").pop()?.toLowerCase() ?? "", m = (e)=>login_p.has(login_b(e)), login_f = (e)=>e >= 1048576 ? `${(e / 1024 / 1024).toFixed(1)} GiB` : e >= 1024 ? `${(e / 1024).toFixed(1)} MiB` : `${e} KiB`, h = (e, t)=>{
     if (0 !== e) throw Error(`${t} failed with code ${e}.`);
 }, v = (e, t)=>{
     dom.content(e, t);
@@ -438,7 +508,7 @@ let login_p = new Set([
                     return s && c.addEventListener("click", s), jsxs("div", {
                         class: "fluent-bg-item",
                         children: [
-                            (n = b(d), l = `/luci-static/fluent/background/${encodeURIComponent(d)}`, "mp4" === n || "webm" === n ? jsx("video", {
+                            (n = login_b(d), l = `/luci-static/fluent/background/${encodeURIComponent(d)}`, "mp4" === n || "webm" === n ? jsx("video", {
                                 class: "fluent-bg-preview fluent-bg-preview-video",
                                 muted: !0,
                                 playsInline: !0,

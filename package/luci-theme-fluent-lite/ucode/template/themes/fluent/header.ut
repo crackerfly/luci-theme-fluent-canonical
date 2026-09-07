@@ -49,6 +49,7 @@
   let tab_animation = defaults.tab_animation;
   let prefers_reduced_motion = defaults.prefers_reduced_motion;
   let loading_bar = defaults.loading_bar;
+  let sticky_action_bar = defaults.sticky_action_bar;
   let page_bg = defaults.page_bg;
   let card_bg = defaults.card_bg;
   let sidebar_bg = defaults.sidebar_bg;
@@ -106,6 +107,7 @@
     tab_animation = cfg.get_first('fluent', 'global', 'tab_animation') || tab_animation;
     prefers_reduced_motion = cfg.get_first('fluent', 'global', 'prefers_reduced_motion') || prefers_reduced_motion;
     loading_bar = cfg.get_first('fluent', 'global', 'loading_bar') || loading_bar;
+    sticky_action_bar = cfg.get_first('fluent', 'global', 'sticky_action_bar') || sticky_action_bar;
     progressbar_text_position = cfg.get_first('fluent', 'global', 'progressbar_text_position') || progressbar_text_position;
     menu_layout = cfg.get_first('fluent', 'global', 'menu_layout') || null;
 
@@ -122,6 +124,15 @@
   // comparison only — no colour arithmetic in the template.
   let primary_is_custom = lc(primary) != lc(defaults.primary);
   let dark_primary_is_custom = lc(dark_primary) != lc(defaults.dark_primary);
+  // Same story for the surfaces. The stylesheet ships a coherent neutral ladder
+  // (canvas -> surface-1 -> surface-2 -> hover -> active). Only page_bg/card_bg
+  // are injected, so a custom card colour would otherwise leave every derived
+  // surface — inputs, table headers, hovers, menus, tooltips — on the Canonical
+  // ramp and clashing with it. Derive them from the chosen colour instead.
+  let page_bg_is_custom = lc(page_bg) != lc(defaults.page_bg);
+  let card_bg_is_custom = lc(card_bg) != lc(defaults.card_bg);
+  let dark_page_bg_is_custom = lc(dark_page_bg) != lc(defaults.dark_page_bg);
+  let dark_card_bg_is_custom = lc(dark_card_bg) != lc(defaults.dark_card_bg);
   let brand_name = hostname;
   let page_title = striptags(hostname + (node && node.title ? ' - ' + _(node.title) : ''));
 %} {% if (ctx.authsession) { %}
@@ -211,6 +222,22 @@
       --fluent-btn-primary-bg-hover: color-mix(in srgb, {{ primary }} 76%, #000000);
       --fluent-btn-primary-bg-active: color-mix(in srgb, {{ primary }} 64%, #000000);
       {% } %}
+      {% if (card_bg_is_custom) { %}
+      {# Custom light card surface: rebuild surface-2 and the hover/active steps
+         off it so every panel, input, menu and table header stays in the same
+         family instead of falling back to the Canonical white ramp. #}
+      --fluent-bg-secondary: color-mix(in srgb, {{ card_bg }} 96%, #000000);
+      --fluent-bg-hover: color-mix(in srgb, {{ card_bg }} 96%, #000000);
+      --fluent-bg-active: color-mix(in srgb, {{ card_bg }} 92%, #000000);
+      --fluent-header-bg: {{ card_bg }};
+      --fluent-input-bg: {{ card_bg }};
+      --fluent-input-bg-hover: {{ card_bg }};
+      --fluent-input-bg-disabled: color-mix(in srgb, {{ card_bg }} 96%, #000000);
+      --fluent-modal-bg: {{ card_bg }};
+      --fluent-dropdown-bg: {{ card_bg }};
+      --fluent-table-header-bg: color-mix(in srgb, {{ card_bg }} 96%, #000000);
+      --fluent-table-row-hover: color-mix(in srgb, {{ card_bg }} 96%, #000000);
+      {% } %}
     }
 
     {# Dark mode overrides #}
@@ -241,6 +268,25 @@
       --fluent-btn-primary-bg: color-mix(in srgb, {{ dark_primary }} 88%, #000000);
       --fluent-btn-primary-bg-hover: color-mix(in srgb, {{ dark_primary }} 78%, #000000);
       --fluent-btn-primary-bg-active: color-mix(in srgb, {{ dark_primary }} 68%, #000000);
+      {% } %}
+      {% if (dark_card_bg_is_custom) { %}
+      {# Custom dark card surface: on a dark ground the ladder climbs towards
+         white, so surface-2/hover/active are lightened rather than darkened. #}
+      --fluent-bg-secondary: color-mix(in srgb, {{ dark_card_bg }} 94%, #ffffff);
+      --fluent-bg-hover: color-mix(in srgb, {{ dark_card_bg }} 94%, #ffffff);
+      --fluent-bg-active: color-mix(in srgb, {{ dark_card_bg }} 90%, #ffffff);
+      --fluent-header-bg: {{ dark_card_bg }};
+      --fluent-input-bg: {{ dark_card_bg }};
+      --fluent-input-bg-hover: {{ dark_card_bg }};
+      --fluent-input-bg-disabled: color-mix(in srgb, {{ dark_card_bg }} 94%, #ffffff);
+      --fluent-modal-bg: {{ dark_card_bg }};
+      --fluent-dropdown-bg: {{ dark_card_bg }};
+      --fluent-table-header-bg: color-mix(in srgb, {{ dark_card_bg }} 94%, #ffffff);
+      --fluent-table-row-hover: color-mix(in srgb, {{ dark_card_bg }} 94%, #ffffff);
+      --fluent-tooltip-bg: color-mix(in srgb, {{ dark_card_bg }} 88%, #ffffff);
+      {% } %}
+      {% if (dark_page_bg_is_custom) { %}
+      --fluent-modal-overlay: color-mix(in srgb, {{ dark_page_bg }} 68%, transparent);
       {% } %}
     }
 
@@ -400,6 +446,7 @@
   data-tab-animation="{{ tab_animation }}"
   data-prefers-reduced-motion="{{ prefers_reduced_motion }}"
   data-loading-bar="{{ loading_bar }}"
+  data-sticky-action-bar="{{ sticky_action_bar }}"
   data-progressbar-text="{{ progressbar_text_position }}"
   data-sidebar-state="expanded">
   {% if (ctx.authsession) { %}

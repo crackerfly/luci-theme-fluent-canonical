@@ -55,12 +55,7 @@ body > div.main > div.main-right > header {
       display: flex;
       align-items: center;
 
-      .icon {
-        width: 18px;
-        height: 18px;
-        margin-inline-end: 12px;
-        flex-shrink: 0;
-      }
+      @include brand-mark(18px, 12px);
     }
 
     &__search-slot {

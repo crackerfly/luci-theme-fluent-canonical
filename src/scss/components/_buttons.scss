@@ -27,25 +27,22 @@
 
   // Delete is an action pairing, not an Error feedback state: each state has
   // its own background, and the same colour carries text, icon and border.
+  //
+  // LuCI core only emits `cbi-button-remove` / `cbi-button-negative` / `danger`;
+  // the rest are the spellings third-party OpenWrt apps use for the same
+  // destructive intent (stop / kill / terminate / delete / remove), so they land
+  // on the red pairing instead of falling through to the neutral Secondary look.
   &.cbi-button-remove,
   &.cbi-button-negative,
+  &.cbi-button-danger,
+  &.cbi-button-delete,
+  &.cbi-button-stop,
+  &.cbi-button-kill,
+  &.cbi-button-terminate,
+  &.btn-danger,
   &.danger {
     @include button-base;
-    background: var(--fluent-delete-bg);
-    color: var(--fluent-delete-fg);
-    border-color: transparent;
-
-    &:hover {
-      background: var(--fluent-delete-bg-hover);
-      color: var(--fluent-delete-fg-hover);
-      border-color: transparent;
-    }
-
-    &:active {
-      background: var(--fluent-delete-bg-active);
-      color: var(--fluent-delete-fg-active);
-      border-color: transparent;
-    }
+    @include button-delete;
   }
 
   // Confirm keeps a solid fill with white text.

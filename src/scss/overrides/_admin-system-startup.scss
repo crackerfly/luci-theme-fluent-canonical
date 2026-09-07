@@ -1,0 +1,40 @@
+@use "overrides-utils" as *;
+@use "../mixins" as *;
+
+// ============================================================
+// System → Startup (admin-system-startup)
+//
+// LuCI's `system/startup.js` builds the action cell as
+//
+//   <div>
+//     <button class="btn cbi-button-positive|cbi-button-negative">Enabled/Disabled</button>
+//     <button class="btn cbi-button-action">Start</button>
+//     <button class="btn cbi-button-action">Restart</button>
+//     <button class="btn cbi-button-action">Reload</button>
+//     <button class="btn cbi-button-action">Stop</button>     <-- destructive
+//   </div>
+//
+// All four service actions share the identical `cbi-button-action` class, so
+// the destructive one carries no semantic hook of its own. Position is the only
+// stable anchor available to CSS, and it is stable: `Stop` is the last child in
+// every row LuCI renders. The enable/disable toggle already carries
+// positive/negative and is the cell's *first* child, so it is untouched here.
+// ============================================================
+
+@mixin admin-system-startup-styles {
+  .td > div {
+    // Keep the row on one baseline and off the neighbouring text (item 4).
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fluent-space-sm);
+
+    > .cbi-button-action:last-child {
+      @include button-delete($important: true);
+    }
+  }
+}
+
+@include plugin("admin-system-startup") {
+  @include admin-system-startup-styles;
+}

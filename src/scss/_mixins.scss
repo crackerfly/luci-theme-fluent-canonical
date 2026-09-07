@@ -270,6 +270,35 @@ $breakpoint-xxl: 1400px;
 @mixin button-text {
   @extend %button-text;
 }
+
+// Delete pairing — the destructive action colour.
+// This is an *action* pairing, not an Error feedback triad: every state gets
+// its own background, and a single colour carries text, icon and border.
+// Declarations only (no @extend) so it can be applied from inside a
+// page-scoped override block without hoisting to the placeholder's position.
+@mixin button-delete($important: false) {
+  $i: "";
+  @if $important {
+    $i: " !important";
+  }
+
+  background: var(--fluent-delete-bg)#{$i};
+  color: var(--fluent-delete-fg)#{$i};
+  border-color: transparent#{$i};
+
+  &:hover {
+    background: var(--fluent-delete-bg-hover)#{$i};
+    color: var(--fluent-delete-fg-hover)#{$i};
+    border-color: transparent#{$i};
+  }
+
+  &:active {
+    background: var(--fluent-delete-bg-active)#{$i};
+    color: var(--fluent-delete-fg-active)#{$i};
+    border-color: transparent#{$i};
+  }
+}
+
 // Global editable-field focus recipe (composite controls: div-based dropdowns).
 // Light/Print: exact brand blue border + blue soft ring.
 // Dark:        exact brand purple border + purple soft ring.
@@ -374,6 +403,42 @@ $breakpoint-xxl: 1400px;
   // layer; the focus indicator is the border + ring above, not an underline.
   @if $extra-bg {
     @include inline-end-background($extra-bg, $extra-position, center, $extra-size);
+  }
+}
+
+// ============================================================
+// BRAND MARK
+// The logo is referenced as <img src=".../fluent.svg">, and an image loaded
+// that way is an isolated document: it cannot read the page's custom
+// properties, so it can never follow the theme accent on its own. Instead the
+// decorative <img> is hidden and the mark is painted on the parent's
+// ::before as a solid brand-coloured box cut to the logo silhouette.
+// The SVG keeps its own standalone colour for the favicon, manifest and the
+// generated PNGs, which are separate documents anyway.
+// ============================================================
+@mixin brand-mark($size: 18px, $gap: null, $important: false, $child: ".icon") {
+  $i: "";
+  @if $important {
+    $i: " !important";
+  }
+
+  > #{$child} {
+    display: none#{$i};
+  }
+
+  &::before {
+    content: ""#{$i};
+    flex: none#{$i};
+    width: $size#{$i};
+    height: $size#{$i};
+    background-color: var(--fluent-primary)#{$i};
+    -webkit-mask: url("../img/fluent.svg") no-repeat center / contain;
+    mask: url("../img/fluent.svg") no-repeat center / contain;
+
+    @if $gap {
+      margin-inline-end: $gap#{$i};
+    }
+    @content;
   }
 }
 

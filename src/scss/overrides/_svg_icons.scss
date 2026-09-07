@@ -16,10 +16,10 @@ $cell-1-path: "M4.75 12a.75.75 0 0 1 .743.64l.008.11v2.503a.75.75 0 0 1-1.493.11
 
 @function get-combined-cellular-svg($active-path, $color-scheme-dark: false) {
     $bg-color: "rgba(0,0,0,0.18)";
-    $active-color: "%23616161"; // matches var(--fluent-text-secondary)
+    $active-color: "%233d3d3d"; // matches light --fluent-text-secondary (#3D3D3D)
     @if $color-scheme-dark {
         $bg-color: "rgba(255,255,255,0.18)";
-        $active-color: "%23adadad";
+        $active-color: "%23b2bad0"; // matches dark --fluent-text-secondary (#B2BAD0)
     }
 
     $svg: "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'>" +

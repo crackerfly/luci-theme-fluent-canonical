@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 // About and Update Manager Styles for Fluent Theme
 
 .fluent-about-manager {
@@ -26,11 +27,9 @@
   text-align: center;
   padding: 12px 0;
 
-  img {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 12px;
-  }
+@include brand-mark(64px, null, false, "img") {
+      margin-bottom: 12px;
+    }
 
   h2 {
     margin: 0;
@@ -117,20 +116,24 @@
     border-left-color: var(--fluent-primary);
   }
 
+  // Feedback states consume the theme's bg / graphic / text triads rather than
+  // WinUI literals, so they follow the active theme.
   &.status-success {
-    border-left-color: #107c41; // WinUI Success color
-    background-color: rgba(16, 124, 65, 0.05);
+    border-left-color: var(--fluent-success);
+    background-color: var(--fluent-success-light);
+    color: var(--fluent-success-text);
   }
 
   &.status-warn {
-    border-left-color: #ffb900; // WinUI Warning color
-    background-color: rgba(255, 185, 0, 0.05);
+    border-left-color: var(--fluent-warning);
+    background-color: var(--fluent-warning-light);
+    color: var(--fluent-warning-text);
   }
 
   &.status-error {
-    border-left-color: #a80000; // WinUI Error color
-    background-color: rgba(168, 0, 0, 0.05);
-    color: #a80000;
+    border-left-color: var(--fluent-error);
+    background-color: var(--fluent-error-light);
+    color: var(--fluent-error-text);
   }
 }
 
@@ -149,8 +152,10 @@
     align-items: center;
 
     .fluent-update-badge {
-      background-color: var(--fluent-primary);
-      color: #fff;
+      // White text on the raw brand anchor is only 4.2106:1 in dark mode, so a
+      // solid fill that carries white uses the Primary Component token instead.
+      background-color: var(--fluent-btn-primary-bg);
+      color: var(--fluent-text-on-primary);
       padding: 2px 8px;
       border-radius: 12px;
       font-size: 11px;
@@ -188,7 +193,7 @@
 
     h4 {
       margin: 0 0 8px 0;
-      color: #107c41;
+      color: var(--fluent-success-text);
       font-weight: 600;
     }
 

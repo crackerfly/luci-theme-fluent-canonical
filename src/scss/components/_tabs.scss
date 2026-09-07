@@ -189,6 +189,21 @@ ul.cbi-tabmenu {
     padding-top: 0;
   }
 }
+
+// ============================================================
+// Tab strip sitting directly under a heading or a description
+//
+// The strip declares `margin: 0` and the global reset zeroes the heading's,
+// so "<h3>CPU Load</h3><ul class="cbi-tabmenu">…" collided: the tab labels
+// touched the heading's descenders and the whole block read as one line.
+// The heading rhythm in _base.scss covers h1–h6; this rule extends the same
+// 12px gap to the description/legend variants third-party pages use, and it
+// outranks the strip's own `margin: 0` (0,1,2 vs 0,1,1).
+// ============================================================
+:is(legend, .cbi-title, .cbi-map-descr, .cbi-section-descr, .cbi-value-description)
+  + :is(ul.tabs, ul.cbi-tabmenu, .cbi-tabmenu, .tabmenu, .nav-tabs) {
+  margin-block-start: var(--fluent-space-md);
+}
 // ============================================================
 // STRUCTURE 2: #tabmenu / .tabmenu > ul.tabs (header tabs)
 // Shared layout structure, keep wrapper constraints if any

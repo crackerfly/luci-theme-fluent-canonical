@@ -557,6 +557,12 @@ cbi-dropdown,
     box-sizing: border-box;
     padding-inline-end: var(--fluent-space-xl);
     cursor: pointer;
+
+    // See _select.scss: the caret is a background image, so dark mode swaps the
+    // file rather than recolouring it.
+    @include theme-dark-context {
+      background-image: url("../assets/select-chevron-dark.svg");
+    }
   }
 
   // Remove border, background and padding of ifacebadge inside dropdown to keep text inline and clean

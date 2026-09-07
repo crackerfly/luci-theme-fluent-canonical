@@ -1,6 +1,37 @@
 @use "overrides-utils" as *;
+@use "../icons" as *;
+@use "../mixins" as *;
 @include plugin-prefix("admin-status-overview") {
   .ifacebox > .ifacebox-body > br {
     display: none;
+  }
+}
+
+// LuCI's 30_network.js emits a literal "\1F4CA" text node as the DHCPv6
+// statistics affordance. A text node cannot be replaced from CSS, so the
+// container's font-size is zeroed to drop the glyph and the project's own
+// Fluent icon is drawn in its place. The tooltip body restores its font-size.
+// Only 30_network.js uses a <span> here; 29_ports.js uses <div>, so the
+// element selector keeps this scoped to the DHCPv6 entry.
+@include plugin-prefix("admin-status-overview") {
+  .ifacebox-body span.cbi-tooltip-container {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: text-bottom;
+    font-size: 0;
+    line-height: 0;
+
+    &::before {
+      @include fluent-mask-icon-by-name("data-histogram-20-regular", 16px, var(--fluent-text-secondary));
+    }
+
+    &:hover::before {
+      background: var(--fluent-primary) !important;
+    }
+
+    .cbi-tooltip {
+      font-size: var(--fluent-font-size-sm);
+      line-height: var(--fluent-line-height-relaxed);
+    }
   }
 }

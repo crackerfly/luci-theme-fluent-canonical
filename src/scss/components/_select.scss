@@ -32,6 +32,14 @@ select.cbi-input-select {
   max-width: 100%;
   box-sizing: border-box;
 
+  // A background-image cannot read a custom property, so the caret ships as two
+  // files and the dark one is swapped in here. Without this the light caret
+  // (#3D3D3D) sat on the dark surface at ~2:1 — under the 3:1 floor for a
+  // non-text graphic.
+  @include theme-dark-context {
+    background-image: url("../assets/select-chevron-dark.svg");
+  }
+
   // Multiple select
   &[multiple] {
     height: auto;

@@ -175,6 +175,14 @@
   border-radius: var(--fluent-radius-lg);
   box-shadow: var(--fluent-shadow-lg);
 
+  // Un-stuck the bar is an ordinary in-flow block, not a floating layer, so it
+  // drops to a tonal surface instead of keeping the float-level shadow.
+  body[data-sticky-action-bar="0"] & {
+    position: static;
+    background: var(--fluent-bg-secondary);
+    box-shadow: none;
+  }
+
   > form[method="post"] {
     display: inline-flex;
   }

@@ -70,6 +70,25 @@ h6 {
   font-size: var(--fluent-font-size-base);
 }
 
+// ── Heading rhythm ──────────────────────────────────────────
+// The reset above zeroes every margin and nothing gave it back, so a heading
+// followed directly by content — a tab strip, a row of buttons, a table —
+// rendered flush against it with no separation at all.
+//
+// Restore the standard 12px block gap, but only when a following sibling
+// actually exists: a heading that ends its container keeps 0 so the card's own
+// padding stays the only trailing space. Putting the gap on the *heading*
+// rather than on the following element matters — a following row of buttons
+// would otherwise have only its first child pushed down and lose its baseline.
+//
+// Scoped to the content region: the header bar, sidebar and login card lay
+// their own headings out with flex gaps and must not gain block margins.
+#maincontent {
+  :is(h1, h2, h3, h4, h5, h6):has(+ *:not(style):not(script)) {
+    margin-block-end: var(--fluent-space-md);
+  }
+}
+
 p {
   margin-bottom: var(--fluent-space-lg);
 }
@@ -357,7 +376,7 @@ div:not([id="view"]) > .spinning {
     width: var(--size);
     border-radius: 50%;
     box-sizing: border-box;
-    border: var(--indicator-size) solid rgba(0, 120, 212, 0.2);
+    border: var(--indicator-size) solid color-mix(in srgb, var(--fluent-primary) 20%, transparent);
     border-top-color: var(--fluent-primary);
     border-right-color: var(--fluent-primary);
     animation: fluent-spin-swing var(--duration) infinite ease;
@@ -400,7 +419,7 @@ div[id="view"] > .spinning {
     width: var(--spinner-size);
     border-radius: 50%;
     box-sizing: border-box;
-    border: var(--indicator-size) solid rgba(0, 120, 212, 0.15);
+    border: var(--indicator-size) solid color-mix(in srgb, var(--fluent-primary) 15%, transparent);
     border-top-color: var(--fluent-primary);
     border-right-color: var(--fluent-primary);
     animation: fluent-spin-swing-clean 1.5s infinite ease;
