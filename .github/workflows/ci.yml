@@ -165,6 +165,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        version: ['24.10.8', '25.12.5']
         variant: [full, lite]
     steps:
       - name: Download prepared source
