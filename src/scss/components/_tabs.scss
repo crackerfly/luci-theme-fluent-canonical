@@ -218,6 +218,15 @@ ul.cbi-tabmenu {
   max-width: 100%;
 }
 
+// The page-level tab bar sits above the page title (System → Administration,
+// Network → Interfaces …) and shipped with no spacing at all, so the strip's
+// labels touched the H2's cap height. The theme renders the bar as
+// `<div id="tabmenu" style="display:none">` and only reveals it once tabs
+// exist, so a bottom margin here costs nothing on untabbed pages.
+#tabmenu {
+  margin-block-end: var(--fluent-space-lg);
+}
+
 // ============================================================
 // Tab content panels
 // ============================================================

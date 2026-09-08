@@ -74,9 +74,7 @@
   &.cbi-button-up,
   &.cbi-button-down {
     @include button-secondary;
-    padding: 0;
-    width: var(--fluent-btn-icon-size);
-    font-size: 0;
+    @include icon-only-button;
     color: var(--fluent-text-secondary);
 
     &:hover {

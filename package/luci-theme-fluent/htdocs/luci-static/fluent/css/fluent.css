@@ -980,9 +980,12 @@ div[id="view"] > :not(.spinning) {
 
 .cbi-button.cbi-button-up, .cbi-button.cbi-button-down, .btn.cbi-button-up, .btn.cbi-button-down {
   width: var(--fluent-btn-icon-size);
+  min-width: var(--fluent-btn-icon-size);
   color: var(--fluent-text-secondary);
+  gap: 0;
   padding: 0;
   font-size: 0;
+  line-height: 0;
 }
 
 .cbi-button.cbi-button-up:hover, .cbi-button.cbi-button-down:hover, .btn.cbi-button-up:hover, .btn.cbi-button-down:hover {
@@ -2452,6 +2455,14 @@ body.modal-overlay-active:has(#modal_overlay .modal.spinning) #maincontent a.btn
 
 .cbi-map > .cbi-section + .cbi-section, #view > .cbi-section + .cbi-section {
   margin-top: 5px;
+}
+
+.cbi-map > .cbi-map-descr, .cbi-map > table.table, .cbi-map > div.table, .cbi-map > p, #view > .cbi-map-descr, #view > table.table, #view > div.table, #view > p {
+  margin-block-end: var(--fluent-space-lg);
+}
+
+.cbi-map > :last-child, #view > :last-child {
+  margin-block-end: 0;
 }
 
 .cbi-map h2, .cbi-map h3, #view h2, #view h3 {
@@ -4544,6 +4555,20 @@ div.td[data-type="fvalue"] {
   }
 }
 
+.diag-action {
+  vertical-align: middle;
+  align-items: center;
+  display: inline-flex;
+}
+
+input + .diag-action, select + .diag-action {
+  margin-inline-start: var(--fluent-space-sm);
+}
+
+.td > input, .td > select {
+  vertical-align: middle;
+}
+
 ul.tabs, ul.cbi-tabmenu {
   box-sizing: border-box;
   align-items: center;
@@ -4731,6 +4756,10 @@ ul.tabs > li.disabled > a:after, ul.tabs > li[disabled] > a:after, ul.cbi-tabmen
   max-width: 100%;
   margin: 0;
   padding: 0;
+}
+
+#tabmenu {
+  margin-block-end: var(--fluent-space-lg);
 }
 
 [data-initialized="true"] > [data-tab][data-tab-title][data-tab-title] {
@@ -8609,8 +8638,11 @@ html[dir="rtl"] .cbi-dropdown.cbi-button, body[data-fluent-dir="rtl"] .cbi-dropd
   align-items: center;
   display: inline-flex;
   width: var(--fluent-input-height) !important;
+  min-width: var(--fluent-input-height) !important;
+  gap: 0 !important;
   padding: 0 !important;
   font-size: 0 !important;
+  line-height: 0 !important;
 }
 
 .control-group:has( > input.cbi-input-password[type="password"]) > input.cbi-input-password + .cbi-button:after {
@@ -11319,7 +11351,7 @@ body[data-page^="admin-status-overview"] > .main > .main-right > #maincontent .c
 
 body[data-page="admin-system-package-manager"] > .main > .main-right > #maincontent .pager {
   justify-content: center;
-  gap: var(--fluent-space-xs);
+  gap: var(--fluent-space-sm);
   box-sizing: border-box;
   width: 100%;
   padding: 0;
@@ -11348,8 +11380,12 @@ body[data-page="admin-system-package-manager"] > .main > .main-right > #maincont
 }
 
 body[data-page="admin-system-package-manager"] > .main > .main-right > #maincontent .pager > .btn.prev, body[data-page="admin-system-package-manager"] > .main > .main-right > #maincontent .pager > .btn.next, body[data-page="admin-system-package-manager"] > .main > .main-right > #maincontent .pager > .cbi-button.prev, body[data-page="admin-system-package-manager"] > .main > .main-right > #maincontent .pager > .cbi-button.next, body[data-page="admin-system-package-manager"] > .main > .main-right > #maincontent .pager > button.prev, body[data-page="admin-system-package-manager"] > .main > .main-right > #maincontent .pager > button.next {
+  gap: 0;
   width: 32px;
+  min-width: 32px;
   padding: 0;
+  font-size: 0;
+  line-height: 0;
   font-size: 0 !important;
   line-height: 0 !important;
 }
@@ -11400,7 +11436,7 @@ body[data-page="admin-system-package-manager"] > .main > .main-right > #maincont
 }
 
 body[data-page="admin-system-package-manager"] > .main > .main-right > #maincontent .pager > .text, body[data-page="admin-system-package-manager"] > .main > .main-right > #maincontent .pager > span {
-  padding: 0 var(--fluent-space-md);
+  padding: 0 var(--fluent-space-sm);
   font-size: var(--fluent-font-size-sm);
   color: var(--fluent-text-secondary);
   font-weight: var(--fluent-font-weight-normal);
@@ -11971,23 +12007,49 @@ body.fluent-log-fullscreen {
   overflow: hidden !important;
 }
 
-body[data-page^="admin-status-logs"] #content_syslog > div {
+body[data-page^="admin-status-logs"] #content_syslog > div:not([class]) {
   align-items: center;
   gap: var(--fluent-space-sm);
   flex-wrap: wrap;
   display: flex;
 }
 
-body[data-page^="admin-status-logs"] #content_syslog > div > * {
+body[data-page^="admin-status-logs"] #content_syslog > div:not([class]) > * {
   margin: 0 !important;
 }
 
-body[data-page^="admin-status-logs"] #content_syslog > div > label {
+body[data-page^="admin-status-logs"] #content_syslog > div:not([class]) > label {
   color: var(--fluent-text-secondary);
 }
 
 body[data-page="admin-network-wireless"] > #modal_overlay > .modal {
   max-height: 90% !important;
+}
+
+body[data-page="admin-network-diagnostics"] > .main > .main-right > #maincontent table.table, body[data-page="admin-network-diagnostics"] > .main > .main-right > #maincontent table.table > tbody {
+  display: block;
+}
+
+body[data-page="admin-network-diagnostics"] > .main > .main-right > #maincontent table.table .tr {
+  align-items: center;
+  gap: var(--fluent-space-md) var(--fluent-space-lg);
+  border-bottom: 0;
+  flex-wrap: wrap;
+  display: flex;
+}
+
+body[data-page="admin-network-diagnostics"] > .main > .main-right > #maincontent table.table .tr:hover {
+  background: none;
+}
+
+body[data-page="admin-network-diagnostics"] > .main > .main-right > #maincontent table.table .td {
+  flex: auto;
+  min-width: 0;
+  padding: 0;
+}
+
+body[data-page="admin-network-diagnostics"] > .main > .main-right > #maincontent table.table .td > input, body[data-page="admin-network-diagnostics"] > .main > .main-right > #maincontent table.table .td > select {
+  max-width: 100%;
 }
 
 body[data-page^="admin-services-appfilter"] > .main > .main-right > #maincontent .slider {

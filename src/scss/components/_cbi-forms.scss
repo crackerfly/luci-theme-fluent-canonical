@@ -18,6 +18,22 @@
     margin-top: 5px;
   }
 
+  // Top-level page blocks that are NOT cards carry no spacing of their own:
+  // the reset zeroed every margin and this container is a flex column, so
+  // nothing collapses in either. Without this the map description and the
+  // free-standing command tables (Network → Diagnostics) sit hard against the
+  // first card below them.
+  > .cbi-map-descr,
+  > table.table,
+  > div.table,
+  > p {
+    margin-block-end: var(--fluent-space-lg);
+  }
+
+  > :last-child {
+    margin-block-end: 0;
+  }
+
   h2,
   h3 {
     margin: 0;

@@ -278,3 +278,29 @@ div.td[data-type="fvalue"] {
     display: block;
   }
 }
+
+// ============================================================
+// DIAGNOSTICS COMMAND ROW
+//
+// network/diagnostics.js emits, inside each table cell,
+//   <input style="margin:5px 0"><span class="diag-action">…button…</span>
+// with nothing but a whitespace text node between them — about 3px, and the
+// wrapper span collapsed to text height so the button's focus ring could be
+// clipped. `.diag-action` is a stable LuCI hook, so the sibling combinator is
+// all this needs; no :has() involved.
+// ============================================================
+.diag-action {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+input + .diag-action,
+select + .diag-action {
+  margin-inline-start: var(--fluent-space-sm);
+}
+
+.td > input,
+.td > select {
+  vertical-align: middle;
+}

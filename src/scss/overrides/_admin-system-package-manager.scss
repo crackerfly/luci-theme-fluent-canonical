@@ -10,7 +10,10 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center;
-    gap: var(--fluent-space-xs);
+    // Separation lives in the flex gap, not half here and half in the label's
+    // padding: the two arrows and the counter then read as one 8px-spaced row
+    // at the box level, which is what a layout audit can actually check.
+    gap: var(--fluent-space-sm);
     padding: 0;
     box-sizing: border-box;
     width: 100%;
@@ -41,8 +44,7 @@
 
       &.prev,
       &.next {
-        width: 32px;
-        padding: 0;
+        @include icon-only-button(32px);
         font-size: 0 !important;
         line-height: 0 !important;
 
@@ -66,7 +68,7 @@
     > .text,
     > span {
       flex: 0 0 auto !important;
-      padding: 0 var(--fluent-space-md);
+      padding: 0 var(--fluent-space-sm);
       font-size: var(--fluent-font-size-sm);
       color: var(--fluent-text-secondary);
       font-weight: var(--fluent-font-weight-normal);

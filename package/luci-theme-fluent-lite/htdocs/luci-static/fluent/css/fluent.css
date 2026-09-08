@@ -980,9 +980,12 @@ div[id="view"] > :not(.spinning) {
 
 .cbi-button.cbi-button-up, .cbi-button.cbi-button-down, .btn.cbi-button-up, .btn.cbi-button-down {
   width: var(--fluent-btn-icon-size);
+  min-width: var(--fluent-btn-icon-size);
   color: var(--fluent-text-secondary);
+  gap: 0;
   padding: 0;
   font-size: 0;
+  line-height: 0;
 }
 
 .cbi-button.cbi-button-up:hover, .cbi-button.cbi-button-down:hover, .btn.cbi-button-up:hover, .btn.cbi-button-down:hover {
@@ -2452,6 +2455,14 @@ body.modal-overlay-active:has(#modal_overlay .modal.spinning) #maincontent a.btn
 
 .cbi-map > .cbi-section + .cbi-section, #view > .cbi-section + .cbi-section {
   margin-top: 5px;
+}
+
+.cbi-map > .cbi-map-descr, .cbi-map > table.table, .cbi-map > div.table, .cbi-map > p, #view > .cbi-map-descr, #view > table.table, #view > div.table, #view > p {
+  margin-block-end: var(--fluent-space-lg);
+}
+
+.cbi-map > :last-child, #view > :last-child {
+  margin-block-end: 0;
 }
 
 .cbi-map h2, .cbi-map h3, #view h2, #view h3 {
@@ -4544,6 +4555,20 @@ div.td[data-type="fvalue"] {
   }
 }
 
+.diag-action {
+  vertical-align: middle;
+  align-items: center;
+  display: inline-flex;
+}
+
+input + .diag-action, select + .diag-action {
+  margin-inline-start: var(--fluent-space-sm);
+}
+
+.td > input, .td > select {
+  vertical-align: middle;
+}
+
 ul.tabs, ul.cbi-tabmenu {
   box-sizing: border-box;
   align-items: center;
@@ -4731,6 +4756,10 @@ ul.tabs > li.disabled > a:after, ul.tabs > li[disabled] > a:after, ul.cbi-tabmen
   max-width: 100%;
   margin: 0;
   padding: 0;
+}
+
+#tabmenu {
+  margin-block-end: var(--fluent-space-lg);
 }
 
 [data-initialized="true"] > [data-tab][data-tab-title][data-tab-title] {
@@ -8609,8 +8638,11 @@ html[dir="rtl"] .cbi-dropdown.cbi-button, body[data-fluent-dir="rtl"] .cbi-dropd
   align-items: center;
   display: inline-flex;
   width: var(--fluent-input-height) !important;
+  min-width: var(--fluent-input-height) !important;
+  gap: 0 !important;
   padding: 0 !important;
   font-size: 0 !important;
+  line-height: 0 !important;
 }
 
 .control-group:has( > input.cbi-input-password[type="password"]) > input.cbi-input-password + .cbi-button:after {

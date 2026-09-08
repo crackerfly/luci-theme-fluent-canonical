@@ -358,7 +358,14 @@ body.fluent-log-fullscreen {
 // and `margin-bottom: 10px` on the facility <select>; as baseline-aligned
 // inline boxes the two selects then sit ~10px apart vertically. Inline styles
 // can only be beaten with !important.
-body[data-page^="admin-status-logs"] #content_syslog > div {
+//
+// `:not([class])` is load-bearing, not decoration. The theme's own log viewer
+// is injected as a sibling of the textarea INSIDE #content_syslog, so a bare
+// `#content_syslog > div` also matched `.fluent-log-viewer` and turned that
+// column into a wrapped row: the header shrank to its content width and the
+// body dropped onto a second line. Only LuCI's unclassed `<div style=…>`
+// filter rows may match here.
+body[data-page^="admin-status-logs"] #content_syslog > div:not([class]) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;

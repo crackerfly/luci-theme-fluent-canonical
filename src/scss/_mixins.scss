@@ -279,6 +279,29 @@ $breakpoint-xxl: 1400px;
   @extend %button-text;
 }
 
+// Icon-only button.
+//
+// The accessible label stays in the DOM (screen readers and LuCI's own code
+// both need it) and is collapsed to zero width, with the mark drawn on a
+// pseudo-element. `gap: 0` is the part that is easy to miss and invisible in
+// source review: a collapsed text node is STILL a flex item, so %button-base's
+// 8px gap gets laid out between the pseudo-element and that empty item and the
+// mark ends up gap/2 off-centre. Measured 4.5px left of centre on the package
+// manager's pager before this mixin existed.
+@mixin icon-only-button($size: var(--fluent-btn-icon-size), $important: false) {
+  $i: "";
+  @if $important {
+    $i: " !important";
+  }
+
+  width: $size#{$i};
+  min-width: $size#{$i};
+  padding: 0#{$i};
+  gap: 0#{$i};
+  font-size: 0#{$i};
+  line-height: 0#{$i};
+}
+
 // Delete pairing — the destructive action colour.
 // This is an *action* pairing, not an Error feedback triad: every state gets
 // its own background, and a single colour carries text, icon and border.

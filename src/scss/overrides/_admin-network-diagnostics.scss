@@ -1,0 +1,50 @@
+@use "overrides-utils" as *;
+
+// ============================================================
+// Network → Diagnostics (admin-network-diagnostics)
+//
+// `network/diagnostics.js` lays the three-or-four command boxes out as a
+// single-row <table>: one <tr>, one <td> per command, each holding an <input>
+// and a <span class="diag-action"> button. A table row cannot wrap, so once
+// the commands need more than the content area's width the *whole page*
+// scrolled sideways — measured 1071px of content in a 1020px area at 1600px
+// viewport, and worse on smaller screens.
+//
+// Re-flow the row as a wrapping flex track instead: each command keeps its
+// cell, and cells that no longer fit drop to the next line. `display: block`
+// on the table is what lets the row become a flex container at all.
+// ============================================================
+
+@mixin admin-network-diagnostics-styles {
+  table.table,
+  table.table > tbody {
+    display: block;
+  }
+
+  table.table .tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fluent-space-md) var(--fluent-space-lg);
+    border-bottom: 0;
+
+    &:hover {
+      background: transparent;
+    }
+  }
+
+  table.table .td {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0;
+
+    > input,
+    > select {
+      max-width: 100%;
+    }
+  }
+}
+
+@include plugin("admin-network-diagnostics") {
+  @include admin-network-diagnostics-styles;
+}
