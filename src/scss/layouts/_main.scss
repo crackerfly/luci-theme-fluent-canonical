@@ -16,19 +16,22 @@
         #view,
         #view > div {
           > h2 {
-            position: relative;
-            padding-inline-start: 12px;
-            &::before {
-              content: "";
-              position: absolute;
-              inset-inline-start: 0;
-              top: 4px;
-              bottom: 4px;
-              width: 4px;
-              background-color: var(--fluent-primary);
-              border-radius: var(--fluent-radius-sm, 2px);
-            }
+            @include page-title-accent;
           }
+        }
+
+        // The structural selectors above assume the page title is at most two
+        // levels inside #view. A view that returns several top-level blocks in
+        // one bare wrapper nests it a level deeper — luci-app-liquid-formula's
+        // FakeHTTP page renders `E('div', {}, [ card, mapNode, card ])`, so its
+        // Map title sits at `#view > div > .cbi-map > h2` and was the one page
+        // title in the whole UI with no brand rule beside it.
+        //
+        // `name="content"` is LuCI's own marker for a Map title — form.js
+        // `renderContents()` emits `E('h2', { name: 'content' }, title)` — so
+        // it identifies the element by contract rather than by nesting depth.
+        #view h2[name="content"] {
+          @include page-title-accent;
         }
       }
       @include mobile-only {

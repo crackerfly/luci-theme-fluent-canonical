@@ -18,7 +18,7 @@
   display: inline-flex;
 }
 
-.cbi-input-file::file-selector-button {
+input[type="file"]::file-selector-button {
   justify-content: center;
   align-items: center;
   gap: var(--fluent-space-sm);
@@ -46,7 +46,7 @@
   pointer-events: none;
 }
 
-.cbi-input-file:disabled::file-selector-button {
+input[type="file"]:disabled::file-selector-button {
   color: var(--fluent-text-muted);
   background: var(--fluent-bg-secondary);
   box-shadow: none;
@@ -59,7 +59,7 @@
   outline-offset: 2px;
 }
 
-.cbi-input-file:focus-visible::file-selector-button {
+input[type="file"]:focus-visible::file-selector-button {
   outline: 2px solid var(--fluent-focus-color);
   outline-offset: 2px;
 }
@@ -84,7 +84,7 @@
   box-shadow: inset 0 0 0 1px var(--fluent-btn-secondary-border);
 }
 
-.cbi-input-file::file-selector-button {
+input[type="file"]::file-selector-button {
   background: var(--fluent-btn-secondary-bg);
   color: var(--fluent-text);
   box-shadow: inset 0 0 0 1px var(--fluent-btn-secondary-border);
@@ -95,7 +95,7 @@
   box-shadow: inset 0 0 0 1px var(--fluent-btn-secondary-border-hover);
 }
 
-.cbi-input-file:hover::file-selector-button {
+input[type="file"]:hover::file-selector-button {
   background: var(--fluent-btn-secondary-bg-hover);
   box-shadow: inset 0 0 0 1px var(--fluent-btn-secondary-border-hover);
 }
@@ -105,7 +105,7 @@
   box-shadow: inset 0 0 0 1px var(--fluent-btn-secondary-border-active);
 }
 
-.cbi-input-file:active::file-selector-button {
+input[type="file"]:active::file-selector-button {
   background: var(--fluent-btn-secondary-bg-active);
   box-shadow: inset 0 0 0 1px var(--fluent-btn-secondary-border-active);
 }
@@ -2453,10 +2453,6 @@ body.modal-overlay-active:has(#modal_overlay .modal.spinning) #maincontent a.btn
   display: flex;
 }
 
-.cbi-map > .cbi-section + .cbi-section, #view > .cbi-section + .cbi-section {
-  margin-top: 5px;
-}
-
 .cbi-map > .cbi-map-descr, .cbi-map > table.table, .cbi-map > div.table, .cbi-map > p, #view > .cbi-map-descr, #view > table.table, #view > div.table, #view > p {
   margin-block-end: var(--fluent-space-lg);
 }
@@ -2487,7 +2483,7 @@ body.modal-overlay-active:has(#modal_overlay .modal.spinning) #maincontent a.btn
   line-height: var(--fluent-line-height-relaxed);
 }
 
-:is(#maincontent div:not([class]):has( > label + input), #maincontent div:not([class]):has( > label + select), #maincontent div:not([class]):has( > label + button), #maincontent div:not([class]):has( > label + .btn), #maincontent div:not([class]):has( > input + label), #maincontent div:not([class]):has( > select + label)) {
+:is(#maincontent div:not([class]):has( > label + input), #maincontent div:not([class]):has( > label + select), #maincontent div:not([class]):has( > label + button), #maincontent div:not([class]):has( > label + .btn), #maincontent div:not([class]):has( > input + label), #maincontent div:not([class]):has( > select + label), #maincontent div:not([class]):has( > input + button), #maincontent div:not([class]):has( > input + .btn), #maincontent div:not([class]):has( > select + button), #maincontent div:not([class]):has( > select + .btn)) {
   align-items: center;
   gap: var(--fluent-space-sm);
   flex-wrap: wrap;
@@ -2638,8 +2634,108 @@ body.modal-overlay-active:has(#modal_overlay .modal.spinning) #maincontent a.btn
   margin: 0 !important;
 }
 
-:is(#maincontent div:not([class]):has( > label + input) > label, #maincontent div:not([class]):has( > label + select) > label, #maincontent div:not([class]):has( > label + button) > label, #maincontent div:not([class]):has( > label + .btn) > label, #maincontent div:not([class]):has( > input + label) > label, #maincontent div:not([class]):has( > select + label) > label) {
+#maincontent div:not([class]):has( > input + button) > label {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + button) > input {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + button) > select {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + button) > button {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + button) > .btn {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + button) > .cbi-button {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + .btn) > label {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + .btn) > input {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + .btn) > select {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + .btn) > button {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + .btn) > .btn {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > input + .btn) > .cbi-button {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + button) > label {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + button) > input {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + button) > select {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + button) > button {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + button) > .btn {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + button) > .cbi-button {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + .btn) > label {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + .btn) > input {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + .btn) > select {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + .btn) > button {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + .btn) > .btn {
+  margin: 0 !important;
+}
+
+#maincontent div:not([class]):has( > select + .btn) > .cbi-button {
+  margin: 0 !important;
+}
+
+:is(#maincontent div:not([class]):has( > label + input) > label, #maincontent div:not([class]):has( > label + select) > label, #maincontent div:not([class]):has( > label + button) > label, #maincontent div:not([class]):has( > label + .btn) > label, #maincontent div:not([class]):has( > input + label) > label, #maincontent div:not([class]):has( > select + label) > label, #maincontent div:not([class]):has( > input + button) > label, #maincontent div:not([class]):has( > input + .btn) > label, #maincontent div:not([class]):has( > select + button) > label, #maincontent div:not([class]):has( > select + .btn) > label) {
   color: var(--fluent-text-secondary);
+}
+
+:is(.cbi-section, .cbi-map) + :is(.cbi-section, .cbi-map) {
+  margin-block-start: var(--fluent-space-lg);
 }
 
 #maincontent .cbi-title {
@@ -2725,11 +2821,15 @@ body.modal-overlay-active:has(#modal_overlay .modal.spinning) #maincontent a.btn
 }
 
 .cbi-section-descr {
-  padding: 0 var(--fluent-space-lg) var(--fluent-space-md);
+  margin: 0 0 var(--fluent-space-md);
   color: var(--fluent-text-secondary);
   font-size: var(--fluent-font-size-base);
   line-height: var(--fluent-line-height-relaxed);
-  margin: 0;
+  padding: 0;
+}
+
+.cbi-section-descr:last-child {
+  margin-block-end: 0;
 }
 
 .cbi-section.fade-in {
@@ -4317,20 +4417,27 @@ select.cbi-input-invalid {
   border-bottom-color: var(--fluent-error);
 }
 
-.cbi-input-file {
-  width: 100%;
-  max-width: 100%;
-  padding: var(--fluent-space-xs);
-  color: var(--fluent-text);
-  background: var(--fluent-input-bg);
-  border: 1px solid var(--fluent-input-border);
-  border-radius: var(--fluent-radius-md);
+input[type="file"] {
   box-sizing: border-box;
-  border-bottom-width: 2px;
+  max-width: 100%;
+  height: var(--fluent-input-height);
+  color: var(--fluent-text);
+  font-family: var(--fluent-font-family);
+  font-size: var(--fluent-font-size-base);
+  line-height: var(--fluent-input-height);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
 }
 
-.cbi-input-file::file-selector-button {
-  margin-right: var(--fluent-space-sm);
+input[type="file"]::file-selector-button {
+  margin: 0;
+  margin-inline-end: var(--fluent-space-sm);
+}
+
+.cbi-input-file {
+  width: 100%;
 }
 
 #cbi-upload {
@@ -12449,6 +12556,22 @@ body > div.main > div.main-right > header [data-theme="dark"] .theme-toggle:hove
 }
 
 .main > .main-right > #maincontent > .container > h2:before, .main > .main-right > #maincontent > .container #view > h2:before, .main > .main-right > #maincontent > .container #view > div > h2:before {
+  content: "";
+  inset-inline-start: 0;
+  background-color: var(--fluent-primary);
+  border-radius: var(--fluent-radius-sm, 2px);
+  width: 4px;
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+}
+
+.main > .main-right > #maincontent > .container #view h2[name="content"] {
+  padding-inline-start: 12px;
+  position: relative;
+}
+
+.main > .main-right > #maincontent > .container #view h2[name="content"]:before {
   content: "";
   inset-inline-start: 0;
   background-color: var(--fluent-primary);

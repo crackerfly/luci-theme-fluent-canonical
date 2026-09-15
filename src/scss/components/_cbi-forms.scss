@@ -14,9 +14,6 @@
   max-width: 100%;
 
   // gap: var(--fluent-space-lg);
-  > .cbi-section + .cbi-section {
-    margin-top: 5px;
-  }
 
   // Top-level page blocks that are NOT cards carry no spacing of their own:
   // the reset zeroed every margin and this container is a flex column, so
@@ -70,10 +67,17 @@
 // 32px control does not centre against its ~20px label, so the row is visibly
 // ragged.
 //
-// Lay any *unclassed* wrapper that mixes a label with a control out as a flex
-// row instead. `:not([class])` is what keeps this bounded: every themed and
-// every CBI container carries a class, so only these ad-hoc wrappers match.
-// The children need !important because LuCI's margins are inline styles.
+// The same wrapper is also used for control-next-to-control rows:
+// luci-app-liquid-formula's FakeHTTP uploader renders
+// `E('div', {}, [ input, ' ', button, output ])`, where the only thing between
+// the file input and its Upload button is a whitespace text node — measured
+// 3.14px, well under the 8px minimum.
+//
+// Lay any *unclassed* wrapper that mixes a label with a control, or one control
+// with the next, out as a flex row instead. `:not([class])` is what keeps this
+// bounded: every themed and every CBI container carries a class, so only these
+// ad-hoc wrappers match. The children need !important because LuCI's margins
+// are inline styles.
 // ============================================================
 // Each shape gets its OWN rule rather than one `:is(:has(), :has())` selector.
 // A selector list is all-or-nothing: if an engine cannot parse any part of it
@@ -84,7 +88,11 @@
 #maincontent div:not([class]):has(> label + button),
 #maincontent div:not([class]):has(> label + .btn),
 #maincontent div:not([class]):has(> input + label),
-#maincontent div:not([class]):has(> select + label) {
+#maincontent div:not([class]):has(> select + label),
+#maincontent div:not([class]):has(> input + button),
+#maincontent div:not([class]):has(> input + .btn),
+#maincontent div:not([class]):has(> select + button),
+#maincontent div:not([class]):has(> select + .btn) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -102,6 +110,24 @@
   > label {
     color: var(--fluent-text-secondary);
   }
+}
+
+// ============================================================
+// TOP-LEVEL BLOCK RHYTHM
+//
+// LuCI views routinely return several top-level blocks inside a bare wrapper —
+// `E('div', {}, [ card, map, card ])` is the shape used by, among others,
+// luci-app-liquid-formula's FakeHTTP page. That wrapper carries no class and no
+// spacing of its own, so a card and the `.cbi-map` next to it rendered with a
+// 0px gap: the Map's own <h2> title sat directly on the card's bottom edge.
+//
+// Cards and maps therefore space themselves from a preceding sibling rather
+// than relying on a container they do not control. 16px is the top-level panel
+// gap; it also replaces the previous `margin-top: 5px`, which applied only
+// directly under `.cbi-map`/`#view` and was itself off the 2px grid.
+// ============================================================
+:is(.cbi-section, .cbi-map) + :is(.cbi-section, .cbi-map) {
+  margin-block-start: var(--fluent-space-lg);
 }
 
 // ============================================================
@@ -202,12 +228,23 @@
   }
 }
 
+// The description is a block inside a `.cbi-section`, and that card already
+// carries `--fluent-card-padding`. Its own 16px of side padding therefore
+// indented the description text one step further in than the h3 above it and
+// the controls below it, so every card with a description read as three
+// different left edges. Space below it is rhythm, not padding, so it moves to a
+// margin — which collapses against a following block's own margin and drops out
+// entirely when the description is the last thing in the card.
 .cbi-section-descr {
-  margin: 0;
-  padding: 0 var(--fluent-space-lg) var(--fluent-space-md);
+  margin: 0 0 var(--fluent-space-md);
+  padding: 0;
   color: var(--fluent-text-secondary);
   font-size: var(--fluent-font-size-base);
   line-height: var(--fluent-line-height-relaxed);
+
+  &:last-child {
+    margin-block-end: 0;
+  }
 }
 
 .cbi-section.fade-in {

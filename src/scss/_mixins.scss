@@ -732,3 +732,27 @@ $breakpoint-xxl: 1400px;
     transform: scaleX(-1) $motion-value;
   }
 }
+
+// ============================================================
+// PAGE TITLE ACCENT
+//
+// The brand rule beside a page title. The bar is an absolutely positioned
+// pseudo-element inside the heading's own inline-start padding, so the
+// heading's border box still starts on the page's content edge and the bar —
+// not the title text — is what lines up with the blocks below it.
+// ============================================================
+@mixin page-title-accent {
+  position: relative;
+  padding-inline-start: 12px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    background-color: var(--fluent-primary);
+    border-radius: var(--fluent-radius-sm, 2px);
+  }
+}

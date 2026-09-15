@@ -31,21 +31,45 @@ select.cbi-input-invalid {
   border-bottom-color: var(--fluent-error);
 }
 
-.cbi-input-file {
-  width: 100%;
-  max-width: 100%;
-  padding: var(--fluent-space-xs);
-  color: var(--fluent-text);
-  background: var(--fluent-input-bg);
-  border: 1px solid var(--fluent-input-border);
-  border-bottom-width: 2px;
-  border-radius: var(--fluent-radius-md);
+// ============================================================
+// FILE INPUT
+//
+// LuCI only adds `.cbi-input-file` when the field comes from a CBI form. Views
+// that build an uploader by hand emit a bare `<input type="file">` — see
+// luci-app-liquid-formula's FakeHTTP payload library, which renders
+// `E('div', {}, [ input, ' ', button, output ])` — and that spelling kept the
+// user agent's own ~22px box sitting next to a 32px button in the same row.
+// Match the element, not the class, so both spellings get the same geometry.
+//
+// The field itself carries no chrome. The boundary budget allows one cue per
+// control and the Secondary browse button inside already provides it; dropping
+// the outer border and padding also lets that button sit flush with the field
+// edge, so the control is exactly one 32px row rather than a button padded
+// inside a second box.
+// ============================================================
+input[type="file"] {
   box-sizing: border-box;
+  max-width: 100%;
+  height: var(--fluent-input-height);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fluent-text);
+  font-family: var(--fluent-font-family);
+  font-size: var(--fluent-font-size-base);
+  line-height: var(--fluent-input-height);
+  cursor: pointer;
 
   &::file-selector-button {
     @include button-secondary;
-    margin-right: var(--fluent-space-sm);
+    margin: 0;
+    margin-inline-end: var(--fluent-space-sm);
   }
+}
+
+// The CBI form variant fills its field column; the bare one sizes to content.
+.cbi-input-file {
+  width: 100%;
 }
 
 #cbi-upload {
