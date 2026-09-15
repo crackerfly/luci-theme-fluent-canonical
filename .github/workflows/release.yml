@@ -152,7 +152,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['24.10.7', '25.12.4']
+        version: ['24.10.8', '25.12.5']
         variant: [full, lite]
     env:
       TAG: ${{ github.event.inputs.tag || github.ref_name }}
