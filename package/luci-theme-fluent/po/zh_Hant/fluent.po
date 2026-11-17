@@ -697,3 +697,54 @@ msgstr "您可以在這裡建立新的 Token："
 
 msgid "Your theme is up to date!"
 msgstr "您的主題已是最新版本！"
+
+msgid "Toggle background audio"
+msgstr "切換背景音訊"
+
+msgid "APK package"
+msgstr "APK 套件"
+
+msgid "IPK package"
+msgstr "IPK 套件"
+
+msgid "Download method"
+msgstr "下載方式"
+
+msgid "Unable to determine installed theme version."
+msgstr "無法識別已安裝的主題版本。"
+
+msgid "No matching theme package found in this release."
+msgstr "此版本中找不到相符的主題套件。"
+
+msgid "Unable to start update."
+msgstr "無法啟動更新。"
+
+msgid "Unable to read update status."
+msgstr "無法讀取更新狀態。"
+
+msgid "Downloading and verifying packages..."
+msgstr "正在下載並驗證套件..."
+
+msgid "Installing packages..."
+msgstr "正在安裝套件..."
+
+msgid "Timed out waiting for update status."
+msgstr "等待更新狀態逾時。"
+
+msgid "Missing update job."
+msgstr "缺少更新工作識別碼。"
+
+msgid "Unexpected update status."
+msgstr "未預期的更新狀態。"
+
+msgid "Update failed. Check the installation log below."
+msgstr "更新失敗，請查看下方安裝記錄。"
+
+msgid "Theme successfully updated. Reload the web interface to use the new version."
+msgstr "主題已成功更新，請重新載入網頁介面以使用新版本。"
+
+msgid "Update status unavailable. Reload and sign in again to check the result."
+msgstr "無法取得更新狀態，請重新載入並登入以確認結果。"
+
+msgid "GitHub token"
+msgstr "GitHub 權杖"

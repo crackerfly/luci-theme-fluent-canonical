@@ -1,14 +1,14 @@
 <div align="center">
 <img src="./package/luci-theme-fluent/htdocs/luci-static/fluent/img/fluent.svg" alt="luci-theme-fluent" width="96" />
 
-# luci-theme-fluent
+# luci-theme-fluent (Canonical Edition)
 
-A FluentUI-inspired OpenWrt LuCI theme built with Rsbuild using pure TypeScript/TSX, SCSS, CSS custom properties, and ucode templates.
+A FluentUI-inspired OpenWrt LuCI theme built with Rsbuild using pure TypeScript/TSX, SCSS, Canonical v3.2 / v3.5.2 perceptual design tokens, and ucode templates.
 
 [![license](https://img.shields.io/badge/license-Apache_2.0-blue.svg?style=flat-square)](./LICENSE)
 [![Forum](https://img.shields.io/badge/Forum-OpenWrt-00a2e8.svg?style=flat-square)](https://forum.openwrt.org/t/luci-theme-fluent-fluent-theme-for-openwrt/251341)
 [![pnpm](https://img.shields.io/badge/pnpm-10.12.4-f69220.svg?style=flat-square)](./package.json)
-[![OpenWrt](https://img.shields.io/badge/OpenWrt-%3E23.05-00a2e8.svg?style=flat-square)](https://openwrt.org/)
+[![OpenWrt](https://img.shields.io/badge/OpenWrt-24.10%20%7C%2025.12.6-00a2e8.svg?style=flat-square)](https://openwrt.org/)
 [![Chrome](https://img.shields.io/badge/Chrome-%3E%3D125-4285f4.svg?style=flat-square)](https://www.google.com/chrome/)
 [![Safari](https://img.shields.io/badge/Safari-%3E%3D26-999999.svg?style=flat-square)](https://www.apple.com/safari/)
 [![Firefox](https://img.shields.io/badge/Firefox-%3E%3D147-e66000.svg?style=flat-square)](https://www.mozilla.org/firefox/)
@@ -40,28 +40,31 @@ A FluentUI-inspired OpenWrt LuCI theme built with Rsbuild using pure TypeScript/
 
 ## Key Features
 
-- FluentUI-inspired visual style for LuCI.
-- SCSS-based architecture with reusable partials.
-- Theme tokens driven by CSS custom properties.
-- ucode templates for LuCI header, footer, and login pages.
-- Theme settings UI for colors, animation, and login appearance.
-- Structured overrides for plugin-specific OpenWrt pages.
-- Optional, theme-independent `luci-mod-fluentdashboard` status dashboard.
+- Canonical v3.2 / v3.5.2 perceptual OKLCH + sRGB dual-layer token system on FluentUI 2 geometry.
+- Dual-layer ambient + contact shadows, tactile micro-interactions, and WCAG AA / APCA contrast-safe semantic triads.
+- Two theme variants: `luci-theme-fluent` (full feature set) and `luci-theme-fluent-lite` (ROM-friendly gzipped `fluent.css.gz` with `sessionStorage` instant caching; requires `DecompressionStream` support: Chrome >= 80, Firefox >= 113, Safari >= 16.4).
+- ucode templates for LuCI header, footer, and login pages compatible with OpenWrt 24.10 (`opkg`) and OpenWrt 25.12.6 (`apk`).
+- Theme settings UI for colors, animation, layout geometry, and login appearance, plus verified background updater.
+- Structured overrides for plugin-specific OpenWrt pages and optional standalone `luci-mod-fluentdashboard`.
 
 ## Getting Started
 
 ### Quick Install
 
-Auto-detects `opkg` / `apk` and installs the latest release by default:
+Auto-detects `apk` / `opkg` and `uclient-fetch` / `wget` / `curl`, installing the latest release by default:
 
 ```bash
 wget -qO- https://raw.githubusercontent.com/LazuliKao/luci-theme-fluent/main/install.sh | sh
 ```
 
-Install the nightly build instead:
+Install the `lite` variant or `nightly` channel:
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/LazuliKao/luci-theme-fluent/main/install.sh | sh -s nightly
+# Latest lite variant
+wget -qO- https://raw.githubusercontent.com/LazuliKao/luci-theme-fluent/main/install.sh | sh -s latest lite
+
+# Nightly full variant
+wget -qO- https://raw.githubusercontent.com/LazuliKao/luci-theme-fluent/main/install.sh | sh -s nightly full
 ```
 
 After installation, navigate to `System -> Fluent Theme` in the LuCI web interface.
@@ -75,24 +78,26 @@ After installation, navigate to `System -> Fluent Theme` in the LuCI web interfa
 3. Install it with the matching package manager:
 
 ```bash
-# OpenWrt 24.10.x
+# OpenWrt 24.10.x (opkg)
 opkg install /tmp/luci-theme-fluent_*.ipk
 
-# OpenWrt 25.12.x
-apk add --allow-untrusted /tmp/luci-theme-fluent-*.apk
+# OpenWrt 25.12.6+ (apk)
+apk add --allow-untrusted --upgrade /tmp/luci-theme-fluent-*.apk
 ```
 
 ### Install from an OpenWrt source tree
 
-You can add this package to your OpenWrt build system in one of two ways:
+You can add `luci-theme-fluent` (or `luci-theme-fluent-lite`) to your OpenWrt build system in one of two ways:
 
 #### Option 1: Clone the repository and copy the package directory
 
 ```bash
 cd openwrt
 git clone --depth=1 https://github.com/LazuliKao/luci-theme-fluent.git /tmp/luci-theme-fluent
-# OpenWrt expects the package directory directly under `package/`.
+# OpenWrt expects package directories under `package/`.
 cp -a /tmp/luci-theme-fluent/package/luci-theme-fluent package/
+# Optional: also copy luci-theme-fluent-lite if building the lite variant
+cp -a /tmp/luci-theme-fluent/package/luci-theme-fluent-lite package/
 ```
 
 #### Option 2: Add to feeds
@@ -116,30 +121,28 @@ After adding the package, configure and select it in `menuconfig`:
 make menuconfig
 ```
 
-Choose `LuCI -> Themes -> luci-theme-fluent`, then build your firmware or package as usual.
+Choose `LuCI -> Themes -> luci-theme-fluent` (or `luci-theme-fluent-lite`), then build your firmware or package as usual.
 
 ### Fluent Dashboard
 
-`luci-mod-fluentdashboard` is an optional fixed-card status dashboard for OpenWrt 24.10 and 25.12. It uses its own `admin/fluentdashboard` route and works with any LuCI theme. It can be installed alongside the official `luci-mod-dashboard` package.
+`luci-mod-fluentdashboard` is an optional fixed-card status dashboard for OpenWrt 24.10 and 25.12.6. It uses its own `admin/fluentdashboard` route and works with any LuCI theme. It can be installed alongside the official `luci-mod-dashboard` package.
 
 ```bash
 # OpenWrt 24.10.x
 opkg install /tmp/luci-mod-fluentdashboard_*.ipk
 
-# OpenWrt 25.12.x
-apk add --allow-untrusted /tmp/luci-mod-fluentdashboard-*.apk
+# OpenWrt 25.12.6+
+apk add --allow-untrusted --upgrade /tmp/luci-mod-fluentdashboard-*.apk
 ```
-
-The dashboard provides system, memory/storage, WAN, interface traffic, wireless, DHCP lease, and wireless client cards. Its assets and Simplified Chinese translation package are built separately from the theme.
 
 ## Configuration
 
-The theme exposes a LuCI settings page for:
+The theme exposes a LuCI settings page (`System -> Fluent Theme`) for:
 
-- color mode
-- primary colors
-- animation behavior
-- login page appearance
+- color mode (light / dark / auto) & Canonical brand colors
+- layout geometry, card elevation, and motion preferences
+- sidebar menu customization & UCI change preview
+- login page wallpaper / blur appearance & verified online update
 
 The settings view is implemented in `src/web/resources/view/fluent-config.tsx`.
 
@@ -147,7 +150,7 @@ The settings view is implemented in `src/web/resources/view/fluent-config.tsx`.
 
 ### Install dependencies
 
-Run this once from the repository root.
+Run this once from the repository root:
 
 ```bash
 pnpm install
@@ -158,14 +161,18 @@ pnpm install
 Run these commands from the repository root:
 
 ```bash
-# Build the CSS and LuCI JavaScript/TSX assets.
+# Build full + lite CSS/gzipped CSS and LuCI JavaScript/TSX assets.
 pnpm run build
 # Watch source files and rebuild assets on changes.
 pnpm run watch
+# Watch and hot-sync standalone dashboard to a remote OpenWrt router.
+pnpm run dev:dashboard:remote
 # Run Biome lint on the package web assets and LuCI resources.
 pnpm run lint
 # Type-check the TypeScript project in `src`.
 pnpm run typecheck
+# Run unit tests.
+pnpm test
 # Extract and build translations; requires `OPENAI_API_KEY` in `.env`.
 pnpm run i18n:build
 # Extract the standalone dashboard translation catalog.
@@ -174,34 +181,14 @@ pnpm run i18n:dashboard
 
 ### Output paths
 
-- CSS: `package/luci-theme-fluent/htdocs/luci-static/fluent/css/fluent.css`
-- JS: `package/luci-theme-fluent/htdocs/luci-static/resources/`
+- Full CSS: `package/luci-theme-fluent/htdocs/luci-static/fluent/css/fluent.css`
+- Lite CSS: `package/luci-theme-fluent-lite/htdocs/luci-static/fluent/css/fluent.css.gz`
+- JS: `package/luci-theme-fluent/htdocs/luci-static/resources/` & `package/luci-theme-fluent-lite/htdocs/luci-static/resources/`
 - Dashboard: `package/luci-mod-fluentdashboard/htdocs/luci-static/resources/view/fluentdashboard/`
-These CSS and JavaScript files are generated by the build and should not be edited manually.
-
-### Project structure
-
-```text
-luci-theme-fluent/
-├── package/luci-theme-fluent/htdocs/luci-static/fluent/
-├── package/luci-theme-fluent/ucode/template/themes/fluent/
-├── package/luci-theme-fluent/root/etc/uci-defaults/
-├── package/luci-theme-fluent/Makefile
-├── src/scss/
-├── src/web/resources/
-└── package.json
-```
-
-### Source layout
-
-- `src/scss/fluent.scss` is the main Sass entry point.
-- `src/scss/components/` contains reusable component styles.
-- `src/scss/layouts/` contains page-level layout styles.
-- `src/scss/overrides/` contains plugin-specific overrides.
-- `src/web/resources/` contains the LuCI-side TypeScript/TSX code.
 
 ## Credits
 
+- [Upstream luci-theme-fluent](https://github.com/LazuliKao/luci-theme-fluent)
 - [Microsoft Fluent Design](https://developer.microsoft.com/en-us/fluentui)
 - [LuCI documentation](https://openwrt.org/docs/techref/luci)
 - [ucode template language](https://openwrt.org/docs/techref/utpl)

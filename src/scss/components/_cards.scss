@@ -1,6 +1,5 @@
 // ============================================================
 // CARDS - FluentUI 2 Card and Section Styles
-// Radius: 8px, Shadow: sm, Border: Grey88
 // ============================================================
 @use "../mixins" as *;
 
@@ -9,7 +8,6 @@
   @include card;
 
   position: relative;
-
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -28,37 +26,31 @@
       padding-top: var(--fluent-space-lg);
     }
   }
+
   .cbi-section-remove.right + .cbi-section-node:has(+ .cbi-section-remove.right + .cbi-section-node) {
-    border-bottom: 2px solid var(--fluent-card-border);
-    margin-bottom: 8px;
-    padding-bottom: 8px;
+    border-bottom: 1px solid var(--fluent-border);
+    margin-bottom: var(--fluent-space-sm);
+    padding-bottom: var(--fluent-space-sm);
   }
 
-  // Top-right section remove button
+  // Top-right section remove button: use Canonical Delete action pairing
   .cbi-section-remove {
     float: inline-end;
     position: relative;
     z-index: 10;
-    margin-block-start: 8px;
-    margin-inline: 0 8px;
-    .cbi-button {
-      background: var(--fluent-error);
-      border-color: var(--fluent-error);
-      color: var(--fluent-button-text);
+    margin-block-start: var(--fluent-space-sm);
+    margin-inline: 0 var(--fluent-space-sm);
 
-      &:hover,
-      &:focus {
-        background: var(--fluent-error-dark);
-        border-color: var(--fluent-error-dark);
-      }
+    .cbi-button {
+      @include button-delete;
     }
   }
+
   .cbi-section-create {
     margin-top: var(--fluent-space-sm);
     display: flex;
     justify-content: flex-end;
     gap: var(--fluent-space-sm);
-
     margin-inline-end: var(--fluent-space-sm);
     margin-bottom: var(--fluent-space-sm);
 
@@ -75,7 +67,7 @@
   border-radius: var(--fluent-card-radius);
   padding: var(--fluent-space-lg);
   margin-bottom: var(--fluent-space-lg);
-  color: var(--fluent-error);
+  color: var(--fluent-error-text);
 }
 
 // Section title
@@ -100,7 +92,7 @@
     color: var(--fluent-text);
     padding-bottom: var(--fluent-space-sm);
     margin-bottom: var(--fluent-space-lg);
-    border-bottom: 1px solid var(--fluent-card-border);
+    border-bottom: 1px solid var(--fluent-border);
   }
 }
 
@@ -114,8 +106,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--fluent-space-xs);
+  gap: var(--fluent-space-sm);
   padding: var(--fluent-space-lg) 0 0;
-  border-top: 1px solid var(--fluent-card-border);
+  border-top: 1px solid var(--fluent-border);
   margin-top: var(--fluent-space-lg);
 }

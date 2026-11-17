@@ -12370,10 +12370,6 @@ body[data-page^="admin-services-appfilter"] > .main > .main-right > #maincontent
   --fluent-focus-inner-color: var(--ref-neutral-0);
 }
 
-body[data-page^="admin-quickstart"] .network_container canvas, body[data-page^="admin-network_guide"] .network_container canvas, body[data-page^="admin-nas-raid"] .network_container canvas, body[data-page^="admin-network-interfaceconfig"] .network_container canvas {
-  filter: invert() hue-rotate(180deg) contrast(1.25) brightness(1.1);
-}
-
 body[data-page^="admin-quickstart"] #actioner, body[data-page^="admin-network_guide"] #actioner, body[data-page^="admin-nas-raid"] #actioner, body[data-page^="admin-network-interfaceconfig"] #actioner {
   z-index: 9999;
 }
@@ -15327,3 +15323,1035 @@ body > div.main > div.main-right > header [data-theme="dark"] .theme-toggle:hove
   --fluent-focus-inner-color: var(--ref-neutral-950);
 }
 
+/* ==========================================================================
+   Canonical v3.5.2 & Upstream v1.0.10 Synchronized Rules (100% SCSS Parity)
+   ========================================================================== */
+:root {
+  --ref-neutral-575: #646d80;
+  --ref-neutral-825: #1d1d1f;
+  --fluent-font-family: Inter, "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Helvetica Neue", sans-serif;
+  --fluent-duration-fast: 120ms;
+  --fluent-duration-normal: 180ms;
+  --fluent-duration-slow: 280ms;
+  --fluent-duration-slower: 400ms;
+  --fluent-easing-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --fluent-easing-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --fluent-easing-effects: cubic-bezier(0.31, 0.94, 0.34, 1);
+  --fluent-easing-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --fluent-easing-decelerate: cubic-bezier(0.23, 1, 0.32, 1);
+  --fluent-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --fluent-easing-easy-ease: cubic-bezier(0.33, 0, 0.67, 1);
+}
+
+@supports (color: oklch(50% 0 0)) {
+  :root {
+    --ref-neutral-50: oklch(0.9795 0.0054 274.97);
+    --ref-neutral-75: oklch(0.9701 0.007 268.55);
+    --ref-neutral-100: oklch(0.9576 0.0087 264.52);
+    --ref-neutral-500: oklch(0.6091 0.0307 265.31);
+    --ref-neutral-575: oklch(0.534 0.0318 265.24);
+    --ref-neutral-600: oklch(0.4964 0.0355 266.86);
+    --ref-neutral-700: oklch(0.454 0.0379 267.48);
+    --ref-neutral-825: oklch(0.2316 0.0038 286.1);
+  }
+}
+
+:root,
+[data-theme="light"] {
+  --fluent-shadow-sm: 0 1px 2px rgba(38, 48, 78, 0.04), 0 6px 18px rgba(38, 48, 78, 0.06);
+  --fluent-shadow-md: 0 2px 4px rgba(38, 48, 78, 0.04), 0 10px 28px rgba(38, 48, 78, 0.08);
+  --fluent-shadow-medium: 0 2px 4px rgba(38, 48, 78, 0.04), 0 10px 28px rgba(38, 48, 78, 0.08);
+  --fluent-shadow-lg: 0 4px 10px rgba(38, 48, 78, 0.08), 0 18px 48px rgba(38, 48, 78, 0.18);
+  --fluent-shadow-xl: 0 8px 16px rgba(38, 48, 78, 0.1), 0 28px 72px rgba(38, 48, 78, 0.22);
+  --fluent-shadow-brand-button: 0 2px 4px rgba(2, 74, 216, 0.14), 0 8px 18px rgba(2, 74, 216, 0.24);
+  --fluent-card-shadow: var(--fluent-shadow-sm);
+  --fluent-dropdown-shadow: var(--fluent-shadow-lg);
+  --fluent-toast-shadow: var(--fluent-shadow-lg);
+}
+
+[data-theme="dark"] {
+  --fluent-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.14), 0 8px 20px rgba(0, 0, 0, 0.16);
+  --fluent-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.16), 0 12px 28px rgba(0, 0, 0, 0.18);
+  --fluent-shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.16), 0 12px 28px rgba(0, 0, 0, 0.18);
+  --fluent-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.24), 0 18px 48px rgba(0, 0, 0, 0.34);
+  --fluent-shadow-xl: 0 8px 20px rgba(0, 0, 0, 0.3), 0 28px 72px rgba(0, 0, 0, 0.42);
+  --fluent-shadow-brand-button: 0 2px 4px rgba(144, 88, 252, 0.16), 0 8px 18px rgba(144, 88, 252, 0.24);
+  --fluent-card-shadow: var(--fluent-shadow-sm);
+  --fluent-dropdown-shadow: var(--fluent-shadow-lg);
+  --fluent-toast-shadow: var(--fluent-shadow-lg);
+}
+
+/* _base.scss: Typography, iOS Coarse-Pointer Auto-Zoom Guard & Containing-Block Safe Keyframes */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+pre, code, kbd, samp, .cbi-value-field code {
+  font-family: var(--fluent-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 767.98px) {
+  @media (hover: none) and (pointer: coarse) {
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="email"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="url"],
+    select,
+    textarea,
+    .cbi-input-text,
+    .cbi-input-password,
+    .cbi-input-select,
+    .ms-input {
+      font-size: max(16px, var(--fluent-font-size-base));
+    }
+  }
+}
+
+@keyframes slideInUp {
+  from { transform: translateY(16px) scale(0.97); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+@keyframes slideInDown {
+  from { transform: translateY(-16px) scale(0.97); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-16px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(16px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+/* _mixins.scss & _buttons.scss: Tactile Press & Brand Shadow */
+.cbi-button,
+.btn,
+button.cbi-button {
+  transition:
+    background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    box-shadow var(--fluent-duration-fast) var(--fluent-easing-effects),
+    transform 140ms var(--fluent-easing-out-strong);
+}
+
+.cbi-button:active:not(:disabled):not(.disabled):not([disabled]):not(.spinning),
+.btn:active:not(:disabled):not(.disabled):not([disabled]):not(.spinning) {
+  transform: scale(0.97);
+}
+
+.cbi-button-apply,
+.cbi-button-action.important,
+.btn.cbi-button-apply,
+.btn.primary {
+  box-shadow: var(--fluent-shadow-brand-button);
+}
+
+.cbi-button-apply:active:not(:disabled),
+.cbi-button-action.important:active:not(:disabled),
+.btn.cbi-button-apply:active:not(:disabled),
+.btn.primary:active:not(:disabled) {
+  box-shadow: var(--fluent-shadow-sm);
+}
+
+/* _cards.scss: Visible Separators & Delete Pairing */
+.cbi-section .cbi-section-remove.right + .cbi-section-node:has(+ .cbi-section-remove.right + .cbi-section-node) {
+  border-bottom: 1px solid var(--fluent-border);
+  margin-bottom: var(--fluent-space-sm);
+  padding-bottom: var(--fluent-space-sm);
+}
+
+.cbi-section .cbi-section-remove.right .cbi-button {
+  background: var(--fluent-delete-bg);
+  color: var(--fluent-delete-fg);
+  box-shadow: none;
+}
+
+.cbi-section .cbi-section-remove.right .cbi-button:hover {
+  background: var(--fluent-delete-bg-hover);
+  color: var(--fluent-delete-fg-hover);
+}
+
+.cbi-section .cbi-section-remove.right .cbi-button:active {
+  background: var(--fluent-delete-bg-active);
+  color: var(--fluent-delete-fg-active);
+}
+
+.cbi-section-error {
+  color: var(--fluent-error-text);
+}
+
+.cbi-section > h3:first-child,
+.cbi-section > legend {
+  border-bottom-color: var(--fluent-border);
+}
+
+.cbi-section-actions {
+  gap: var(--fluent-space-sm);
+  border-top: 1px solid var(--fluent-border);
+}
+
+/* _cbi-dialogs.scss: Sticky Action Bar Frosted Glass, Modal Chips & Valid Transform Origins */
+.uci-change-list {
+  font-family: var(--fluent-font-mono);
+}
+
+.uci-change-list ins {
+  color: var(--fluent-success-text);
+}
+
+.uci-change-list del {
+  color: var(--fluent-error-text);
+}
+
+.modal label > input[type="checkbox"] {
+  margin-inline-end: var(--fluent-space-sm);
+}
+
+.modal .label {
+  padding: 2px 10px;
+  border-radius: var(--fluent-radius-circular);
+  background: var(--fluent-info-light);
+  color: var(--fluent-info-text);
+  font-weight: var(--fluent-font-weight-regular);
+}
+
+.modal .label.warning {
+  background: var(--fluent-warning-light);
+  color: var(--fluent-warning-text);
+}
+
+.cbi-page-actions {
+  padding-bottom: calc(var(--fluent-space-md) + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--fluent-bg-card) 88%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-shadow-lg);
+}
+
+body[data-sticky-action-bar="0"] .cbi-page-actions {
+  position: static;
+  background: var(--fluent-bg-secondary);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.cbi-page-actions .cbi-button-link:first-child {
+  margin-inline-end: auto;
+}
+
+.cbi-page-actions .cbi-dropdown[open] > ul.dropdown {
+  transform-origin: bottom right !important;
+}
+
+[dir="rtl"] .cbi-page-actions .cbi-dropdown[open] > ul.dropdown,
+body[data-fluent-dir="rtl"] .cbi-page-actions .cbi-dropdown[open] > ul.dropdown {
+  transform-origin: bottom left !important;
+}
+
+/* _cbi-network.scss, _cbi-widgets.scss, _errors.scss, _checkboxes.scss */
+.ifacebadge {
+  padding: 2px var(--fluent-space-sm);
+  border: 0;
+  font-weight: var(--fluent-font-weight-regular);
+  line-height: var(--fluent-line-height-normal);
+  font-variant-numeric: tabular-nums;
+}
+
+.zonebadge-empty {
+  border: 1px dashed var(--fluent-warning);
+  background: var(--fluent-bg-page);
+}
+
+#syslog:focus {
+  border-color: var(--fluent-field-focus-border);
+  box-shadow: 0 0 0 4px var(--fluent-field-focus-ring);
+  outline: none;
+}
+
+.cbi-input-invalid:focus,
+input.cbi-input-invalid:focus,
+select.cbi-input-invalid:focus,
+textarea.cbi-input-invalid:focus {
+  outline: none;
+  border-color: var(--fluent-error);
+  box-shadow: 0 0 0 4px var(--fluent-error-light);
+}
+
+.fluent-field-error,
+.cbi-value-error {
+  color: var(--fluent-error-text);
+}
+
+@keyframes fluent-error-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+input[type="checkbox"].fluent-switch::after {
+  transition:
+    transform 140ms var(--fluent-easing-out-strong),
+    width 120ms var(--fluent-easing-out-strong),
+    background-color 120ms var(--fluent-easing-effects) !important;
+}
+
+input[type="checkbox"]:not(.fluent-switch) {
+  border-radius: var(--fluent-radius-sm) !important;
+  margin-inline-end: 4px !important;
+}
+
+/* _select.scss: Optical 32px End Padding & Dark Chevron */
+select,
+select:not([multiple]):not([size]),
+.cbi-input-select,
+select.cbi-input-select {
+  padding-inline-start: 10px;
+  padding-inline-end: 32px;
+}
+
+[data-theme="dark"] select:not([multiple]):not([size]),
+[data-theme="dark"] .cbi-input-select:not([multiple]):not([size]) {
+  background-image: url("../assets/select-chevron-dark.svg");
+}
+
+select[multiple] option:checked,
+select[size] option:checked {
+  background: var(--fluent-primary-lightest);
+  color: var(--fluent-accent-text);
+}
+
+/* _dynlist.scss (Upstream e19720d) */
+.cbi-dynlist {
+  min-height: 32px;
+}
+
+.cbi-dynlist > .item {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--fluent-control-height, 32px);
+  padding-block: var(--fluent-space-xs);
+  box-sizing: border-box;
+}
+
+.cbi-dynlist > .add-item {
+  display: flex;
+  align-items: center;
+  gap: var(--fluent-space-sm);
+}
+
+/* _dropdown.scss: Upstream b3a9d9c Optgroup + Issue #15 Modal Floating + Valid Transform Origins */
+@keyframes fluent-dropdown-slide-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes fluent-dropdown-slide-in-up {
+  from { opacity: 0; transform: translateY(4px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+.cbi-dropdown,
+cbi-dropdown,
+.fluent-custom-select {
+  padding: 0 var(--fluent-space-sm);
+  gap: var(--fluent-space-xs);
+}
+
+.cbi-dropdown[open] > ul.dropdown,
+cbi-dropdown[open] > ul.dropdown,
+.fluent-custom-select[open] > ul.dropdown {
+  transform-origin: top left;
+  animation: fluent-dropdown-slide-in 160ms var(--fluent-easing-out-strong) forwards;
+}
+
+[dir="rtl"] .cbi-dropdown[open] > ul.dropdown,
+[dir="rtl"] cbi-dropdown[open] > ul.dropdown,
+[dir="rtl"] .fluent-custom-select[open] > ul.dropdown,
+body[data-fluent-dir="rtl"] .cbi-dropdown[open] > ul.dropdown,
+body[data-fluent-dir="rtl"] cbi-dropdown[open] > ul.dropdown,
+body[data-fluent-dir="rtl"] .fluent-custom-select[open] > ul.dropdown {
+  transform-origin: top right;
+}
+
+.cbi-dropdown[data-open-direction="up"][open] > ul.dropdown,
+cbi-dropdown[data-open-direction="up"][open] > ul.dropdown,
+.fluent-custom-select[data-open-direction="up"][open] > ul.dropdown {
+  transform-origin: bottom left !important;
+  animation: fluent-dropdown-slide-in-up 160ms var(--fluent-easing-out-strong) forwards !important;
+}
+
+[dir="rtl"] .cbi-dropdown[data-open-direction="up"][open] > ul.dropdown,
+[dir="rtl"] cbi-dropdown[data-open-direction="up"][open] > ul.dropdown,
+[dir="rtl"] .fluent-custom-select[data-open-direction="up"][open] > ul.dropdown,
+body[data-fluent-dir="rtl"] .cbi-dropdown[data-open-direction="up"][open] > ul.dropdown,
+body[data-fluent-dir="rtl"] cbi-dropdown[data-open-direction="up"][open] > ul.dropdown,
+body[data-fluent-dir="rtl"] .fluent-custom-select[data-open-direction="up"][open] > ul.dropdown {
+  transform-origin: bottom right !important;
+}
+
+.fluent-custom-select ul.dropdown li.fluent-select-group,
+.cbi-dropdown ul.dropdown li.fluent-select-group {
+  display: block;
+  padding: 4px 0 0;
+  margin: 0;
+  cursor: default;
+  background: transparent !important;
+}
+
+.fluent-custom-select ul.dropdown li.fluent-select-group + li.fluent-select-group {
+  border-top: 1px solid var(--fluent-border);
+  margin-top: 4px;
+}
+
+.fluent-custom-select ul.dropdown .fluent-select-group__label {
+  display: block;
+  padding: 4px 12px 2px;
+  font-size: var(--fluent-font-size-xs);
+  font-weight: var(--fluent-font-weight-semibold);
+  color: var(--fluent-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.fluent-custom-select ul.dropdown li.fluent-select-group > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fluent-custom-select ul.dropdown li[role="option"].is-active {
+  background-color: var(--fluent-dropdown-option-hover);
+  outline: 2px solid var(--fluent-focus-color);
+  outline-offset: -2px;
+}
+
+.fluent-custom-select ul.dropdown li[role="option"][disabled],
+.fluent-custom-select ul.dropdown li[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.cbi-dropdown[open][data-fluent-floating="modal"] > ul.dropdown:not(.preview),
+.cbi-dropdown[open][data-fluent-floating="modal"] > ul:not(.preview),
+cbi-dropdown[open][data-fluent-floating="modal"] > ul.dropdown:not(.preview),
+.fluent-custom-select[open][data-fluent-floating="modal"] > ul.dropdown:not(.preview) {
+  position: fixed !important;
+  top: var(--fluent-dropdown-top, auto) !important;
+  bottom: auto !important;
+  left: var(--fluent-dropdown-left, 8px) !important;
+  right: auto !important;
+  width: var(--fluent-dropdown-width, calc(100vw - 16px)) !important;
+  min-width: var(--fluent-dropdown-width, 160px) !important;
+  max-height: var(--fluent-dropdown-max-height, 45vh) !important;
+  margin: 0 !important;
+  z-index: calc(var(--fluent-zindex-dropdown, 1500) + 10) !important;
+}
+
+/* _tabs.scss: Upstream 59a65cb Static Indicator + :has(> .fluent-tab-slider) Suppression */
+ul.tabs .fluent-tab-slider,
+ul.cbi-tabmenu .fluent-tab-slider {
+  height: var(--fluent-tab-indicator-height, 2px);
+  border-radius: calc(var(--fluent-tab-indicator-height, 2px) / 2);
+}
+
+body[data-tab-animation="0"] ul.tabs .fluent-tab-slider,
+body[data-reduce-motion="true"] ul.tabs .fluent-tab-slider,
+body[data-tab-animation="0"] ul.cbi-tabmenu .fluent-tab-slider,
+body[data-reduce-motion="true"] ul.cbi-tabmenu .fluent-tab-slider {
+  transition: none !important;
+}
+
+ul.tabs > li.cbi-tab > a::after,
+ul.tabs > li.active > a::after,
+ul.cbi-tabmenu > li.cbi-tab > a::after,
+ul.cbi-tabmenu > li.active > a::after {
+  display: block !important;
+  transform: scaleX(1);
+  background-color: var(--fluent-tab-indicator-color, var(--fluent-accent-text));
+}
+
+ul.tabs:has(> .fluent-tab-slider) > li.cbi-tab > a::after,
+ul.tabs:has(> .fluent-tab-slider) > li.active > a::after,
+ul.cbi-tabmenu:has(> .fluent-tab-slider) > li.cbi-tab > a::after,
+ul.cbi-tabmenu:has(> .fluent-tab-slider) > li.active > a::after {
+  display: none !important;
+}
+
+/* _modals.scss & _tables.scss */
+#modal_overlay {
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+#modal_overlay > .modal {
+  max-height: 85vh;
+  max-height: 85dvh;
+  transform-origin: center;
+  border-radius: var(--fluent-modal-radius, 16px);
+  box-shadow: var(--fluent-shadow-xl);
+}
+
+#modal_overlay > .modal > .modal-close:hover,
+#modal_overlay > .modal > .close:hover {
+  background: var(--fluent-bg-hover) !important;
+}
+
+.table .td,
+table.cbi-section-table td,
+.cbi-progressbar {
+  font-variant-numeric: tabular-nums;
+}
+
+.table .td.cbi-section-table-cell,
+table.cbi-section-table td.cbi-section-table-cell {
+  gap: var(--fluent-space-sm);
+}
+
+/* _header.scss, _sidebar.scss, _main.scss, _login.scss */
+body > div.main > div.main-right > header .header__toggle,
+body > div.main > div.main-right > header .desktop-toggle {
+  transition:
+    background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    transform var(--fluent-duration-fast) var(--fluent-easing-out-strong);
+}
+
+body > div.main > div.main-right > header .header__toggle:active,
+body > div.main > div.main-right > header .desktop-toggle:active,
+body > div.main > div.main-right > header .theme-toggle:active,
+body > div.main > div.main-right > header .status #xhr_poll_status:active {
+  transform: scale(0.95);
+}
+
+body > div.main > div.main-right > header .header__toggle:focus-visible,
+body > div.main > div.main-right > header .desktop-toggle:focus-visible,
+body > div.main > div.main-right > header .theme-toggle:focus-visible,
+body > div.main > div.main-right > header .status #xhr_poll_status:focus-visible {
+  outline: 2px solid var(--fluent-focus-color);
+  outline-offset: -2px;
+}
+
+body > div.main > div.main-right > header .theme-toggle {
+  border-radius: var(--fluent-radius-md);
+  transition:
+    background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    transform var(--fluent-duration-fast) var(--fluent-easing-out-strong);
+}
+
+@keyframes fluent-rail-popover-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.main-left {
+  height: calc(100vh - var(--fluent-header-height, 48px));
+  height: calc(100dvh - var(--fluent-header-height, 48px));
+  transition:
+    width var(--fluent-duration-normal) var(--fluent-easing-standard),
+    transform var(--fluent-duration-slow) var(--fluent-easing-sheet);
+}
+
+.main-right {
+  height: 100vh;
+  height: 100dvh;
+}
+
+.main-left .nav li.slide .slide-menu li a .menu-label {
+  font-size: var(--fluent-font-size-base);
+}
+
+body[data-sidebar-state="collapsed"] .main-left .nav > li > .slide-menu {
+  max-height: calc(100vh - 16px);
+  max-height: calc(100dvh - 16px);
+  transform-origin: top left;
+}
+
+[dir="rtl"] body[data-sidebar-state="collapsed"] .main-left .nav > li > .slide-menu,
+body[data-fluent-dir="rtl"][data-sidebar-state="collapsed"] .main-left .nav > li > .slide-menu {
+  transform-origin: top right;
+}
+
+body[data-sidebar-state="collapsed"] .main-left .nav > li > .slide-menu.popup-open {
+  animation: fluent-rail-popover-in 140ms var(--fluent-easing-out-strong);
+}
+
+.main > .main-right > #maincontent > .container > h2[name="content"] {
+  margin-bottom: var(--fluent-space-lg);
+}
+
+@media (max-width: 767.98px) {
+  .main > .main-right > #maincontent {
+    padding: var(--fluent-space-lg);
+  }
+
+  body > div.main > div.main-right > header .theme-toggle {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+  }
+
+  body > div.main > div.main-right > header .status #xhr_poll_status,
+  body > div.main > div.main-right > header .status [data-indicator="poll-status"],
+  body > div.main > div.main-right > header .status [data-indicator="poll"] {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+  }
+
+  .main-left {
+    height: 100vh;
+    height: 100dvh;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    transition: transform var(--fluent-duration-slow) var(--fluent-easing-sheet);
+  }
+
+  .darkMask {
+    background-color: var(--fluent-modal-overlay, rgba(0, 0, 0, 0.42));
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    transition: opacity var(--fluent-duration-slow) var(--fluent-easing-sheet);
+  }
+}
+
+.login-page {
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+}
+
+.login-page .volume-control {
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+  width: 32px !important;
+  height: 32px !important;
+  background-size: 24px 24px !important;
+  border-radius: var(--fluent-radius-md) !important;
+}
+
+.login-page .volume-control:focus-visible {
+  outline: 2px solid var(--fluent-focus-color) !important;
+  outline-offset: 2px !important;
+}
+
+.login-page .login-container .login-form {
+  border-radius: var(--fluent-radius-xl) !important;
+  box-shadow: var(--fluent-shadow-lg) !important;
+}
+
+.login-page .login-container .login-form .form-login .ms-input-wrapper .ms-input {
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 12px !important;
+  background-image: none !important;
+  border-radius: var(--fluent-radius-md) !important;
+}
+
+.login-page .login-container .login-form .form-login .ms-input-wrapper .ms-label {
+  transition:
+    top var(--fluent-duration-fast) var(--fluent-easing-out-strong),
+    font-size var(--fluent-duration-fast) var(--fluent-easing-out-strong),
+    color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    background-color var(--fluent-duration-fast) var(--fluent-easing-effects) !important;
+}
+
+.login-page .login-container .login-form .ms-button {
+  height: 36px !important;
+  border-radius: var(--fluent-radius-md) !important;
+  font-weight: var(--fluent-font-weight-semibold) !important;
+  box-shadow: var(--fluent-shadow-brand-button) !important;
+}
+
+.login-page .login-container .login-form .ms-button:active {
+  transform: scale(0.98) !important;
+  box-shadow: none !important;
+}
+
+.login-page .login-container .login-form .login-account-pill {
+  border: 1px solid var(--fluent-border-strong) !important;
+}
+
+.login-page footer {
+  inset-block-end: max(18px, env(safe-area-inset-bottom, 18px)) !important;
+}
+
+/* Accessibility Contracts: Reduced Motion, High-Specificity Print & Forced Colors */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  :root,
+  :root[data-theme="dark"],
+  :root[data-theme="light"],
+  [data-theme="dark"],
+  [data-theme="light"] {
+    color-scheme: light !important;
+    --fluent-primary: #024ad8 !important;
+    --fluent-accent-text: #024ad8 !important;
+    --fluent-text: #1a1a1a !important;
+    --fluent-text-secondary: #3d3d3d !important;
+    --fluent-text-muted: #636363 !important;
+    --fluent-bg-page: #ffffff !important;
+    --fluent-bg: #ffffff !important;
+    --fluent-bg-card: #ffffff !important;
+    --fluent-bg-secondary: #f2fbff !important;
+    --fluent-card-bg: #ffffff !important;
+    --fluent-border: rgba(37, 44, 69, 0.18) !important;
+    --fluent-border-strong: rgba(37, 44, 69, 0.28) !important;
+    --fluent-card-border: rgba(37, 44, 69, 0.18) !important;
+    --fluent-table-border: rgba(37, 44, 69, 0.18) !important;
+    --fluent-shadow-sm: none !important;
+    --fluent-shadow-md: none !important;
+    --fluent-shadow-medium: none !important;
+    --fluent-shadow-lg: none !important;
+    --fluent-shadow-xl: none !important;
+    --fluent-shadow-brand-button: none !important;
+    --fluent-card-shadow: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+  }
+
+  .main-left,
+  .fluent-loading-bar,
+  .cbi-page-actions,
+  .darkMask,
+  body > div.main > div.main-right > header {
+    display: none !important;
+  }
+
+  .main-right {
+    margin-inline-start: 0 !important;
+    padding-top: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .cbi-section,
+  .panel {
+    border: 1px solid var(--fluent-card-border) !important;
+    break-inside: avoid;
+  }
+}
+
+@media (forced-colors: active) {
+  .cbi-section,
+  .panel,
+  .modal,
+  .uci-dialog,
+  .cbi-button,
+  .btn,
+  .cbi-dropdown,
+  .fluent-custom-select {
+    border: 1px solid ButtonBorder !important;
+  }
+}
+
+/* ==========================================================================
+   Full Variant Enhancements (_about, _mac-selector, _menu-editor, _menu-search, overrides)
+   ========================================================================== */
+.fluent-about-manager {
+  max-width: 640px;
+  padding: var(--fluent-card-padding);
+  background-color: var(--fluent-bg-card);
+  border: 1px solid var(--fluent-card-border);
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fluent-space-lg);
+  margin: 0 auto;
+}
+
+.fluent-about-manager [hidden] {
+  display: none !important;
+}
+
+.fluent-about-details .fluent-about-detail-row {
+  font-size: var(--fluent-font-size-base);
+  font-variant-numeric: tabular-nums;
+}
+
+.fluent-about-details .fluent-about-detail-row strong {
+  font-weight: var(--fluent-font-weight-semibold);
+}
+
+.fluent-about-details .fluent-about-detail-row a {
+  color: var(--fluent-text-link);
+}
+
+.fluent-update-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  align-items: end;
+  gap: var(--fluent-space-md);
+}
+
+.fluent-update-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fluent-update-field label {
+  font-size: var(--fluent-font-size-sm);
+  font-weight: var(--fluent-font-weight-semibold);
+  color: var(--fluent-text-secondary);
+}
+
+.fluent-update-field select {
+  width: 100%;
+}
+
+.fluent-update-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.fluent-update-status {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--fluent-radius-md);
+  font-size: var(--fluent-font-size-base);
+  line-height: var(--fluent-line-height-normal);
+}
+
+.fluent-update-status.status-info { background-color: var(--fluent-accent-soft); color: var(--fluent-accent-text); }
+.fluent-update-status.status-success { background-color: var(--fluent-success-light); color: var(--fluent-success-text); }
+.fluent-update-status.status-warn { background-color: var(--fluent-warning-light); color: var(--fluent-warning-text); }
+.fluent-update-status.status-error { background-color: var(--fluent-error-light); color: var(--fluent-error-text); }
+
+.fluent-update-card {
+  border: 1px solid var(--fluent-border);
+  border-radius: var(--fluent-radius-lg);
+  padding: var(--fluent-space-lg);
+  background-color: var(--fluent-bg-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fluent-space-md);
+}
+
+.fluent-update-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fluent-space-sm);
+}
+
+.fluent-update-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--fluent-radius-circular);
+  background-color: var(--fluent-accent-soft);
+  color: var(--fluent-accent-text);
+  font-size: var(--fluent-font-size-sm);
+  font-weight: var(--fluent-font-weight-regular);
+  font-variant-numeric: tabular-nums;
+}
+
+.fluent-update-date {
+  font-size: var(--fluent-font-size-sm);
+  color: var(--fluent-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.fluent-update-changelog,
+.fluent-about-manager > .fluent-update-changelog {
+  margin: 0;
+  padding: var(--fluent-space-sm) var(--fluent-space-md);
+  max-height: 240px;
+  overflow: auto;
+  border-radius: var(--fluent-radius-md);
+  border: 1px solid var(--fluent-border);
+  background-color: var(--fluent-bg-card);
+  color: var(--fluent-text);
+  font-family: var(--fluent-font-mono);
+  font-size: var(--fluent-font-size-sm);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.fluent-update-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* _mac-selector.scss, _menu-editor.scss, _menu-search.scss */
+.fluent-mac-overlay {
+  background: var(--fluent-modal-overlay);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.fluent-mac-overlay-card {
+  background: var(--fluent-modal-bg);
+  border: none;
+  border-radius: var(--fluent-modal-radius);
+  box-shadow: var(--fluent-shadow-xl);
+}
+
+@keyframes fluent-mac-pop-in {
+  from { opacity: 0; transform: scale(0.95) translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.fluent-menu-editor__error,
+.fluent-menu-editor__title-error {
+  color: var(--fluent-error-text);
+}
+
+.fluent-menu-editor__count {
+  font-variant-numeric: tabular-nums;
+}
+
+.fluent-menu-editor__delete:hover {
+  color: var(--fluent-delete-fg);
+  background: var(--fluent-delete-bg);
+}
+
+.fluent-menu-editor__items {
+  max-height: 55vh;
+  max-height: 55dvh;
+}
+
+.fluent-menu-search input:focus,
+.fluent-menu-search input:focus-visible {
+  outline: none;
+  border-color: var(--fluent-field-focus-border);
+  box-shadow: 0 0 0 4px var(--fluent-field-focus-ring);
+  background: var(--fluent-input-bg);
+}
+
+.fluent-menu-search__dropdown {
+  background: var(--fluent-dropdown-bg);
+  border: 1px solid var(--fluent-dropdown-border);
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-dropdown-shadow);
+}
+
+/* _admin-quickstart.scss (Issue #10), _admin-status-logs.scss, _luci-mod-dashboard.scss */
+[data-theme="dark"] body[data-page^="admin-network_guide"] .network_container canvas,
+[data-theme="dark"] body[data-page^="admin-nas-raid"] .network_container canvas,
+[data-theme="dark"] body[data-page^="admin-network-interfaceconfig"] .network_container canvas {
+  filter: invert(1) hue-rotate(180deg) contrast(1.25) brightness(1.1);
+}
+
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__header,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__header {
+  background-color: var(--fluent-bg-secondary);
+  border-bottom: 1px solid var(--fluent-border);
+}
+
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__badge,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__badge {
+  padding: 2px 10px;
+  font-weight: var(--fluent-font-weight-regular);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__badge--lines,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__badge--lines {
+  background-color: var(--fluent-info-light);
+  color: var(--fluent-info-text);
+}
+
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__badge--errors,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__badge--errors,
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__level--err,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__level--err,
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__level--crit,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__level--crit {
+  background-color: var(--fluent-error-light);
+  color: var(--fluent-error-text);
+}
+
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__badge--warnings,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__badge--warnings,
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__level--warn,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__level--warn {
+  background-color: var(--fluent-warning-light);
+  color: var(--fluent-warning-text);
+}
+
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__badge--disconnects,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__badge--disconnects {
+  background-color: var(--fluent-purple-light);
+  color: var(--fluent-help-text);
+}
+
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__level,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__level {
+  font-weight: var(--fluent-font-weight-regular);
+}
+
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__level--info,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__level--info,
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer__level--notice,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer__level--notice {
+  background-color: var(--fluent-info-light);
+  color: var(--fluent-info-text);
+}
+
+body[data-page^="admin-status-logs-syslog"] .fluent-log-viewer--fullscreen,
+body[data-page^="admin-status-logs-dmesg"] .fluent-log-viewer--fullscreen {
+  height: 100vh !important;
+  height: 100dvh !important;
+}
+
+body[data-page="admin-dashboard"] .label {
+  padding: 2px 10px;
+  border-radius: var(--fluent-radius-circular);
+  font-weight: var(--fluent-font-weight-regular);
+}
+
+body[data-page="admin-dashboard"] .label-success { background: var(--fluent-success-light); color: var(--fluent-success-text); }
+body[data-page="admin-dashboard"] .label-danger { background: var(--fluent-error-light); color: var(--fluent-error-text); }
+body[data-page="admin-dashboard"] .label-warning { background: var(--fluent-warning-light); color: var(--fluent-warning-text); }
+
+body[data-page="admin-dashboard"] .dashboard-bg svg text {
+  fill: var(--fluent-text-secondary);
+  font-family: var(--fluent-font-family);
+  font-variant-numeric: tabular-nums;
+}
+
+body[data-page="admin-dashboard"] .dashboard-bg svg line,
+body[data-page="admin-dashboard"] .dashboard-bg svg .grid {
+  stroke: var(--fluent-border);
+}
+
+.fluent-loading-bar {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  height: 2px;
+  z-index: calc(var(--fluent-zindex-toast, 1300) + 100);
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--fluent-primary), var(--fluent-accent-text), transparent);
+}

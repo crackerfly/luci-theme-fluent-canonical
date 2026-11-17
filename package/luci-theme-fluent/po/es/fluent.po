@@ -779,3 +779,54 @@ msgstr "Puedes crear un nuevo token en:"
 
 msgid "Your theme is up to date!"
 msgstr "¡Tu tema está actualizado!"
+
+msgid "Toggle background audio"
+msgstr ""
+
+msgid "APK package"
+msgstr ""
+
+msgid "IPK package"
+msgstr ""
+
+msgid "Download method"
+msgstr ""
+
+msgid "Unable to determine installed theme version."
+msgstr ""
+
+msgid "No matching theme package found in this release."
+msgstr ""
+
+msgid "Unable to start update."
+msgstr ""
+
+msgid "Unable to read update status."
+msgstr ""
+
+msgid "Downloading and verifying packages..."
+msgstr ""
+
+msgid "Installing packages..."
+msgstr ""
+
+msgid "Timed out waiting for update status."
+msgstr ""
+
+msgid "Missing update job."
+msgstr ""
+
+msgid "Unexpected update status."
+msgstr ""
+
+msgid "Update failed. Check the installation log below."
+msgstr ""
+
+msgid "Theme successfully updated. Reload the web interface to use the new version."
+msgstr ""
+
+msgid "Update status unavailable. Reload and sign in again to check the result."
+msgstr ""
+
+msgid "GitHub token"
+msgstr ""

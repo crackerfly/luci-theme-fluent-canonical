@@ -2,7 +2,7 @@
 # build.sh - Downloads OpenWrt SDK and builds packages
 # Usage: build.sh <version> <full|lite>
 # Example: build.sh 24.10.7 full  (produces full theme, dashboard, and .ipk translations)
-#          build.sh 25.12.4 lite  (produces lite theme .apk)
+#          build.sh 25.12.6 lite  (produces lite theme .apk)
 #
 # OpenWrt 24.x uses opkg/ipk, OpenWrt 25.x+ uses apk.
 

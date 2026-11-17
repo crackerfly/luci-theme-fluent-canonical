@@ -1,21 +1,42 @@
 @use "../mixins" as *;
-// About and Update Manager Styles for Fluent Theme
+// About and Update Manager Styles for Fluent Theme (Canonical v3.5.2)
 
 .fluent-about-manager {
   max-width: 600px;
   margin: 0 auto;
   padding: var(--fluent-card-padding);
   background-color: var(--fluent-bg-card);
-  border-radius: var(--fluent-radius-md);
-  // box-shadow: var(--fluent-card-shadow);
+  border-radius: var(--fluent-radius-lg);
+  box-shadow: var(--fluent-card-shadow);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--fluent-space-lg);
+
+  [hidden] {
+    display: none !important;
+  }
+
+  > .fluent-update-changelog {
+    margin: 0;
+    padding: var(--fluent-space-sm) var(--fluent-space-md);
+    font-family: var(--fluent-font-mono);
+    font-size: var(--fluent-font-size-sm);
+    line-height: var(--fluent-line-height-relaxed);
+    color: var(--fluent-text);
+    background-color: var(--fluent-bg-secondary);
+    border: 1px solid var(--fluent-border);
+    border-radius: var(--fluent-radius-md);
+    max-height: 12rem;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    @include custom-scrollbar;
+  }
 
   h3 {
-    margin: 8px 0 4px;
-    font-size: 16px;
-    font-weight: 600;
+    margin: var(--fluent-space-xs) 0 0;
+    font-size: var(--fluent-font-size-md);
+    font-weight: var(--fluent-font-weight-semibold);
     color: var(--fluent-text);
   }
 }
@@ -25,22 +46,22 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 12px 0;
+  padding: var(--fluent-space-md) 0;
 
-@include brand-mark(64px, null, false, "img") {
-      margin-bottom: 12px;
-    }
+  @include brand-mark(64px, null, false, "img") {
+    margin-bottom: var(--fluent-space-md);
+  }
 
   h2 {
     margin: 0;
-    font-size: 20px;
-    font-weight: 600;
+    font-size: var(--fluent-font-size-lg);
+    font-weight: var(--fluent-font-weight-semibold);
     color: var(--fluent-text);
   }
 
   .fluent-about-subtitle {
-    margin: 4px 0 0;
-    font-size: 13px;
+    margin: var(--fluent-space-xs) 0 0;
+    font-size: var(--fluent-font-size-sm);
     color: var(--fluent-text-secondary);
   }
 }
@@ -48,25 +69,29 @@
 .fluent-about-details {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px 0;
+  gap: var(--fluent-space-sm);
+  padding: var(--fluent-space-sm) 0;
 
   .fluent-about-detail-row {
     display: flex;
     justify-content: space-between;
-    font-size: 13px;
+    align-items: center;
+    gap: var(--fluent-space-md);
+    font-size: var(--fluent-font-size-base);
     color: var(--fluent-text);
+    font-variant-numeric: tabular-nums;
 
     strong {
-      font-weight: 500;
+      font-weight: var(--fluent-font-weight-regular);
       color: var(--fluent-text-secondary);
     }
 
     a {
-      color: var(--fluent-primary);
+      color: var(--fluent-text-link);
       text-decoration: none;
 
       &:hover {
+        color: var(--fluent-text-link-hover);
         text-decoration: underline;
       }
     }
@@ -76,174 +101,120 @@
 .fluent-about-divider {
   border: none;
   border-top: 1px solid var(--fluent-border);
-  margin: 8px 0;
+  margin: var(--fluent-space-xs) 0;
 }
 
 .fluent-update-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  align-items: end;
+  gap: var(--fluent-space-md);
 
-  .fluent-update-channel-selector {
+  .fluent-update-field {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--fluent-text);
+    flex-direction: column;
+    gap: var(--fluent-space-xs);
+    min-width: 0;
 
     label {
+      font-size: var(--fluent-font-size-sm);
+      font-weight: var(--fluent-font-weight-semibold);
       color: var(--fluent-text-secondary);
     }
+  }
 
-    select {
-      padding: 4px 8px;
-      min-width: 140px;
-    }
+  .fluent-update-actions {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
   }
 }
 
 .fluent-update-status {
-  font-size: 13px;
-  padding: 8px 12px;
-  border-radius: var(--fluent-radius-sm);
-  background-color: var(--fluent-bg);
-  border-left: 3px solid transparent;
+  margin: 0;
+  font-size: var(--fluent-font-size-base);
+  line-height: var(--fluent-line-height-normal);
+  padding: var(--fluent-space-sm) var(--fluent-space-md);
+  border-radius: var(--fluent-radius-md);
+  background-color: var(--fluent-bg-secondary);
+  border-inline-start: 3px solid transparent;
   color: var(--fluent-text);
 
   &.status-info {
-    border-left-color: var(--fluent-primary);
+    border-inline-start-color: var(--fluent-primary);
+    background-color: var(--fluent-primary-lightest);
+    color: var(--fluent-text);
   }
 
-  // Feedback states consume the theme's bg / graphic / text triads rather than
-  // WinUI literals, so they follow the active theme.
   &.status-success {
-    border-left-color: var(--fluent-success);
+    border-inline-start-color: var(--fluent-success);
     background-color: var(--fluent-success-light);
     color: var(--fluent-success-text);
   }
 
   &.status-warn {
-    border-left-color: var(--fluent-warning);
+    border-inline-start-color: var(--fluent-warning);
     background-color: var(--fluent-warning-light);
     color: var(--fluent-warning-text);
   }
 
   &.status-error {
-    border-left-color: var(--fluent-error);
+    border-inline-start-color: var(--fluent-error);
     background-color: var(--fluent-error-light);
     color: var(--fluent-error-text);
   }
 }
 
 .fluent-update-card {
-  padding: 12px;
+  padding: var(--fluent-space-md);
   border: 1px solid var(--fluent-border);
-  border-radius: var(--fluent-radius-sm);
-  background-color: var(--fluent-bg);
+  border-radius: var(--fluent-radius-md);
+  background-color: var(--fluent-bg-secondary);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--fluent-space-md);
 
   .fluent-update-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: var(--fluent-space-sm);
 
     .fluent-update-badge {
-      // White text on the raw brand anchor is only 4.2106:1 in dark mode, so a
-      // solid fill that carries white uses the Primary Component token instead.
       background-color: var(--fluent-btn-primary-bg);
       color: var(--fluent-text-on-primary);
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: var(--fluent-radius-circular);
+      font-size: var(--fluent-font-size-sm);
+      font-weight: var(--fluent-font-weight-regular);
+      font-variant-numeric: tabular-nums;
     }
 
     .fluent-update-date {
-      font-size: 12px;
+      font-size: var(--fluent-font-size-sm);
       color: var(--fluent-text-secondary);
+      font-variant-numeric: tabular-nums;
     }
   }
 
   .fluent-update-changelog {
     margin: 0;
-    padding: 8px;
+    padding: var(--fluent-space-sm) var(--fluent-space-md);
     font-family: inherit;
-    font-size: 12px;
+    font-size: var(--fluent-font-size-sm);
+    line-height: var(--fluent-line-height-relaxed);
     color: var(--fluent-text);
     background-color: var(--fluent-bg-card);
     border: 1px solid var(--fluent-border);
     border-radius: var(--fluent-radius-sm);
-    max-height: 120px;
+    max-height: 160px;
     overflow-y: auto;
     white-space: pre-wrap;
+    @include custom-scrollbar;
   }
 
   .fluent-update-footer {
     display: flex;
     justify-content: flex-end;
-  }
-
-  .fluent-update-success {
-    text-align: center;
-    padding: 8px 0;
-
-    h4 {
-      margin: 0 0 8px 0;
-      color: var(--fluent-success-text);
-      font-weight: 600;
-    }
-
-    p {
-      margin: 0;
-      font-size: 13px;
-      color: var(--fluent-text-secondary);
-    }
-  }
-}
-
-// Fluent styling for progress bar
-.fluent-progress-bar {
-  width: 100%;
-  height: 4px;
-  background-color: var(--fluent-border);
-  border-radius: 2px;
-  overflow: hidden;
-  position: relative;
-}
-
-.fluent-progress-bar__fill {
-  height: 100%;
-  background-color: var(--fluent-primary);
-  border-radius: 2px;
-  transition: width 0.2s ease-in-out;
-
-  &.fill-verify,
-  &.fill-install {
-    width: 100% !important;
-    animation: fluent-indeterminate-progress 1.5s infinite linear;
-    transform-origin: left;
-  }
-}
-
-.fluent-progress-text {
-  font-size: 12px;
-  color: var(--fluent-text-secondary);
-  text-align: center;
-  margin-top: -8px;
-}
-
-@keyframes fluent-indeterminate-progress {
-  0% {
-    transform: translateX(-100%) scaleX(0.2);
-  }
-  50% {
-    transform: translateX(-20%) scaleX(0.5);
-  }
-  100% {
-    transform: translateX(100%) scaleX(0.2);
   }
 }

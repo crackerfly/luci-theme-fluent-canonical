@@ -31,7 +31,7 @@ body > div.main > div.main-right > header {
   inset-inline-start: 0;
   width: 100%;
   z-index: var(--fluent-zindex-actions, 1000);
-  transition: background var(--fluent-duration-normal) var(--fluent-easing-standard);
+  transition: background var(--fluent-duration-normal) var(--fluent-easing-effects);
 
   .header {
     &__brand {
@@ -89,7 +89,9 @@ body > div.main > div.main-right > header {
     color: var(--fluent-text);
     cursor: pointer;
     border-radius: var(--fluent-radius-md);
-    transition: background var(--fluent-duration-fast) var(--fluent-easing-standard);
+    transition:
+      background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+      transform var(--fluent-duration-fast) var(--fluent-easing-out-strong);
 
     &::before {
       @include fluent-mask-icon-by-name("line-horizontal-3-20-regular", 20px, currentColor);
@@ -97,6 +99,15 @@ body > div.main > div.main-right > header {
 
     &:hover {
       background: var(--fluent-bg-hover);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--fluent-focus-color);
+      outline-offset: -2px;
     }
   }
 
@@ -128,11 +139,12 @@ body > div.main > div.main-right > header {
     background: transparent;
     color: var(--fluent-text-secondary);
     cursor: pointer;
-    border-radius: var(--fluent-radius-sm);
+    border-radius: var(--fluent-radius-md);
     transition:
-      background-color var(--fluent-transition-fast),
-      color var(--fluent-transition-fast),
-      border-color var(--fluent-transition-fast);
+      background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+      color var(--fluent-duration-fast) var(--fluent-easing-effects),
+      border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+      transform var(--fluent-duration-fast) var(--fluent-easing-out-strong);
     position: relative;
     opacity: 0;
     pointer-events: none;
@@ -151,14 +163,19 @@ body > div.main > div.main-right > header {
       transform: scale(0.95);
     }
 
+    &:focus-visible {
+      outline: 2px solid var(--fluent-focus-color);
+      outline-offset: -2px;
+    }
+
     &::before,
     &::after {
       position: absolute;
       pointer-events: none;
       transition:
-        opacity var(--fluent-transition-fast),
-        transform var(--fluent-transition-fast),
-        background-color var(--fluent-transition-fast);
+        opacity var(--fluent-duration-fast) var(--fluent-easing-effects),
+        transform var(--fluent-duration-fast) var(--fluent-easing-out-strong),
+        background-color var(--fluent-duration-fast) var(--fluent-easing-effects);
     }
 
     &::before {
@@ -239,17 +256,27 @@ body > div.main > div.main-right > header {
       height: 32px !important;
       width: 32px !important;
       min-width: 32px !important;
-      border-radius: var(--fluent-radius-sm);
+      border-radius: var(--fluent-radius-md);
       border: none !important;
       background-color: transparent !important;
       user-select: none;
       transition:
-        background-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-        color var(--fluent-duration-fast) var(--fluent-easing-standard),
-        opacity var(--fluent-duration-fast) var(--fluent-easing-standard);
+        background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+        color var(--fluent-duration-fast) var(--fluent-easing-effects),
+        opacity var(--fluent-duration-fast) var(--fluent-easing-effects),
+        transform var(--fluent-duration-fast) var(--fluent-easing-out-strong);
       position: relative; // For absolute icon positioning
       box-sizing: border-box;
       overflow: visible;
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--fluent-focus-color);
+        outline-offset: -2px;
+      }
 
       &[data-style="active"] {
         --fluent-poll-icon: var(--fluent-text-secondary);
@@ -260,7 +287,7 @@ body > div.main > div.main-right > header {
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
-          transition: background-color var(--fluent-duration-fast) var(--fluent-easing-standard);
+          transition: background-color var(--fluent-duration-fast) var(--fluent-easing-effects);
         }
 
         &::after {
@@ -291,7 +318,7 @@ body > div.main > div.main-right > header {
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
-          transition: background-color var(--fluent-duration-fast) var(--fluent-easing-standard);
+          transition: background-color var(--fluent-duration-fast) var(--fluent-easing-effects);
         }
 
         &:hover {
@@ -307,14 +334,14 @@ body > div.main > div.main-right > header {
     color: var(--fluent-text-secondary);
 
     &:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--fluent-bg-hover);
       color: var(--fluent-text);
     }
   }
 
   @include mobile-only {
     padding: 0 var(--fluent-space-sm);
-    gap: var(--fluent-space-sm);
+    gap: var(--fluent-space-xs);
 
     .header {
       &__brand {
@@ -326,10 +353,21 @@ body > div.main > div.main-right > header {
       }
     }
 
+    // Match 36x36px mobile touch ergonomics with .header__toggle
     .theme-toggle {
-      width: 28px;
-      height: 28px;
-      flex: 0 0 28px;
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+    }
+
+    .status {
+      #xhr_poll_status,
+      [data-indicator="poll-status"],
+      [data-indicator="poll"] {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+      }
     }
   }
 }

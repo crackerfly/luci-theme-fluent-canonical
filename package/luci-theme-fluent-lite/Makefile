@@ -5,7 +5,7 @@ LUCI_DEPENDS:=+luci-base
 LUCI_MINIFY_CSS:=0
 
 PKG_NAME:=luci-theme-fluent-lite
-PKG_VERSION:=1.0.9
+PKG_VERSION:=1.0.10
 PKG_RELEASE:=1
 PKG_LICENSE:=Apache-2.0
 
@@ -19,10 +19,13 @@ endef
 define Build/Prepare/$(PKG_NAME)
 	$(CP) $(FLUENT_FULL_SOURCE_DIR)/htdocs/* $(PKG_BUILD_DIR)/htdocs/
 	$(CP) $(FLUENT_FULL_SOURCE_DIR)/root/* $(PKG_BUILD_DIR)/root/
+	$(CP) $(FLUENT_FULL_SOURCE_DIR)/ucode/* $(PKG_BUILD_DIR)/ucode/
+	rm -f $(PKG_BUILD_DIR)/htdocs/luci-static/fluent/css/fluent.css
+	rm -f $(PKG_BUILD_DIR)/root/usr/libexec/fluent/update
 	$(CP) $(FLUENT_LITE_SOURCE_DIR)/htdocs/* $(PKG_BUILD_DIR)/htdocs/
 	$(CP) $(FLUENT_LITE_SOURCE_DIR)/root/* $(PKG_BUILD_DIR)/root/
-	$(SED) 's/@VERSION@/$(PKG_VERSION)/g' $(PKG_BUILD_DIR)/ucode/template/themes/fluent/header.ut
-	$(SED) 's/@VERSION@/$(PKG_VERSION)/g' $(PKG_BUILD_DIR)/ucode/template/themes/fluent/header_login.ut
+	$(SED) 's/@VERSION@/$(PKG_VERSION)-$(PKG_RELEASE)/g' $(PKG_BUILD_DIR)/ucode/template/themes/fluent/header.ut
+	$(SED) 's/@VERSION@/$(PKG_VERSION)-$(PKG_RELEASE)/g' $(PKG_BUILD_DIR)/ucode/template/themes/fluent/header_login.ut
 endef
 
 define Package/$(PKG_NAME)/conffiles

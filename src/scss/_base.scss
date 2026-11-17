@@ -191,6 +191,27 @@ textarea {
   resize: vertical;
 }
 
+// Prevent iOS Safari viewport auto-zoom when focusing editable inputs on touch mobile (CLN003)
+@include mobile-only {
+  @media (hover: none) and (pointer: coarse) {
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="email"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="url"],
+    select,
+    textarea,
+    .cbi-input-text,
+    .cbi-input-password,
+    .cbi-input-select,
+    .ms-input {
+      font-size: max(16px, var(--fluent-font-size-base));
+    }
+  }
+}
+
 // ============================================================
 // SELECTION
 // ============================================================
@@ -200,7 +221,7 @@ textarea {
 }
 
 // ============================================================
-// FOCUS (FluentUI: 2px black outline, 2px offset)
+// FOCUS
 // ============================================================
 :focus-visible {
   outline: 2px solid var(--fluent-focus-color);
@@ -262,7 +283,7 @@ body {
 }
 
 // ============================================================
-// RESPONSIVE UTILITY CLASSES (Hiding elements on smaller viewports)
+// RESPONSIVE UTILITY CLASSES
 // ============================================================
 @media (max-width: 575.98px) {
   .hide-xs {
@@ -290,6 +311,8 @@ body {
 
 // ============================================================
 // ANIMATIONS
+// NOTE: Keyframe `to` states use `transform: none` so `forwards` fill-mode
+// never leaves a non-none transform that traps `position: fixed` descendants.
 // ============================================================
 @keyframes fadeIn {
   from {
@@ -302,22 +325,22 @@ body {
 
 @keyframes slideInUp {
   from {
-    transform: translateY(20px);
+    transform: translateY(16px) scale(0.97);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: none;
     opacity: 1;
   }
 }
 
 @keyframes slideInDown {
   from {
-    transform: translateY(-20px);
+    transform: translateY(-16px) scale(0.97);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: none;
     opacity: 1;
   }
 }
@@ -328,7 +351,7 @@ body {
     opacity: 0;
   }
   to {
-    transform: translateX(0);
+    transform: none;
     opacity: 1;
   }
 }
@@ -339,7 +362,7 @@ body {
     opacity: 0;
   }
   to {
-    transform: translateX(0);
+    transform: none;
     opacity: 1;
   }
 }
@@ -400,11 +423,11 @@ div:not([id="view"]) > .spinning {
     border: var(--indicator-size) solid color-mix(in srgb, var(--fluent-primary) 20%, transparent);
     border-top-color: var(--fluent-primary);
     border-right-color: var(--fluent-primary);
-    animation: fluent-spin-swing var(--duration) infinite ease;
+    animation: fluent-spin-swing var(--duration) infinite cubic-bezier(0.33, 0, 0.67, 1);
   }
 }
 
-// Full view spinner (loading screen layout optimization)
+// Full view spinner
 @keyframes fluent-spin-swing-clean {
   0% {
     transform: rotate(-135deg);
@@ -443,14 +466,14 @@ div[id="view"] > .spinning {
     border: var(--indicator-size) solid color-mix(in srgb, var(--fluent-primary) 15%, transparent);
     border-top-color: var(--fluent-primary);
     border-right-color: var(--fluent-primary);
-    animation: fluent-spin-swing-clean 1.5s infinite ease;
+    animation: fluent-spin-swing-clean 1.5s infinite cubic-bezier(0.33, 0, 0.67, 1);
     background: none;
     position: static;
     margin-bottom: var(--fluent-space-sm, 8px);
   }
 }
 
-// Loaded view page fade-in animation
+// Loaded view page fade-in animation (transform: none end state prevents fixed-positioning trap)
 @keyframes fluent-view-fade-in {
   from {
     opacity: 0;
@@ -458,23 +481,23 @@ div[id="view"] > .spinning {
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
 div[id="view"] > *:not(.spinning) {
-  animation: fluent-view-fade-in var(--fluent-duration-slow) var(--fluent-easing-decelerate) forwards;
+  animation: fluent-view-fade-in 220ms var(--fluent-easing-out-strong) forwards;
 }
 
 // Login form fade-in animation
 @keyframes fluent-login-fade-in {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.98);
+    transform: translateY(16px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
   }
 }
 
@@ -486,6 +509,35 @@ div[id="view"] > *:not(.spinning) {
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
+  }
+}
+
+// ============================================================
+// REDUCED MOTION CONTRACT (CSS003 / WCAG 2.3.3)
+// ============================================================
+@media (prefers-reduced-motion: reduce) {
+  body:not([data-prefers-reduced-motion="0"]) {
+    &,
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+body[data-reduce-motion="true"] {
+  &,
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

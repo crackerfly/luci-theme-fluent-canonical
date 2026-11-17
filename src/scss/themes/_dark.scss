@@ -1,4 +1,4 @@
-// Dark theme — Canonical v3.2 semantic mapping.
+// Dark theme — Canonical v3.2 semantic mapping (theme contract v3.5.2).
 // Same key set as themes/_light.scss; only the values differ.
 //
 // Locked rule: the Dark brand anchor #9058FC stays the brand graphic, focus
@@ -7,6 +7,7 @@
 // #8A52F2 / #7D45DE / #6F37C9, which is verified at 4.5955 / 5.5585 / 6.8498:1.
 
 @use "../mixins" as *;
+@use "light" as *;
 
 @mixin dark-theme-tokens {
   color-scheme: dark;
@@ -100,12 +101,13 @@
   --fluent-chart-5: var(--ref-magenta-400);
   --fluent-chart-6: var(--ref-green-400);
 
-  // ---- Elevation ------------------------------------------------------
-  --fluent-shadow-sm: 0 12px 28px rgba(0, 0, 0, 0.18);
-  --fluent-shadow-md: 0 12px 28px rgba(0, 0, 0, 0.18);
-  --fluent-shadow-medium: 0 12px 28px rgba(0, 0, 0, 0.18);
-  --fluent-shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.34);
-  --fluent-shadow-xl: 0 28px 72px rgba(0, 0, 0, 0.42);
+  // ---- Elevation (Canonical v3.5.2 dual-layer contact + ambient) ------
+  --fluent-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.14), 0 8px 20px rgba(0, 0, 0, 0.16);
+  --fluent-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.16), 0 12px 28px rgba(0, 0, 0, 0.18);
+  --fluent-shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.16), 0 12px 28px rgba(0, 0, 0, 0.18);
+  --fluent-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.24), 0 18px 48px rgba(0, 0, 0, 0.34);
+  --fluent-shadow-xl: 0 8px 20px rgba(0, 0, 0, 0.3), 0 28px 72px rgba(0, 0, 0, 0.42);
+  --fluent-shadow-brand-button: 0 2px 4px rgba(144, 88, 252, 0.16), 0 8px 18px rgba(144, 88, 252, 0.24);
 
   // ---- Shell ----------------------------------------------------------
   --fluent-sidebar-bg: var(--ref-neutral-925);
@@ -203,4 +205,72 @@
 
 @include theme-dark {
   @include dark-theme-tokens;
+}
+
+// Print & High-Contrast accessibility contracts (Canonical v3.5.2)
+@media print {
+  :root,
+  :root[data-theme="dark"],
+  :root[data-theme="light"],
+  [data-theme="dark"],
+  [data-theme="light"] {
+    @include light-theme-tokens;
+    color-scheme: light !important;
+    --fluent-text: #1a1a1a !important;
+    --fluent-text-secondary: #3d3d3d !important;
+    --fluent-text-muted: #636363 !important;
+    --fluent-bg-page: #ffffff !important;
+    --fluent-bg: #ffffff !important;
+    --fluent-bg-card: #ffffff !important;
+    --fluent-bg-secondary: #f2fbff !important;
+    --fluent-border: rgba(37, 44, 69, 0.18) !important;
+    --fluent-border-strong: rgba(37, 44, 69, 0.28) !important;
+    --fluent-card-border: rgba(37, 44, 69, 0.18) !important;
+    --fluent-shadow-sm: none !important;
+    --fluent-shadow-md: none !important;
+    --fluent-shadow-medium: none !important;
+    --fluent-shadow-lg: none !important;
+    --fluent-shadow-xl: none !important;
+    --fluent-shadow-brand-button: none !important;
+    --fluent-card-shadow: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+  }
+
+  .main-left,
+  .fluent-loading-bar,
+  .cbi-page-actions,
+  .darkMask,
+  body > div.main > div.main-right > header {
+    display: none !important;
+  }
+
+  .main-right {
+    margin-inline-start: 0 !important;
+    padding-top: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .cbi-section,
+  .panel {
+    border: 1px solid var(--fluent-card-border) !important;
+    break-inside: avoid;
+  }
+}
+
+@media (forced-colors: active) {
+  .cbi-section,
+  .panel,
+  .modal,
+  .uci-dialog,
+  .cbi-button,
+  .btn,
+  .cbi-dropdown,
+  .fluent-custom-select {
+    border: 1px solid ButtonBorder !important;
+  }
 }

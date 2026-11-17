@@ -8,35 +8,35 @@
 
   .fluent-menu-search-input {
     width: 100%;
-    height: 32px;
+    height: var(--fluent-control-height);
     padding-block: 0;
-    padding-inline: 32px 52px;
+    padding-inline: 32px 56px;
     border-radius: var(--fluent-radius-md);
-    border: 1px solid var(--fluent-border);
+    border: 1px solid var(--fluent-input-border);
     background: var(--fluent-bg-hover);
     color: var(--fluent-text);
     font-size: var(--fluent-font-size-base);
     transition:
-      background-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-      border-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-      box-shadow var(--fluent-duration-fast) var(--fluent-easing-standard);
+      background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+      border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+      box-shadow var(--fluent-duration-fast) var(--fluent-easing-effects);
     box-sizing: border-box;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
-    &:hover {
+    &:hover:not(:focus) {
       border-color: var(--fluent-input-border-hover);
     }
 
-    &:focus {
+    // Global editable-field focus recipe (ui-spec.md §8.6): exact brand border + 4px soft ring
+    &:focus,
+    &:focus-visible {
       outline: none;
-      border-color: var(--fluent-primary);
-      box-shadow: 0 0 0 1px var(--fluent-primary);
+      border-color: var(--fluent-field-focus-border);
+      box-shadow: 0 0 0 4px var(--fluent-field-focus-ring);
       background: var(--fluent-input-bg);
     }
 
     &::placeholder {
-      color: var(--fluent-text-secondary);
-      opacity: 0.8;
+      color: var(--fluent-text-muted);
     }
 
     &::-webkit-search-cancel-button {
@@ -58,8 +58,8 @@
     background: var(--fluent-bg);
     border: 1px solid var(--fluent-border);
     border-radius: var(--fluent-radius-sm);
-    color: var(--fluent-text-secondary);
-    font-size: 11px;
+    color: var(--fluent-text-muted);
+    font-size: var(--fluent-font-size-sm);
     line-height: 1;
     pointer-events: none;
     display: flex;
@@ -85,50 +85,63 @@
     position: absolute;
     inset-inline: 0 !important;
     top: calc(100% + 4px) !important;
-    background: var(--fluent-card-bg);
-    border: 1px solid var(--fluent-border);
-    border-radius: var(--fluent-radius-md);
-    box-shadow: var(--fluent-shadow-medium);
-    z-index: var(--fluent-zindex-popover, 1050);
+    background: var(--fluent-dropdown-bg);
+    border: 1px solid var(--fluent-dropdown-border);
+    border-radius: var(--fluent-radius-lg);
+    box-shadow: var(--fluent-dropdown-shadow);
+    z-index: var(--fluent-zindex-dropdown);
     max-height: 400px;
     overflow-y: auto;
+    transform-origin: top center;
+    animation: fluent-dropdown-slide-in 140ms var(--fluent-easing-out-strong) forwards;
     @include custom-scrollbar;
 
     .fluent-menu-search-list {
       list-style: none;
       margin: 0;
-      padding: var(--fluent-space-xs) 0;
+      padding: var(--fluent-space-xs);
 
       .fluent-menu-search-item {
-        padding: var(--fluent-space-xs) var(--fluent-space-sm);
+        padding: 6px var(--fluent-space-sm);
+        border-radius: var(--fluent-radius-md);
         cursor: pointer;
         display: flex;
         flex-direction: column;
         gap: 2px;
-        transition: background var(--fluent-duration-fast) var(--fluent-easing-standard);
+        transition: background-color 80ms var(--fluent-easing-effects);
         user-select: none;
 
-        &:hover,
-        &.selected {
+        &:hover {
           background: var(--fluent-sidebar-item-hover);
+        }
+
+        &.selected {
+          background: var(--fluent-sidebar-item-active);
+          box-shadow: inset 2px 0 0 var(--fluent-primary);
+
+          @include rtl {
+            box-shadow: inset -2px 0 0 var(--fluent-primary);
+          }
         }
 
         .fluent-menu-search-label {
           color: var(--fluent-text);
           font-weight: var(--fluent-font-weight-regular);
-          font-size: 13px;
+          font-size: var(--fluent-font-size-base);
+          line-height: 20px;
         }
 
         .fluent-menu-search-path {
-          color: var(--fluent-text-secondary);
-          font-size: 11px;
+          color: var(--fluent-text-muted);
+          font-size: var(--fluent-font-size-sm);
+          line-height: 16px;
         }
       }
 
       .fluent-menu-search-more {
         padding: var(--fluent-space-xs) var(--fluent-space-sm);
-        color: var(--fluent-text-secondary);
-        font-size: 11px;
+        color: var(--fluent-text-muted);
+        font-size: var(--fluent-font-size-sm);
         text-align: center;
         font-style: italic;
       }

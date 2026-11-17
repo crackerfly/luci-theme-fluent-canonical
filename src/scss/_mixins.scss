@@ -1,7 +1,7 @@
 @use "sass:string";
 
 // FluentUI 2 SCSS Mixins
-// Aligned with official @fluentui/tokens v2
+// Aligned with official @fluentui/tokens v2 & Canonical v3.5.2
 
 // ============================================================
 // RESPONSIVE BREAKPOINTS
@@ -61,9 +61,7 @@ $breakpoint-xxl: 1400px;
   }
 }
 
-// --- Semantic Responsive Mixins (Recommended) ---
-
-/// Target mobile screen sizes (< 768px, i.e., max-width: 767px)
+// --- Semantic Responsive Mixins ---
 @mixin mobile-only {
   @include respond-down("md") {
     @content;
@@ -184,15 +182,20 @@ $breakpoint-xxl: 1400px;
   user-select: none;
   text-decoration: none;
   transition:
-    background var(--fluent-duration-fast) var(--fluent-easing-standard),
-    box-shadow var(--fluent-duration-fast) var(--fluent-easing-standard),
-    border-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-    color var(--fluent-duration-fast) var(--fluent-easing-standard);
+    background var(--fluent-duration-fast) var(--fluent-easing-effects),
+    box-shadow var(--fluent-duration-fast) var(--fluent-easing-effects),
+    border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    transform 140ms var(--fluent-easing-out-strong);
 
   // A nested span/strong must not re-bold the label.
   b,
   strong {
     font-weight: var(--fluent-font-weight-regular);
+  }
+
+  &:active:not(:disabled):not([disabled]):not(.spinning) {
+    transform: scale(0.97);
   }
 
   &:disabled {
@@ -201,6 +204,7 @@ $breakpoint-xxl: 1400px;
     box-shadow: none;
     cursor: not-allowed;
     pointer-events: none;
+    transform: none;
   }
 
   // Focus ring follows the theme brand: Light blue, Dark purple.
@@ -215,7 +219,7 @@ $breakpoint-xxl: 1400px;
 }
 
 // ============================================================
-// BUTTON VARIANTS (FluentUI)
+// BUTTON VARIANTS
 // ============================================================
 %button-primary {
   @extend %button-base;
@@ -335,8 +339,8 @@ $breakpoint-xxl: 1400px;
 @mixin input-focus-ripple-v1 {
   position: relative;
   transition:
-    border-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-    box-shadow var(--fluent-duration-fast) var(--fluent-easing-standard);
+    border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    box-shadow var(--fluent-duration-fast) var(--fluent-easing-effects);
 
   &:hover:not([disabled]):not(:focus):not(:focus-within):not(.focus):not([open]) {
     border-color: var(--fluent-input-border-hover);
@@ -364,9 +368,9 @@ $breakpoint-xxl: 1400px;
     }
   }
 }
+
 // ============================================================
 // INPUT BASE (FluentUI Input)
-// Height: 32px, Radius: 4px, Bottom-border indicator
 // ============================================================
 %input-base {
   height: var(--fluent-input-height);
@@ -378,7 +382,7 @@ $breakpoint-xxl: 1400px;
   background: var(--fluent-input-bg);
   border: 1px solid var(--fluent-input-border);
   border-radius: var(--fluent-radius-md);
-  transition: border-color var(--fluent-duration-fast) var(--fluent-easing-standard);
+  transition: border-color var(--fluent-duration-fast) var(--fluent-easing-effects);
 
   &:disabled {
     background: var(--fluent-input-bg-disabled);
@@ -399,8 +403,8 @@ $breakpoint-xxl: 1400px;
 // Same global focus recipe for void elements (input, select, textarea).
 %input-focus-ripple-v2-base {
   transition:
-    border-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-    box-shadow var(--fluent-duration-fast) var(--fluent-easing-standard);
+    border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+    box-shadow var(--fluent-duration-fast) var(--fluent-easing-effects);
 
   &:hover:not([disabled]):not(:focus) {
     border-color: var(--fluent-input-border-hover);
@@ -473,11 +477,10 @@ $breakpoint-xxl: 1400px;
 
 // ============================================================
 // CARD (FluentUI Card)
-// Radius: 8px, Border: None, Shadow: sm
 // ============================================================
 @mixin card {
   background: var(--fluent-card-bg);
-  border: none; // FluentUI / Windows 11 style: no borders on cards
+  border: none;
   border-radius: var(--fluent-card-radius);
   box-shadow: var(--fluent-card-shadow);
   padding: var(--fluent-card-padding);
@@ -529,7 +532,7 @@ $breakpoint-xxl: 1400px;
 }
 
 // ============================================================
-// SCROLLBAR (FluentUI custom scrollbar)
+// SCROLLBAR
 // ============================================================
 @mixin custom-scrollbar {
   &::-webkit-scrollbar {
@@ -537,7 +540,7 @@ $breakpoint-xxl: 1400px;
     height: var(--fluent-scrollbar-width);
 
     &:horizontal {
-      height: var(--fluent-scrollbar-horizontal-height, 5px);
+      height: var(--fluent-scrollbar-horizontal-height, 6px);
     }
   }
 
@@ -547,7 +550,7 @@ $breakpoint-xxl: 1400px;
 
   &::-webkit-scrollbar-thumb {
     background: var(--fluent-scrollbar-thumb-bg);
-    border-radius: 3px;
+    border-radius: 4px;
 
     &:hover {
       background: var(--fluent-scrollbar-thumb-bg-hover);
@@ -577,15 +580,15 @@ $breakpoint-xxl: 1400px;
 // ANIMATIONS
 // ============================================================
 @mixin fade-in($duration: var(--fluent-duration-normal)) {
-  animation: fadeIn $duration var(--fluent-easing-decelerate);
+  animation: fadeIn $duration var(--fluent-easing-effects);
 }
 
 @mixin slide-in-up($duration: var(--fluent-duration-normal)) {
-  animation: slideInUp $duration var(--fluent-easing-decelerate);
+  animation: slideInUp $duration var(--fluent-easing-out-strong);
 }
 
 @mixin slide-in-down($duration: var(--fluent-duration-normal)) {
-  animation: slideInDown $duration var(--fluent-easing-decelerate);
+  animation: slideInDown $duration var(--fluent-easing-out-strong);
 }
 
 // ============================================================

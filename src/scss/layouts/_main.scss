@@ -10,7 +10,7 @@
       padding: var(--fluent-space-xl);
       > .container {
         > h2[name="content"] {
-          margin-bottom: 15px;
+          margin-bottom: var(--fluent-space-lg);
         }
         &,
         #view,
@@ -35,7 +35,7 @@
         }
       }
       @include mobile-only {
-        padding: var(--fluent-space-md);
+        padding: var(--fluent-space-lg);
       }
     }
   }

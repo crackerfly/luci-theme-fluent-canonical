@@ -38,7 +38,7 @@
 
   // Background image handling
   let imageTypes = {
-    jpg: true, png: true, gif: true, webp: true
+    jpg: true, jpeg: true, png: true, gif: true, webp: true
   };
   let videoTypes = {
     mp4: true, webm: true
@@ -52,7 +52,7 @@
       let files = glob(path);
       for (let f in files) {
         let m = match(f, regexp('.+\\.([A-Za-z0-9]+)$'));
-        let ext = m ? m[1] : null;
+        let ext = m ? lc(m[1]) : null;
 
         if (ext in imageTypes || ext in videoTypes) {
           let parts = split(f, '/');
@@ -128,19 +128,21 @@
   {% if (backgroundType === 'Video') { %}
   <!-- Video Player Start -->
   <div class="video">
-    <video autoplay loop muted id="video">
+    <video autoplay loop muted playsinline id="video">
       <source src="{{ bgUrl }}" type="{{ mimeType }}">
     </video>
   </div>
-  <div class="volume-control mute"></div>
+  <button type="button" class="volume-control mute" aria-label="{{ _('Toggle background audio') }}" aria-pressed="false"></button>
   <script>
     document.querySelector(".volume-control").addEventListener("click", function(){
       var video = document.getElementById("video");
       if(this.classList.contains("mute")){
         this.classList.remove("mute");
+        this.setAttribute("aria-pressed", "true");
         video.muted = false;
       } else {
         this.classList.add("mute");
+        this.setAttribute("aria-pressed", "false");
         video.muted = true;
       }
     });
@@ -148,67 +150,71 @@
   <!-- Video Player End -->
   {% } else if (backgroundType === 'MicrosoftDynamic') { %}
   <!-- Microsoft-style Dynamic Canvas Background -->
-  <canvas id="login-canvas" class="main-bg"></canvas>
+  <canvas id="login-canvas" class="main-bg" aria-hidden="true"></canvas>
   <script type="text/javascript">//<![CDATA[
     (function() {
       const canvas = document.getElementById('login-canvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      
+      if (!ctx) return;
+
       let w = canvas.width = window.innerWidth;
       let h = canvas.height = window.innerHeight;
-      
+      let rafId = 0;
+
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      
+      const respectReducedMotion = document.body.getAttribute('data-prefers-reduced-motion') !== '0';
+      const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+
       // Dynamic color options based on theme
       const colors = isDark ? {
-        bgStart: '#090a10',
-        bgEnd: '#030406',
+        bgStart: '#0b0f18',
+        bgEnd: '#080b12',
         ribbons: [
           {
             y1: 0.6, y2: 0.1, thicknessStart: 0.35, thicknessEnd: 0.3, thicknessMid: 0.5,
             cp1x: 0.3, cp1y: 0.4, cp2x: 0.7, cp2y: 0.2, speed: 0.0004, phase: 0,
-            c1: 'rgba(10, 24, 72, 0.45)', c2: 'rgba(3, 8, 28, 0)'
+            c1: 'rgba(16, 28, 80, 0.42)', c2: 'rgba(8, 11, 18, 0)'
           },
           {
             y1: 0.75, y2: 0.2, thicknessStart: 0.25, thicknessEnd: 0.2, thicknessMid: 0.4,
             cp1x: 0.4, cp1y: 0.55, cp2x: 0.8, cp2y: 0.35, speed: 0.0006, phase: 1.8,
-            c1: 'rgba(0, 72, 160, 0.35)', c2: 'rgba(0, 10, 40, 0)'
+            c1: 'rgba(2, 74, 216, 0.24)', c2: 'rgba(8, 11, 18, 0)'
           },
           {
             y1: 0.5, y2: 0.35, thicknessStart: 0.15, thicknessEnd: 0.15, thicknessMid: 0.3,
             cp1x: 0.2, cp1y: 0.65, cp2x: 0.6, cp2y: 0.45, speed: 0.0005, phase: 3.5,
-            c1: 'rgba(84, 32, 140, 0.25)', c2: 'rgba(12, 4, 28, 0)'
+            c1: 'rgba(144, 88, 252, 0.22)', c2: 'rgba(8, 11, 18, 0)'
           },
           {
             y1: 0.5, y2: 0.35, thicknessStart: 0.02, thicknessEnd: 0.02, thicknessMid: 0.04,
             cp1x: 0.2, cp1y: 0.65, cp2x: 0.6, cp2y: 0.45, speed: 0.0005, phase: 3.5,
-            c1: 'rgba(0, 180, 255, 0.25)', c2: 'rgba(0, 0, 0, 0)'
+            c1: 'rgba(147, 133, 255, 0.20)', c2: 'rgba(0, 0, 0, 0)'
           }
         ]
       } : {
-        bgStart: '#eef3fa',
-        bgEnd: '#f4f6f9',
+        bgStart: '#e4eefa',
+        bgEnd: '#f2fbff',
         ribbons: [
           {
             y1: 0.6, y2: 0.1, thicknessStart: 0.35, thicknessEnd: 0.3, thicknessMid: 0.5,
             cp1x: 0.3, cp1y: 0.4, cp2x: 0.7, cp2y: 0.2, speed: 0.0004, phase: 0,
-            c1: 'rgba(0, 120, 215, 0.08)', c2: 'rgba(0, 120, 215, 0)'
+            c1: 'rgba(2, 74, 216, 0.07)', c2: 'rgba(2, 74, 216, 0)'
           },
           {
             y1: 0.75, y2: 0.2, thicknessStart: 0.25, thicknessEnd: 0.2, thicknessMid: 0.4,
             cp1x: 0.4, cp1y: 0.55, cp2x: 0.8, cp2y: 0.35, speed: 0.0006, phase: 1.8,
-            c1: 'rgba(112, 48, 160, 0.06)', c2: 'rgba(112, 48, 160, 0)'
+            c1: 'rgba(144, 88, 252, 0.05)', c2: 'rgba(144, 88, 252, 0)'
           },
           {
             y1: 0.5, y2: 0.35, thicknessStart: 0.15, thicknessEnd: 0.15, thicknessMid: 0.3,
             cp1x: 0.2, cp1y: 0.65, cp2x: 0.6, cp2y: 0.45, speed: 0.0005, phase: 3.5,
-            c1: 'rgba(0, 130, 114, 0.07)', c2: 'rgba(0, 130, 114, 0)'
+            c1: 'rgba(0, 153, 93, 0.05)', c2: 'rgba(0, 153, 93, 0)'
           },
           {
             y1: 0.5, y2: 0.35, thicknessStart: 0.02, thicknessEnd: 0.02, thicknessMid: 0.04,
             cp1x: 0.2, cp1y: 0.65, cp2x: 0.6, cp2y: 0.45, speed: 0.0005, phase: 3.5,
-            c1: 'rgba(255, 255, 255, 0.65)', c2: 'rgba(255, 255, 255, 0)'
+            c1: 'rgba(255, 255, 255, 0.72)', c2: 'rgba(255, 255, 255, 0)'
           }
         ]
       };
@@ -233,100 +239,112 @@
         }
       }
 
-      initParticles();
-
-      window.addEventListener('resize', () => {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-        initParticles();
-      });
-
       function drawRibbon(time, opt) {
         ctx.beginPath();
-        
-        // Calculate dynamic start/end points using sine/cosine waves for gentle floating motion
         const startX1 = -w * 0.2;
         const startY1 = h * (opt.y1 + Math.sin(time * opt.speed + opt.phase) * 0.04);
-        
         const cp1x = w * (opt.cp1x + Math.cos(time * opt.speed * 0.8 + opt.phase) * 0.04);
         const cp1y = h * (opt.cp1y + Math.sin(time * opt.speed * 1.1 + opt.phase) * 0.05);
-        
         const cp2x = w * (opt.cp2x + Math.sin(time * opt.speed * 0.9 + opt.phase * 1.5) * 0.04);
         const cp2y = h * (opt.cp2y + Math.cos(time * opt.speed * 1.2 + opt.phase * 1.5) * 0.04);
-        
         const endX1 = w * 1.2;
         const endY1 = h * (opt.y2 + Math.cos(time * opt.speed * 0.7 + opt.phase * 2) * 0.04);
-        
+
         ctx.moveTo(startX1, startY1);
         ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX1, endY1);
-        
-        // Line down to start of bottom edge of the ribbon
+
         const endX2 = w * 1.2;
         const endY2 = endY1 + h * opt.thicknessEnd;
         ctx.lineTo(endX2, endY2);
-        
-        // Bezier curves back to left side
+
         const cp3x = cp2x;
         const cp3y = cp2y + h * opt.thicknessMid;
         const cp4x = cp1x;
         const cp4y = cp1y + h * opt.thicknessMid;
-        
         const startX2 = startX1;
         const startY2 = startY1 + h * opt.thicknessStart;
-        
+
         ctx.bezierCurveTo(cp3x, cp3y, cp4x, cp4y, startX2, startY2);
         ctx.closePath();
-        
+
         const grad = ctx.createLinearGradient(0, h * opt.y1, w, h * opt.y2);
         grad.addColorStop(0, opt.c1);
         grad.addColorStop(1, opt.c2);
-        
+
         ctx.fillStyle = grad;
         ctx.fill();
       }
 
-      function animate(time) {
-        // 1. Draw base gradient background
+      function renderFrame(time, advanceParticles) {
         const bgGrad = ctx.createLinearGradient(0, 0, w, h);
         bgGrad.addColorStop(0, colors.bgStart);
         bgGrad.addColorStop(1, colors.bgEnd);
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, w, h);
 
-        // 2. Draw dynamic ribbons/waves
         colors.ribbons.forEach(opt => {
           drawRibbon(time, opt);
         });
 
-        // 3. Draw particles
         particles.forEach(p => {
-          // Update position
-          p.x += p.dx;
-          p.y += p.dy;
+          if (advanceParticles) {
+            p.x += p.dx;
+            p.y += p.dy;
+            if (p.x < 0) p.x = w;
+            if (p.x > w) p.x = 0;
+            if (p.y < 0) p.y = h;
+            if (p.y > h) p.y = 0;
 
-          // Loop screen edges
-          if (p.x < 0) p.x = w;
-          if (p.x > w) p.x = 0;
-          if (p.y < 0) p.y = h;
-          if (p.y > h) p.y = 0;
-
-          // Twinkle/Flicker alpha
-          if (Math.abs(p.alpha - p.targetAlpha) < 0.02) {
-            p.targetAlpha = Math.random() * (isDark ? 0.7 : 0.4) + 0.1;
+            if (Math.abs(p.alpha - p.targetAlpha) < 0.02) {
+              p.targetAlpha = Math.random() * (isDark ? 0.7 : 0.4) + 0.1;
+            }
+            p.alpha += (p.targetAlpha - p.alpha) * p.flicker;
           }
-          p.alpha += (p.targetAlpha - p.alpha) * p.flicker;
 
-          // Draw
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fillStyle = isDark ? `rgba(255, 255, 255, ${p.alpha})` : `rgba(0, 120, 215, ${p.alpha * 0.7})`;
+          ctx.fillStyle = isDark ? `rgba(238, 241, 255, ${p.alpha})` : `rgba(2, 74, 216, ${p.alpha * 0.6})`;
           ctx.fill();
         });
-
-        requestAnimationFrame(animate);
       }
 
-      requestAnimationFrame(animate);
+      function shouldAnimate() {
+        return !document.hidden && !(respectReducedMotion && reducedMotionMedia.matches);
+      }
+
+      function animate(time) {
+        if (!shouldAnimate()) {
+          rafId = 0;
+          return;
+        }
+        renderFrame(time, true);
+        rafId = requestAnimationFrame(animate);
+      }
+
+      function syncAnimationLoop() {
+        if (shouldAnimate()) {
+          if (!rafId) rafId = requestAnimationFrame(animate);
+        } else {
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
+          renderFrame(0, false);
+        }
+      }
+
+      initParticles();
+      syncAnimationLoop();
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        initParticles();
+        if (!shouldAnimate()) renderFrame(0, false);
+      });
+
+      document.addEventListener('visibilitychange', syncAnimationLoop);
+      reducedMotionMedia.addEventListener('change', syncAnimationLoop);
     })();
   //]]></script>
   {% } else if (bgUrl) { %}
@@ -346,7 +364,7 @@
           </svg>
         </button>
         <a class="brand" href="/">
-          <img src="{{ media }}/img/fluent.svg" class="icon" />
+          <img src="{{ media }}/img/fluent.svg" class="icon" alt="" />
           <span class="brand-text">{{ hostname }}</span>
         </a>
       </div>
@@ -358,15 +376,15 @@
         <div id="step-username" class="step-container">
           <h2 class="login-title">{{ _('Authorization Required') }}</h2>
           <p class="login-subtitle">{{ _('Please enter your username.') }}</p>
-          
+
           <div class="input-container">
             <div class="ms-input-wrapper">
-              <input class="ms-input{% if (fuser) { %} cbi-input-invalid{% } %}" id="cbi-input-user" type="text" name="luci_username" value="{{ entityencode(duser, true) }}" placeholder=" " />
+              <input class="ms-input{% if (fuser) { %} cbi-input-invalid{% } %}" id="cbi-input-user" type="text" name="luci_username" autocomplete="username" value="{{ entityencode(duser, true) }}" placeholder=" " />
               <label class="ms-label" for="cbi-input-user">{{ _('Username') }}</label>
               <div class="ms-input-underline"></div>
             </div>
           </div>
-          
+
           <div class="button-container">
             <button type="button" class="ms-button" id="btn-next">{{ _('Next') }}</button>
           </div>
@@ -379,15 +397,15 @@
               <span class="login-account-pill__text" id="login-account-pill-text"></span>
             </div>
           </div>
-          
+
           <h2 class="login-title">{{ _('Authorization Required') }}</h2>
           <p class="login-subtitle">{{ _('Please enter your password.') }}</p>
-          
+
           <div class="input-container">
             <div class="ms-input-wrapper password-wrapper">
-              <input class="ms-input{% if (fuser) { %} cbi-input-invalid{% } %}" id="cbi-input-password" type="password" name="luci_password" placeholder=" " />
+              <input class="ms-input{% if (fuser) { %} cbi-input-invalid{% } %}" id="cbi-input-password" type="password" name="luci_password" autocomplete="current-password" placeholder=" " />
               <label class="ms-label" for="cbi-input-password">{{ _('Password') }}</label>
-              <button type="button" class="ms-password-toggle" id="ms-password-toggle" tabindex="-1" aria-label="Toggle password visibility">
+              <button type="button" class="ms-password-toggle" id="ms-password-toggle" aria-pressed="false" aria-label="Toggle password visibility">
                 <svg class="eye-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                   <circle cx="12" cy="12" r="3"></circle>
@@ -396,7 +414,7 @@
               <div class="ms-input-underline"></div>
             </div>
             {%- if (fuser) { %}
-            <div class="errorbox">{{ _('Invalid username and/or password! Please try again.') }}</div>
+            <div class="errorbox" role="alert">{{ _('Invalid username and/or password! Please try again.') }}</div>
             {%- } %}
           </div>
 
@@ -410,8 +428,6 @@
         (function() {
           var userInput = document.getElementById('cbi-input-user');
           var passInput = document.getElementById('cbi-input-password');
-          var stepUsername = document.getElementById('step-username');
-          var stepPassword = document.getElementById('step-password');
           var backBtn = document.getElementById('ms-back-btn');
           var btnNext = document.getElementById('btn-next');
           var accountPillText = document.getElementById('login-account-pill-text');
@@ -512,9 +528,11 @@
               e.preventDefault();
               if (passInput.type === 'password') {
                 passInput.type = 'text';
+                passwordToggle.setAttribute('aria-pressed', 'true');
                 passwordToggle.innerHTML = '<svg class="eye-off-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
               } else {
                 passInput.type = 'password';
+                passwordToggle.setAttribute('aria-pressed', 'false');
                 passwordToggle.innerHTML = '<svg class="eye-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
               }
             });
@@ -527,7 +545,7 @@
               loginFormEl.classList.add('no-transition');
               showStep2();
               // Force reflow to flush styles before removing no-transition
-              var reflow = loginFormEl.offsetHeight;
+              void loginFormEl.offsetHeight;
               loginFormEl.classList.remove('no-transition');
             } else {
               showStep2();

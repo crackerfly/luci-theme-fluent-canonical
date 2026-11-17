@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-theme-fluent
-PKG_VERSION:=1.0.9
+PKG_VERSION:=1.0.10
 PKG_RELEASE:=1
 PKG_LICENSE:=Apache-2.0
 
@@ -11,14 +11,13 @@ LUCI_MINIFY_CSS:=0
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
-	$(SED) 's/@VERSION@/$(PKG_VERSION)/g' $(PKG_BUILD_DIR)/ucode/template/themes/fluent/header.ut
-	$(SED) 's/@VERSION@/$(PKG_VERSION)/g' $(PKG_BUILD_DIR)/ucode/template/themes/fluent/header_login.ut
+	$(SED) 's/@VERSION@/$(PKG_VERSION)-$(PKG_RELEASE)/g' $(PKG_BUILD_DIR)/ucode/template/themes/fluent/header.ut
+	$(SED) 's/@VERSION@/$(PKG_VERSION)-$(PKG_RELEASE)/g' $(PKG_BUILD_DIR)/ucode/template/themes/fluent/header_login.ut
 endef
 
 define Package/$(PKG_NAME)/conffiles
 /etc/config/fluent
 endef
-
 
 define Package/$(PKG_NAME)/preinst
 #!/bin/sh

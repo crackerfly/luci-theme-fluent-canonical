@@ -1,13 +1,12 @@
 // ============================================================
 // CBI DIALOGS - FluentUI 2 LuCI dialogs, alerts, and page actions
-// Radius: 8px, Shadow: xl, Token-only styling
 // ============================================================
 @use "../mixins" as *;
 
 .uci-dialog {
   @include slide-in-up;
   background: var(--fluent-modal-bg);
-  border: none; // FluentUI borderless style
+  border: none;
   border-radius: var(--fluent-radius-lg);
   box-shadow: var(--fluent-shadow-xl);
   color: var(--fluent-text);
@@ -29,7 +28,7 @@
   );
   overflow: auto;
   padding: var(--fluent-space-sm);
-  font-family: var(--fluent-font-family);
+  font-family: var(--fluent-font-mono);
   font-size: var(--fluent-font-size-sm);
   line-height: var(--fluent-line-height-normal);
   background: var(--fluent-bg-page);
@@ -49,13 +48,13 @@
   }
 
   ins {
-    color: var(--fluent-success);
+    color: var(--fluent-success-text);
     background: var(--fluent-success-light);
     border: 1px solid var(--fluent-success);
   }
 
   del {
-    color: var(--fluent-error);
+    color: var(--fluent-error-text);
     background: var(--fluent-error-light);
     border: 1px solid var(--fluent-error);
   }
@@ -98,9 +97,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: calc(var(--fluent-space-sm) + var(--fluent-space-xs) + var(--fluent-space-xxs));
-    height: calc(var(--fluent-space-sm) + var(--fluent-space-xs) + var(--fluent-space-xxs));
-    min-width: calc(var(--fluent-space-sm) + var(--fluent-space-xs) + var(--fluent-space-xxs));
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
     padding: 0;
     border-radius: var(--fluent-radius-sm);
     text-decoration: none;
@@ -138,23 +137,23 @@
 
 .modal {
   label > input[type="checkbox"] {
-    margin-right: var(--fluent-space-sm);
+    margin-inline-end: var(--fluent-space-sm);
     vertical-align: middle;
   }
 
   .label {
     display: inline-flex;
     align-items: center;
-    padding: var(--fluent-space-xxs) var(--fluent-space-sm);
+    padding: 2px 10px;
     border-radius: var(--fluent-radius-circular);
     background: var(--fluent-info-light);
-    color: var(--fluent-info);
+    color: var(--fluent-info-text);
     font-size: var(--fluent-font-size-sm);
-    font-weight: var(--fluent-font-weight-semibold);
+    font-weight: var(--fluent-font-weight-regular);
 
     &.warning {
       background: var(--fluent-warning-light);
-      color: var(--fluent-text);
+      color: var(--fluent-warning-text);
     }
   }
 }
@@ -170,8 +169,11 @@
   gap: var(--fluent-space-sm);
   margin-top: var(--fluent-space-xl);
   padding: var(--fluent-space-md) var(--fluent-space-lg);
-  background: color-mix(in srgb, var(--fluent-bg-card) 92%, transparent);
-  border: none; // FluentUI borderless style
+  padding-bottom: calc(var(--fluent-space-md) + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--fluent-bg-card) 88%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: none;
   border-radius: var(--fluent-radius-lg);
   box-shadow: var(--fluent-shadow-lg);
 
@@ -180,6 +182,8 @@
   body[data-sticky-action-bar="0"] & {
     position: static;
     background: var(--fluent-bg-secondary);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     box-shadow: none;
   }
 
@@ -188,7 +192,7 @@
   }
 
   .cbi-button-link:first-child {
-    margin-right: auto;
+    margin-inline-end: auto;
   }
 
   .cbi-button-apply {
@@ -208,15 +212,16 @@
       bottom: 100% !important;
       top: auto !important;
       margin-top: 0 !important;
-      margin-bottom: var(--fluent-space-xxs) !important;
+      margin-bottom: var(--fluent-space-xs) !important;
       width: max-content !important;
       max-width: calc(100vw - 32px) !important;
-      transform-origin: bottom !important;
+      transform-origin: bottom right !important;
       animation-name: fluent-dropdown-slide-in-up !important;
 
       @include rtl {
         left: 0 !important;
         right: auto !important;
+        transform-origin: bottom left !important;
       }
 
       @supports (anchor-name: --a) {

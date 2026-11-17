@@ -143,3 +143,5 @@ vite.config.ts.timestamp-*
 .vite/
 src/scss/_fluent-icons.scss
 /.omo
+.DS_Store
+**/.DS_Store

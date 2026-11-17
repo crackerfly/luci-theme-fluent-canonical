@@ -1,6 +1,5 @@
 // ============================================================
 // TABLES - FluentUI 2 Table Styles
-// Content-based column width, centered cells, mobile scroll
 // ============================================================
 @use "../mixins" as *;
 
@@ -21,7 +20,7 @@
 // LuCI table structure (visual styles for all tables)
 .tr {
   border-bottom: 1px solid var(--fluent-table-border);
-  transition: background var(--fluent-duration-fast) var(--fluent-easing-standard);
+  transition: background var(--fluent-duration-fast) var(--fluent-easing-effects);
 
   &:hover {
     background: var(--fluent-table-row-hover);
@@ -124,7 +123,7 @@ div.th {
   }
 
   .tr.cbi-section-table-row {
-    transition: background var(--fluent-duration-fast) var(--fluent-easing-standard);
+    transition: background var(--fluent-duration-fast) var(--fluent-easing-effects);
 
     &:hover {
       background: var(--fluent-table-row-hover);
@@ -186,7 +185,7 @@ div.th {
   font-style: italic;
 }
 
-// Table actions column — buttons in a row, no wrapping
+// Table actions column — minimum 8px gap between adjacent buttons (ui-spec.md §8.1)
 .cbi-section-table .cbi-section-actions,
 td.cbi-section-actions {
   padding: var(--fluent-space-xs) var(--fluent-space-sm);
@@ -199,10 +198,11 @@ td.cbi-section-actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 5px;
+    gap: var(--fluent-space-sm);
     flex-wrap: nowrap;
   }
 }
+
 .table-wrapper {
   display: block;
   width: 100%;

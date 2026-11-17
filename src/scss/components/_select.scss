@@ -1,16 +1,24 @@
 // ============================================================
-// SELECT - FluentUI 2 Select Dropdown Styles
-// Bottom-border underline indicator, 32px height
+// SELECT - FluentUI 2 Select Dropdown Styles (Canonical §8.6.0.1)
+// Caret 8px from inline-end, 32px inline-end text clearance
 // ============================================================
 @use "../mixins" as *;
 
 // Native select
 select {
   @include input-base;
-  @include input-focus-ripple-v2;
+  @include input-focus-ripple-v2(
+    url("../assets/select-chevron.svg"),
+    8px,
+    12px 8px
+  );
   appearance: none;
-  padding-inline-end: var(--fluent-space-xl);
+  padding-inline-end: var(--fluent-space-xxl);
   cursor: pointer;
+
+  @include theme-dark-context {
+    background-image: url("../assets/select-chevron-dark.svg");
+  }
 
   // Custom chevron
   &::after {
@@ -23,11 +31,11 @@ select.cbi-input-select {
   @include input-base;
   @include input-focus-ripple-v2(
     url("../assets/select-chevron.svg"),
-    10px,
-    10px 6px
+    8px,
+    12px 8px
   );
   appearance: none;
-  padding-inline-end: var(--fluent-space-xl);
+  padding-inline-end: var(--fluent-space-xxl);
   cursor: pointer;
   max-width: 100%;
   box-sizing: border-box;
@@ -44,18 +52,18 @@ select.cbi-input-select {
   &[multiple] {
     height: auto;
     min-height: calc(var(--fluent-input-height) * 4);
-    padding: var(--fluent-space-xxs);
+    padding: var(--fluent-space-xs);
     background-image: none !important;
     background-position: initial !important;
     background-size: initial !important;
 
     option {
-      padding: var(--fluent-space-xxs) var(--fluent-space-xs);
+      padding: var(--fluent-space-xs) var(--fluent-space-sm);
       border-radius: var(--fluent-radius-sm);
 
       &:checked {
         background: var(--fluent-primary-lightest);
-        color: var(--fluent-primary);
+        color: var(--fluent-accent-text);
       }
 
       &:hover {

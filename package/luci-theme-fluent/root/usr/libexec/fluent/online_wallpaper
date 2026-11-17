@@ -7,34 +7,56 @@ if [ "$WEB_PIC_SRC" != "bing" ]; then
     exit 0
 fi
 
+mkdir -p /var/run /var/lock 2>/dev/null
 CACHE=/var/run/fluent_${WEB_PIC_SRC}.url
 WRLOCK=/var/lock/fluent_${WEB_PIC_SRC}.lock
 
 fetch_pic_url() {
-    local picpath=$(curl -fks --max-time 3 \
-        "https://www.bing.com/HPImageArchive.aspx?format=js&n=1" |
-        jsonfilter -qe '@.images[0].url')
-    [ -n "${picpath}" ] && echo "https://www.bing.com${picpath}"
+    local raw=""
+    if command -v uclient-fetch >/dev/null 2>&1; then
+        raw=$(uclient-fetch -q -T 3 -O - "https://www.bing.com/HPImageArchive.aspx?format=js&n=1" 2>/dev/null)
+    elif command -v curl >/dev/null 2>&1; then
+        raw=$(curl -fsSL --max-time 3 "https://www.bing.com/HPImageArchive.aspx?format=js&n=1" 2>/dev/null)
+    elif command -v wget >/dev/null 2>&1; then
+        raw=$(wget -q -T 3 -O - "https://www.bing.com/HPImageArchive.aspx?format=js&n=1" 2>/dev/null)
+    fi
+    local picpath=$(printf '%s' "$raw" | jsonfilter -qe '@.images[0].url' 2>/dev/null)
+    [ -n "${picpath}" ] && printf 'https://www.bing.com%s\n' "${picpath}"
+}
+
+write_or_fallback_cache() {
+    local picurl=$(fetch_pic_url)
+    if [ -n "$picurl" ]; then
+        printf '%s\n' "${picurl}" | tee "$CACHE"
+    elif [ -s "$CACHE" ]; then
+        cat "$CACHE"
+    else
+        touch "$CACHE"
+    fi
 }
 
 try_update() {
     local lock="$WRLOCK"
-    exec 200>$lock
-
-    if flock -n 200 >/dev/null 2>&1; then
-        local picurl=$(fetch_pic_url)
-        if [ -n "$picurl" ]; then
-            echo "${picurl}" | tee "$CACHE"
-        else
-            if [ -s "$CACHE" ]; then
-                cat "$CACHE"
-            else
-                touch "$CACHE"
-            fi
+    if command -v flock >/dev/null 2>&1; then
+        exec 200>"$lock"
+        if flock -n 200 >/dev/null 2>&1; then
+            write_or_fallback_cache
+            flock -u 200 >/dev/null 2>&1
+        elif [ -s "$CACHE" ]; then
+            cat "$CACHE"
         fi
-        flock -u 200 >/dev/null 2>&1
-    elif [ -s "$CACHE" ]; then
-        cat "$CACHE"
+    else
+        local lockdir="${lock}.d"
+        if [ -d "$lockdir" ]; then
+            local lock_age=$(($(date '+%s') - $(date -r "$lockdir" '+%s' 2>/dev/null || echo '0')))
+            [ "$lock_age" -gt 30 ] && rmdir "$lockdir" 2>/dev/null || true
+        fi
+        if mkdir "$lockdir" 2>/dev/null; then
+            write_or_fallback_cache
+            rmdir "$lockdir" 2>/dev/null || true
+        elif [ -s "$CACHE" ]; then
+            cat "$CACHE"
+        fi
     fi
 }
 
@@ -42,12 +64,12 @@ get_url() {
     if [ -f "$CACHE" ]; then
         local idle_t=$(($(date '+%s') - $(date -r "$CACHE" '+%s' 2>/dev/null || echo '0')))
         if [ -s "$CACHE" ]; then
-            if [ $idle_t -le 43200 ]; then
+            if [ "$idle_t" -le 43200 ]; then
                 cat "$CACHE"
                 return
             fi
         else
-            if [ $idle_t -le 120 ]; then
+            if [ "$idle_t" -le 120 ]; then
                 return
             fi
         fi

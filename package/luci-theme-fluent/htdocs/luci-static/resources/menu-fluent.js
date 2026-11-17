@@ -846,36 +846,87 @@ function getInlinePadding(t) {
 }
 
 ;// CONCATENATED MODULE: ./web/resources/utils/ifacebox-tooltip.ts
+const { setupIfaceboxTooltips } = (() => {
+  const _jsx = typeof jsx !== "undefined" ? jsx : undefined;
+  const _jsxs = typeof jsxs !== "undefined" ? jsxs : undefined;
+  const _Fragment = typeof Fragment !== "undefined" ? Fragment : undefined;
 
-let ifacebox_tooltip_l = null;
+let globalTooltip = null;
+let activeContainer = null;
+let cleanupActiveTooltip = null;
 function setupIfaceboxTooltips() {
-    document.addEventListener("mouseover", (n)=>{
-        let s = n.target.closest(".cbi-tooltip-container");
-        if (!s?.closest('td[data-name="_ifacebox"] .ifacebox-body, .td[data-name="_ifacebox"] .ifacebox-body')) {
-            ifacebox_tooltip_l && "none" !== ifacebox_tooltip_l.style.display && (ifacebox_tooltip_l.style.display = "none", ifacebox_tooltip_l.style.opacity = "0");
-            return;
-        }
-        let a = s.querySelector(".cbi-tooltip");
-        if (!a) return;
-        ifacebox_tooltip_l || ((ifacebox_tooltip_l = document.createElement("div")).id = "fluent-global-tooltip", ifacebox_tooltip_l.className = "cbi-tooltip ifacebadge large", ifacebox_tooltip_l.style.position = "absolute", ifacebox_tooltip_l.style.zIndex = "10000", ifacebox_tooltip_l.style.pointerEvents = "none", ifacebox_tooltip_l.style.display = "none", document.body.appendChild(ifacebox_tooltip_l)), ifacebox_tooltip_l.innerHTML = a.innerHTML, ifacebox_tooltip_l.style.display = "block", ifacebox_tooltip_l.style.opacity = "0";
-        let d = s.getBoundingClientRect(), r = ifacebox_tooltip_l.getBoundingClientRect(), y = getEffectiveDocumentDirection(), c = getViewportInlineSize(), p = window.pageYOffset + d.bottom + 6, f = getRectInlineStart(d, y, c) + d.width / 2, m = f - r.width / 2;
-        m < 10 && (m = 10), m + r.width > c - 10 && (m = c - r.width - 10);
-        let u = getPhysicalLeftFromInlineStart({
-            inlineStart: m,
-            inlineSize: r.width
-        }, y, c);
-        ifacebox_tooltip_l.style.top = `${p}px`, ifacebox_tooltip_l.style.left = `${window.pageXOffset + u}px`, ifacebox_tooltip_l.offsetWidth, ifacebox_tooltip_l.style.opacity = "1";
-        let v = f - m, w = "rtl" === y ? r.width - v : v;
-        ifacebox_tooltip_l.style.setProperty("--arrow-left", `${w}px`);
-        let b = ()=>{
-            ifacebox_tooltip_l && (ifacebox_tooltip_l.style.display = "none", ifacebox_tooltip_l.style.opacity = "0"), s.removeEventListener("mouseleave", b), window.removeEventListener("scroll", g, !0);
-        }, g = ()=>{
-            ifacebox_tooltip_l && (ifacebox_tooltip_l.style.display = "none", ifacebox_tooltip_l.style.opacity = "0"), s.removeEventListener("mouseleave", b), window.removeEventListener("scroll", g, !0);
-        };
-        s.addEventListener("mouseleave", b), window.addEventListener("scroll", g, !0);
-    }, !0);
+  document.addEventListener("mouseover", e => {
+    const target = e.target;
+    const container = target?.closest?.(".cbi-tooltip-container");
+    if (!container?.closest('td[data-name="_ifacebox"] .ifacebox-body, .td[data-name="_ifacebox"] .ifacebox-body')) {
+      cleanupActiveTooltip?.();
+      return;
+    }
+    if (container === activeContainer) {
+      return;
+    }
+    cleanupActiveTooltip?.();
+    const localTooltip = container.querySelector(".cbi-tooltip");
+    if (!localTooltip) return;
+    if (!globalTooltip) {
+      globalTooltip = document.createElement("div");
+      globalTooltip.id = "fluent-global-tooltip";
+      globalTooltip.className = "cbi-tooltip ifacebadge large";
+      globalTooltip.style.position = "absolute";
+      globalTooltip.style.zIndex = "10000";
+      globalTooltip.style.pointerEvents = "none";
+      globalTooltip.style.display = "none";
+      document.body.appendChild(globalTooltip);
+    }
+    activeContainer = container;
+    globalTooltip.innerHTML = localTooltip.innerHTML;
+    globalTooltip.style.display = "block";
+    globalTooltip.style.opacity = "0";
+    const parentRect = container.getBoundingClientRect();
+    const tooltipRect = globalTooltip.getBoundingClientRect();
+    const direction = getEffectiveDocumentDirection();
+    const viewportInlineSize = getViewportInlineSize();
+    const top = window.scrollY + parentRect.bottom + 6;
+    const parentInlineCenter = getRectInlineStart(parentRect, direction, viewportInlineSize) + parentRect.width / 2;
+    let tooltipInlineStart = parentInlineCenter - tooltipRect.width / 2;
+    const padding = 10;
+    if (tooltipInlineStart < padding) {
+      tooltipInlineStart = padding;
+    }
+    if (tooltipInlineStart + tooltipRect.width > viewportInlineSize - padding) {
+      tooltipInlineStart = viewportInlineSize - tooltipRect.width - padding;
+    }
+    const tooltipInlineGeometry = {
+      inlineStart: tooltipInlineStart,
+      inlineSize: tooltipRect.width
+    };
+    const tooltipPhysicalLeft = getPhysicalLeftFromInlineStart(tooltipInlineGeometry, direction, viewportInlineSize);
+    globalTooltip.style.top = `${top}px`;
+    globalTooltip.style.left = `${window.scrollX + tooltipPhysicalLeft}px`;
+    void globalTooltip.offsetWidth;
+    globalTooltip.style.opacity = "1";
+    const arrowInlineStart = parentInlineCenter - tooltipInlineStart;
+    const arrowPhysicalLeft = direction === "rtl" ? tooltipRect.width - arrowInlineStart : arrowInlineStart;
+    globalTooltip.style.setProperty("--arrow-left", `${arrowPhysicalLeft}px`);
+    const hideAndCleanup = () => {
+      if (globalTooltip) {
+        globalTooltip.style.display = "none";
+        globalTooltip.style.opacity = "0";
+      }
+      container.removeEventListener("mouseleave", hideAndCleanup);
+      window.removeEventListener("scroll", hideAndCleanup, true);
+      if (activeContainer === container) {
+        activeContainer = null;
+        cleanupActiveTooltip = null;
+      }
+    };
+    cleanupActiveTooltip = hideAndCleanup;
+    container.addEventListener("mouseleave", hideAndCleanup);
+    window.addEventListener("scroll", hideAndCleanup, true);
+  }, true);
 }
-
+  return { setupIfaceboxTooltips };
+})();
 ;// CONCATENATED MODULE: ./web/resources/utils/log-viewer.tsx
 
 let log_viewer_l = "fluent-log-wordwrap", log_viewer_n = "fluent-log-autoscroll";
@@ -1668,263 +1719,653 @@ function setupSelectionPause() {
 }
 
 ;// CONCATENATED MODULE: ./web/resources/utils/select-dropdown.tsx
+const { setupFluentSelects } = (() => {
+  const _jsx = typeof jsx !== "undefined" ? jsx : undefined;
+  const _jsxs = typeof jsxs !== "undefined" ? jsxs : undefined;
+  const _Fragment = typeof Fragment !== "undefined" ? Fragment : undefined;
 
 
-let select_dropdown_r = !1;
-function select_dropdown_s() {
-    document.querySelectorAll("cbi-dropdown[open], .cbi-dropdown[open], .fluent-custom-select[open]").forEach((e)=>{
-        if (e instanceof HTMLElement) if (e.classList.contains("fluent-custom-select")) {
-            let t = e.previousElementSibling;
-            t instanceof HTMLSelectElement && select_dropdown_f(e, t);
-        } else select_dropdown_a(e);
-    });
+
+let selectDropdownListenersRegistered = false;
+let selectsInitialized = false;
+const selectLifecycles = new WeakMap();
+let nextSelectId = 0;
+const SUPPORTS_ANCHOR_POSITIONING = typeof CSS !== "undefined" && typeof CSS.supports === "function" && CSS.supports("anchor-name", "--a");
+function clearFloatingDropdownStyles(dropdown) {
+  dropdown.removeAttribute("data-fluent-floating");
+  dropdown.style.removeProperty("--fluent-dropdown-left");
+  dropdown.style.removeProperty("--fluent-dropdown-top");
+  dropdown.style.removeProperty("--fluent-dropdown-width");
+  dropdown.style.removeProperty("--fluent-dropdown-max-height");
 }
-function select_dropdown_a(e) {
-    let t = e.getBoundingClientRect(), n = window.innerHeight - t.bottom, o = t.top, l = e.querySelector("ul.dropdown, ul:not(.preview)"), i = l ? l.querySelectorAll("li").length : 8, r = l ? l.scrollHeight : 0, s = Math.min(r > 0 ? r + 8 : 36 * i + 10, select_dropdown_c), a = n < s && o > n, d = a ? Math.max(64, o - select_dropdown_u - select_dropdown_p) : Math.max(64, n - select_dropdown_u - select_dropdown_p);
-    e.setAttribute("data-open-direction", a ? "up" : "down"), e.style.setProperty("--fluent-dropdown-max-height", `${Math.min(select_dropdown_c, s, d)}px`);
+function updateOpenDropdownPositions() {
+  document.querySelectorAll("cbi-dropdown[open], .cbi-dropdown[open], .fluent-custom-select[open]").forEach(dropdown => {
+    if (!(dropdown instanceof HTMLElement)) return;
+    if (dropdown.classList.contains("fluent-custom-select")) {
+      const selectEl = dropdown.previousElementSibling;
+      if (selectEl instanceof HTMLSelectElement) {
+        updateDropdownPosition(dropdown, selectEl);
+      }
+    } else {
+      updateNativeDropdownPosition(dropdown);
+    }
+  });
+}
+function updateNativeDropdownPosition(dropdown) {
+  const rect = dropdown.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const spaceBelow = viewportHeight - rect.bottom;
+  const spaceAbove = rect.top;
+  const listbox = dropdown.querySelector("ul.dropdown, ul:not(.preview)");
+  const itemCount = listbox ? listbox.querySelectorAll("li").length : 8;
+  const scrollHeight = listbox ? listbox.scrollHeight : 0;
+  const listHeight = Math.min(scrollHeight > 0 ? scrollHeight + 8 : itemCount * 36 + 10, DROPDOWN_MAX_HEIGHT_LIMIT);
+  const openUp = spaceBelow < listHeight && spaceAbove > spaceBelow;
+  const maxListHeight = openUp ? Math.max(64, spaceAbove - DROPDOWN_VIEWPORT_MARGIN - DROPDOWN_GAP) : Math.max(64, spaceBelow - DROPDOWN_VIEWPORT_MARGIN - DROPDOWN_GAP);
+  const resolvedHeight = Math.min(DROPDOWN_MAX_HEIGHT_LIMIT, listHeight, maxListHeight);
+  dropdown.setAttribute("data-open-direction", openUp ? "up" : "down");
+  dropdown.style.setProperty("--fluent-dropdown-max-height", `${resolvedHeight}px`);
+  const isModalOrOverlay = !!dropdown.closest("#modal_overlay .modal, .fluent-mac-overlay-card, [class*='overlay']");
+  if (!isModalOrOverlay || SUPPORTS_ANCHOR_POSITIONING) {
+    dropdown.removeAttribute("data-fluent-floating");
+    return;
+  }
+  const direction = getEffectiveDocumentDirection();
+  const viewportInlineSize = getViewportInlineSize();
+  const dropdownHeight = Math.min(resolvedHeight, viewportHeight * 0.45);
+  const dropdownInlineSize = Math.min(Math.max(rect.width, 160), viewportInlineSize - DROPDOWN_VIEWPORT_MARGIN * 2);
+  const triggerInlineStart = getRectInlineStart(rect, direction, viewportInlineSize);
+  const dropdownInlineStart = Math.min(Math.max(DROPDOWN_VIEWPORT_MARGIN, triggerInlineStart), viewportInlineSize - dropdownInlineSize - DROPDOWN_VIEWPORT_MARGIN);
+  const dropdownTop = openUp ? Math.max(DROPDOWN_VIEWPORT_MARGIN, rect.top - dropdownHeight - DROPDOWN_GAP) : Math.min(viewportHeight - DROPDOWN_VIEWPORT_MARGIN - dropdownHeight, rect.bottom + DROPDOWN_GAP);
+  dropdown.setAttribute("data-fluent-floating", "modal");
+  setInlineCssCustomProperties(dropdown.style, {
+    inlineStart: dropdownInlineStart,
+    inlineSize: dropdownInlineSize
+  }, direction, viewportInlineSize, {
+    inlineStart: "--fluent-dropdown-left",
+    inlineSize: "--fluent-dropdown-width"
+  });
+  dropdown.style.setProperty("--fluent-dropdown-top", `${dropdownTop}px`);
+  dropdown.style.setProperty("--fluent-dropdown-max-height", `${dropdownHeight}px`);
+}
+function registerSelectDropdownListeners() {
+  if (selectDropdownListenersRegistered) return;
+  selectDropdownListenersRegistered = true;
+  window.addEventListener("scroll", updateOpenDropdownPositions, true);
+  window.addEventListener("resize", updateOpenDropdownPositions);
+  document.addEventListener("click", event => {
+    document.querySelectorAll(".fluent-custom-select[open]").forEach(dropdown => {
+      if (!dropdown.contains(event.target) && event.target !== dropdown.previousElementSibling) closeCustomDropdown(dropdown);
+    });
+  }, true);
+  const dropdownObserver = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      if (mutation.type === "attributes" && mutation.attributeName === "open") {
+        const target = mutation.target;
+        if (target.hasAttribute("open")) {
+          if (target.classList.contains("fluent-custom-select")) {
+            const selectEl = target.previousElementSibling;
+            if (selectEl instanceof HTMLSelectElement) {
+              updateDropdownPosition(target, selectEl);
+            }
+          } else if (target.tagName === "CBI-DROPDOWN" || target.classList.contains("cbi-dropdown")) {
+            updateNativeDropdownPosition(target);
+          }
+        } else if (target.tagName === "CBI-DROPDOWN" || target.classList.contains("cbi-dropdown")) {
+          clearFloatingDropdownStyles(target);
+        }
+      }
+    });
+  });
+  dropdownObserver.observe(document.body, {
+    attributes: true,
+    attributeFilter: ["open"],
+    subtree: true
+  });
 }
 function setupFluentSelects() {
-    select_dropdown_r || (select_dropdown_r = !0, window.addEventListener("scroll", select_dropdown_s, !0), window.addEventListener("resize", select_dropdown_s), new MutationObserver((e)=>{
-        e.forEach((e)=>{
-            if ("attributes" === e.type && "open" === e.attributeName) {
-                let t = e.target;
-                if (t.hasAttribute("open")) if (t.classList.contains("fluent-custom-select")) {
-                    let e = t.previousElementSibling;
-                    e instanceof HTMLSelectElement && select_dropdown_f(t, e);
-                } else ("CBI-DROPDOWN" === t.tagName || t.classList.contains("cbi-dropdown")) && select_dropdown_a(t);
+  registerSelectDropdownListeners();
+  const isEnabled = document.body.getAttribute("data-theme-custom-select") !== "0";
+  if (!isEnabled || selectsInitialized) return;
+  selectsInitialized = true;
+  transformAllSelects();
+  upgradeNativeDropdowns();
+  const observer = new MutationObserver(mutations => {
+    const removedSelects = new Set();
+    mutations.forEach(mutation => {
+      mutation.removedNodes.forEach(node => {
+        if (node instanceof HTMLSelectElement) removedSelects.add(node);else if (node instanceof Element) {
+          node.querySelectorAll("select").forEach(select => {
+            removedSelects.add(select);
+          });
+        }
+      });
+      mutation.addedNodes.forEach(node => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          const el = node;
+          if (el.tagName === "SELECT") {
+            transformSelect(el);
+          } else if (el.tagName === "CBI-DROPDOWN" || el.classList.contains("cbi-dropdown")) {
+            if (!el.classList.contains("fluent-custom-select")) {
+              upgradeNativeDropdown(el);
             }
-        });
-    }).observe(document.body, {
-        attributes: !0,
-        attributeFilter: [
-            "open"
-        ],
-        subtree: !0
-    })), "0" === document.body.getAttribute("data-theme-custom-select") || (document.querySelectorAll("select").forEach((e)=>{
-        select_dropdown_h(e);
-    }), document.querySelectorAll("cbi-dropdown, .cbi-dropdown").forEach((e)=>{
-        e.classList.contains("fluent-custom-select") || select_dropdown_d(e);
-    }), new MutationObserver((e)=>{
-        e.forEach((e)=>{
-            e.addedNodes.forEach((e)=>{
-                e.nodeType === Node.ELEMENT_NODE && ("SELECT" === e.tagName ? select_dropdown_h(e) : "CBI-DROPDOWN" === e.tagName || e.classList.contains("cbi-dropdown") ? e.classList.contains("fluent-custom-select") || select_dropdown_d(e) : (e.querySelectorAll("select").forEach((e)=>{
-                    select_dropdown_h(e);
-                }), e.querySelectorAll("cbi-dropdown, .cbi-dropdown").forEach((e)=>{
-                    e.classList.contains("fluent-custom-select") || select_dropdown_d(e);
-                })));
+          } else {
+            el.querySelectorAll("select").forEach(select => {
+              transformSelect(select);
             });
-        });
-    }).observe(document.body, {
-        childList: !0,
-        subtree: !0
-    }));
-}
-function select_dropdown_d(e) {
-    let t;
-    (t = e.querySelector("span.open")) && "true" !== t.getAttribute("data-chevron-upgraded") && (t.setAttribute("data-chevron-upgraded", "true"), t.innerHTML = "");
-    let n = e.querySelector("ul:not(.preview)");
-    n && !n.classList.contains("dropdown") && n.classList.add("dropdown");
-}
-let select_dropdown_c = 350, select_dropdown_u = 8, select_dropdown_p = 2;
-function select_dropdown_b(e, t) {
-    let n = t.offsetTop, o = n + t.offsetHeight, l = e.scrollTop, i = l + e.clientHeight;
-    n < l ? e.scrollTop = n : o > i && (e.scrollTop = o - e.clientHeight);
-}
-function select_dropdown_f(e, t) {
-    let r = e.getBoundingClientRect(), s = getEffectiveDocumentDirection(), a = getViewportInlineSize(), d = window.innerHeight, b = d - r.bottom, f = r.top;
-    if (b < Math.min(32 * t.options.length + 10, select_dropdown_c) && f > b ? e.setAttribute("data-open-direction", "up") : e.setAttribute("data-open-direction", "down"), !e.closest("#modal_overlay .modal, .fluent-mac-overlay-card, [class*='overlay']")) return void e.removeAttribute("data-fluent-floating");
-    let m = Math.min(32 * t.options.length + 10, select_dropdown_c, 0.45 * d), h = b < m && f > b, v = Math.min(m, Math.max(64, h ? f - select_dropdown_u - select_dropdown_p : b - select_dropdown_u - select_dropdown_p)), w = Math.min(r.width, a - 2 * select_dropdown_u), y = Math.min(Math.max(select_dropdown_u, getRectInlineStart(r, s, a)), a - w - select_dropdown_u), A = h ? Math.max(select_dropdown_u, r.top - v - select_dropdown_p) : Math.min(d - select_dropdown_u - v, r.bottom + select_dropdown_p);
-    e.setAttribute("data-open-direction", h ? "up" : "down"), e.setAttribute("data-fluent-floating", "modal"), setInlineCssCustomProperties(e.style, {
-        inlineStart: y,
-        inlineSize: w
-    }, s, a, {
-        inlineStart: "--fluent-dropdown-left",
-        inlineSize: "--fluent-dropdown-width"
-    }), e.style.setProperty("--fluent-dropdown-top", `${A}px`), e.style.setProperty("--fluent-dropdown-max-height", `${v}px`);
-}
-function select_dropdown_m(e) {
-    e.removeAttribute("open"), e.removeAttribute("data-fluent-floating"), e.style.removeProperty("--fluent-dropdown-left"), e.style.removeProperty("--fluent-dropdown-top"), e.style.removeProperty("--fluent-dropdown-width"), e.style.removeProperty("--fluent-dropdown-max-height"), e.closest(".cbi-value-field, .cbi-value")?.classList.remove("cbi-dropdown-open");
-    let t = e.querySelector("ul.dropdown");
-    t instanceof HTMLElement && "function" == typeof t.hidePopover && t.matches(":popover-open") && t.hidePopover();
-}
-function select_dropdown_h(n) {
-    if (n?.tagName !== "SELECT" || "true" === n.getAttribute("data-fluent-transformed") || n.closest(".cbi-dropdown") || n.multiple || function(e) {
-        let t = e.getAttribute("style") || "";
-        if (/\bdisplay\s*:\s*none/i.test(t) || "none" === e.style.display) return !0;
-        if (!e.isConnected) return !1;
-        try {
-            let t = window.getComputedStyle(e);
-            if ("none" === t.display) {
-                let t = e.parentElement, n = !1;
-                for(; t;){
-                    let e = window.getComputedStyle(t);
-                    if ("none" === e.display) {
-                        n = !0;
-                        break;
-                    }
-                    t = t.parentElement;
-                }
-                if (!n) return !0;
-                let o = e.cloneNode(!1);
-                o.style.display = "", document.body.appendChild(o);
-                let l = window.getComputedStyle(o), i = "none" === l.display;
-                return document.body.removeChild(o), i;
-            }
-        } catch (e) {}
-        return !1;
-    }(n)) return;
-    let o = n.getAttribute("style");
-    n.setAttribute("data-fluent-transformed", "true"), n.style.setProperty("display", "none", "important");
-    let l = jsx("li", {});
-    l.setAttribute("selected", "");
-    let i = jsx("ul", {
-        class: "dropdown"
-    }), r = jsx("span", {
-        class: "open"
-    }), s = jsxs("div", {
-        class: "fluent-custom-select",
-        children: [
-            jsx("ul", {
-                children: l
-            }),
-            r,
-            i
-        ]
+            el.querySelectorAll("cbi-dropdown, .cbi-dropdown").forEach(dropdown => {
+              if (!dropdown.classList.contains("fluent-custom-select")) {
+                upgradeNativeDropdown(dropdown);
+              }
+            });
+          }
+        }
+      });
     });
-    if (s.setAttribute("tabindex", "0"), o) {
-        let e = o.replace(/\bdisplay\s*:\s*[^;]+(;|$)/gi, "").trim();
-        e && s.setAttribute("style", e);
+    removedSelects.forEach(select => {
+      const lifecycle = selectLifecycles.get(select);
+      if (!lifecycle) return;
+      if (!select.isConnected) lifecycle.dispose();else {
+        if (select.nextElementSibling !== lifecycle.dropdown) {
+          closeCustomDropdown(lifecycle.dropdown);
+          select.after(lifecycle.dropdown);
+        }
+        lifecycle.refreshAncestors();
+      }
+    });
+  });
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+}
+function transformAllSelects() {
+  document.querySelectorAll("select").forEach(select => {
+    transformSelect(select);
+  });
+}
+function upgradeNativeDropdowns() {
+  document.querySelectorAll("cbi-dropdown, .cbi-dropdown").forEach(dropdown => {
+    if (!dropdown.classList.contains("fluent-custom-select")) {
+      upgradeNativeDropdown(dropdown);
     }
-    n.disabled && (s.setAttribute("disabled", ""), s.removeAttribute("tabindex"));
-    let a = ()=>{
-        i.innerHTML = "";
-        let t = "", o = !1;
-        if (Array.from(n.options).forEach((n)=>{
-            let l = jsx("li", {
-                children: n.text
-            });
-            l.setAttribute("data-value", n.value), n.selected && (l.setAttribute("selected", ""), t = n.text, o = !0), n.disabled && l.setAttribute("disabled", ""), i.appendChild(l);
-        }), !o && n.options.length > 0) {
-            let e = n.options[n.selectedIndex >= 0 ? n.selectedIndex : 0];
-            t = e.text;
-            let o = i.querySelector(`li[data-value="${e.value}"]`);
-            o?.setAttribute("selected", "");
-        }
-        l.textContent = t;
-    };
-    a(), n.parentNode?.insertBefore(s, n.nextSibling), s.addEventListener("click", (e)=>{
-        if (s.hasAttribute("disabled")) return;
-        let t = e.target.closest("ul.dropdown > li");
-        if (t) {
-            let o = t.getAttribute("data-value");
-            null === o || t.hasAttribute("disabled") || (n.value = o, n.dispatchEvent(new Event("change", {
-                bubbles: !0
-            })), n.dispatchEvent(new Event("input", {
-                bubbles: !0
-            }))), select_dropdown_m(s), e.stopPropagation();
-            return;
-        }
-        if (s.hasAttribute("open")) select_dropdown_m(s);
-        else {
-            document.querySelectorAll("cbi-dropdown[open], .cbi-dropdown[open], .fluent-custom-select[open]").forEach((e)=>{
-                e instanceof HTMLElement && e.classList.contains("fluent-custom-select") ? select_dropdown_m(e) : (e.removeAttribute("open"), e.closest(".cbi-value-field, .cbi-value")?.classList.remove("cbi-dropdown-open"));
-            }), select_dropdown_f(s, n), s.setAttribute("open", ""), s.closest(".cbi-value-field, .cbi-value")?.classList.add("cbi-dropdown-open");
-            let e = i.querySelector("li[selected]");
-            e && select_dropdown_b(i, e);
-        }
-        e.stopPropagation();
-    });
-    let d = (e)=>{
-        !s.contains(e.target) && e.target !== n && s.hasAttribute("open") && select_dropdown_m(s);
-    };
-    document.addEventListener("click", d, !0), s.addEventListener("keydown", (e)=>{
-        if (s.hasAttribute("disabled")) return;
-        let t = s.hasAttribute("open"), o = Array.from(i.querySelectorAll("li:not([disabled])")), l = o.findIndex((e)=>e.hasAttribute("selected"));
-        switch(e.key){
-            case "Enter":
-            case " ":
-                if (e.preventDefault(), t) {
-                    let e = o[l];
-                    e && e.click();
-                } else s.click();
-                break;
-            case "Escape":
-                t && (e.preventDefault(), select_dropdown_m(s));
-                break;
-            case "ArrowDown":
-                if (e.preventDefault(), t) {
-                    if (o.length > 0) {
-                        let e = (l + 1) % o.length;
-                        o.forEach((t, o)=>{
-                            if (o === e) {
-                                t.setAttribute("selected", ""), select_dropdown_b(i, t);
-                                let e = t.getAttribute("data-value");
-                                null !== e && (n.value = e, n.dispatchEvent(new Event("change", {
-                                    bubbles: !0
-                                })), n.dispatchEvent(new Event("input", {
-                                    bubbles: !0
-                                })));
-                            } else t.removeAttribute("selected");
-                        });
-                    }
-                } else s.click();
-                break;
-            case "ArrowUp":
-                if (e.preventDefault(), t) {
-                    if (o.length > 0) {
-                        let e = (l - 1 + o.length) % o.length;
-                        o.forEach((t, o)=>{
-                            if (o === e) {
-                                t.setAttribute("selected", ""), select_dropdown_b(i, t);
-                                let e = t.getAttribute("data-value");
-                                null !== e && (n.value = e, n.dispatchEvent(new Event("change", {
-                                    bubbles: !0
-                                })), n.dispatchEvent(new Event("input", {
-                                    bubbles: !0
-                                })));
-                            } else t.removeAttribute("selected");
-                        });
-                    }
-                } else s.click();
-                break;
-            case "Tab":
-                t && select_dropdown_m(s);
-        }
-    }), n.addEventListener("change", ()=>{
-        let e = n.value, t = Array.from(i.querySelectorAll("li")), o = "";
-        t.forEach((t)=>{
-            t.getAttribute("data-value") === e ? (t.setAttribute("selected", ""), o = t.textContent || "") : t.removeAttribute("selected");
-        }), l.textContent = o;
-    });
-    let c = new MutationObserver(()=>{
-        a();
-    });
-    c.observe(n, {
-        childList: !0
-    });
-    let u = new MutationObserver((e)=>{
-        e.forEach((e)=>{
-            "disabled" === e.attributeName && (n.disabled ? (s.setAttribute("disabled", ""), s.removeAttribute("tabindex"), select_dropdown_m(s)) : (s.removeAttribute("disabled"), s.setAttribute("tabindex", "0")));
-        });
-    });
-    u.observe(n, {
-        attributes: !0,
-        attributeFilter: [
-            "disabled"
-        ]
-    });
-    let p = new MutationObserver((e)=>{
-        e.forEach((e)=>{
-            e.removedNodes.forEach((e)=>{
-                (e === n || e.contains?.(n)) && (document.removeEventListener("click", d, !0), c.disconnect(), u.disconnect(), p.disconnect(), s.remove());
-            });
-        });
-    });
-    n.parentNode && p.observe(n.parentNode, {
-        childList: !0
-    });
+  });
 }
-
+function upgradeDropdownChevron(dropdown) {
+  const openSpan = dropdown.querySelector("span.open");
+  if (openSpan) {
+    if (openSpan.getAttribute("data-chevron-upgraded") !== "true") {
+      openSpan.setAttribute("data-chevron-upgraded", "true");
+      openSpan.innerHTML = "";
+    }
+  }
+}
+function upgradeNativeDropdown(dropdown) {
+  upgradeDropdownChevron(dropdown);
+  const listbox = dropdown.querySelector("ul:not(.preview)");
+  if (listbox && !listbox.classList.contains("dropdown")) {
+    listbox.classList.add("dropdown");
+  }
+}
+function isSelectElementHidden(selectEl) {
+  const styleAttr = selectEl.getAttribute("style") || "";
+  if (/\bdisplay\s*:\s*none/i.test(styleAttr)) {
+    return true;
+  }
+  if (selectEl.style.display === "none") {
+    return true;
+  }
+  if (!selectEl.isConnected) {
+    return false;
+  }
+  try {
+    const computedStyle = window.getComputedStyle(selectEl);
+    if (computedStyle.display === "none") {
+      let parent = selectEl.parentElement;
+      let parentIsHidden = false;
+      while (parent) {
+        const parentStyle = window.getComputedStyle(parent);
+        if (parentStyle.display === "none") {
+          parentIsHidden = true;
+          break;
+        }
+        parent = parent.parentElement;
+      }
+      if (!parentIsHidden) {
+        return true;
+      }
+      const clone = selectEl.cloneNode(false);
+      clone.style.display = "";
+      document.body.appendChild(clone);
+      const cloneStyle = window.getComputedStyle(clone);
+      const isCloneHidden = cloneStyle.display === "none";
+      document.body.removeChild(clone);
+      return isCloneHidden;
+    }
+  } catch (_e) {
+    return false;
+  }
+  return false;
+}
+const DROPDOWN_MAX_HEIGHT_LIMIT = 350;
+const DROPDOWN_VIEWPORT_MARGIN = 8;
+const DROPDOWN_GAP = 2;
+function scrollOptionIntoDropdown(listbox, item) {
+  const itemTop = item.offsetTop;
+  const itemBottom = itemTop + item.offsetHeight;
+  const visibleTop = listbox.scrollTop;
+  const visibleBottom = visibleTop + listbox.clientHeight;
+  if (itemTop < visibleTop) {
+    listbox.scrollTop = itemTop;
+  } else if (itemBottom > visibleBottom) {
+    listbox.scrollTop = itemBottom - listbox.clientHeight;
+  }
+}
+function updateDropdownPosition(customDropdown, selectEl) {
+  const rect = customDropdown.getBoundingClientRect();
+  const direction = getEffectiveDocumentDirection();
+  const viewportInlineSize = getViewportInlineSize();
+  const viewportHeight = window.innerHeight;
+  const spaceBelow = viewportHeight - rect.bottom;
+  const spaceAbove = rect.top;
+  const listHeight = Math.min(selectEl.options.length * 32 + 10, DROPDOWN_MAX_HEIGHT_LIMIT);
+  if (spaceBelow < listHeight && spaceAbove > spaceBelow) {
+    customDropdown.setAttribute("data-open-direction", "up");
+  } else {
+    customDropdown.setAttribute("data-open-direction", "down");
+  }
+  const isModalOrOverlay = !!customDropdown.closest("#modal_overlay .modal, .fluent-mac-overlay-card, [class*='overlay']");
+  if (!isModalOrOverlay) {
+    customDropdown.removeAttribute("data-fluent-floating");
+    return;
+  }
+  const maxListHeight = Math.min(selectEl.options.length * 32 + 10, DROPDOWN_MAX_HEIGHT_LIMIT, viewportHeight * 0.45);
+  const openUp = spaceBelow < maxListHeight && spaceAbove > spaceBelow;
+  const availableHeight = Math.max(64, openUp ? spaceAbove - DROPDOWN_VIEWPORT_MARGIN - DROPDOWN_GAP : spaceBelow - DROPDOWN_VIEWPORT_MARGIN - DROPDOWN_GAP);
+  const dropdownHeight = Math.min(maxListHeight, availableHeight);
+  const dropdownInlineSize = Math.min(rect.width, viewportInlineSize - DROPDOWN_VIEWPORT_MARGIN * 2);
+  const triggerInlineStart = getRectInlineStart(rect, direction, viewportInlineSize);
+  const dropdownInlineStart = Math.min(Math.max(DROPDOWN_VIEWPORT_MARGIN, triggerInlineStart), viewportInlineSize - dropdownInlineSize - DROPDOWN_VIEWPORT_MARGIN);
+  const dropdownTop = openUp ? Math.max(DROPDOWN_VIEWPORT_MARGIN, rect.top - dropdownHeight - DROPDOWN_GAP) : Math.min(viewportHeight - DROPDOWN_VIEWPORT_MARGIN - dropdownHeight, rect.bottom + DROPDOWN_GAP);
+  customDropdown.setAttribute("data-open-direction", openUp ? "up" : "down");
+  customDropdown.setAttribute("data-fluent-floating", "modal");
+  setInlineCssCustomProperties(customDropdown.style, {
+    inlineStart: dropdownInlineStart,
+    inlineSize: dropdownInlineSize
+  }, direction, viewportInlineSize, {
+    inlineStart: "--fluent-dropdown-left",
+    inlineSize: "--fluent-dropdown-width"
+  });
+  customDropdown.style.setProperty("--fluent-dropdown-top", `${dropdownTop}px`);
+  customDropdown.style.setProperty("--fluent-dropdown-max-height", `${dropdownHeight}px`);
+}
+function closeCustomDropdown(customDropdown) {
+  customDropdown.removeAttribute("open");
+  customDropdown.setAttribute("aria-expanded", "false");
+  customDropdown.removeAttribute("aria-activedescendant");
+  customDropdown.querySelectorAll(".is-active").forEach(el => {
+    el.classList.remove("is-active");
+  });
+  clearFloatingDropdownStyles(customDropdown);
+  customDropdown.closest(".cbi-value-field, .cbi-value")?.classList.remove("cbi-dropdown-open");
+  const listbox = customDropdown.querySelector("ul.dropdown");
+  if (listbox instanceof HTMLElement && typeof listbox.hidePopover === "function" && listbox.matches(":popover-open")) {
+    listbox.hidePopover();
+  }
+}
+function transformSelect(selectEl) {
+  if (selectEl?.tagName !== "SELECT" || !selectEl.isConnected) return;
+  if (selectEl.getAttribute("data-fluent-transformed") === "true") return;
+  if (selectEl.closest(".cbi-dropdown")) return;
+  if (selectEl.multiple) return;
+  if (isSelectElementHidden(selectEl)) return;
+  const nativeStyle = selectEl.getAttribute("style");
+  const nativeDisplay = selectEl.style.getPropertyValue("display");
+  const nativeDisplayPriority = selectEl.style.getPropertyPriority("display");
+  selectEl.setAttribute("data-fluent-transformed", "true");
+  selectEl.style.setProperty("display", "none", "important");
+  const previewLi = _jsx("li", {});
+  previewLi.setAttribute("selected", "");
+  const listbox = _jsx("ul", {
+    class: "dropdown"
+  });
+  listbox.id = `fluent-select-list-${++nextSelectId}`;
+  listbox.setAttribute("role", "listbox");
+  const openSpan = _jsx("span", {
+    class: "open"
+  });
+  const customDropdown = _jsxs("div", {
+    class: "fluent-custom-select",
+    children: [_jsx("ul", {
+      children: previewLi
+    }), openSpan, listbox]
+  });
+  customDropdown.setAttribute("tabindex", "0");
+  customDropdown.setAttribute("role", "combobox");
+  customDropdown.setAttribute("aria-haspopup", "listbox");
+  customDropdown.setAttribute("aria-controls", listbox.id);
+  customDropdown.setAttribute("aria-expanded", "false");
+  customDropdown.setAttribute("aria-required", String(selectEl.required));
+  customDropdown.querySelector("ul:not(.dropdown)")?.setAttribute("aria-hidden", "true");
+  openSpan.setAttribute("aria-hidden", "true");
+  if (nativeStyle) {
+    const cleanStyle = nativeStyle.replace(/\bdisplay\s*:\s*[^;]+(;|$)/gi, "").trim();
+    if (cleanStyle) {
+      customDropdown.setAttribute("style", cleanStyle);
+    }
+  }
+  let items = new Map();
+  let active = null;
+  let openFrame = 0;
+  let resetTimer = 0;
+  let typeahead = "";
+  let typeaheadTimer = 0;
+  let form = null;
+  let labels = [];
+  let fieldsets = [];
+  const isDisabled = () => selectEl.matches(":disabled");
+  const usable = option => !option.hidden && !option.closest("[hidden]") && !option.matches(":disabled");
+  const available = () => Array.from(selectEl.options).filter(option => usable(option));
+  const setActive = option => {
+    active = option && items.has(option) && usable(option) ? option : null;
+    for (const [opt, item] of items) {
+      item.classList.toggle("is-active", opt === active && customDropdown.hasAttribute("open"));
+    }
+    if (active && customDropdown.hasAttribute("open")) {
+      const item = items.get(active);
+      if (item) {
+        customDropdown.setAttribute("aria-activedescendant", item.id);
+        scrollOptionIntoDropdown(listbox, item);
+      }
+    } else {
+      customDropdown.removeAttribute("aria-activedescendant");
+    }
+  };
+  const sync = () => {
+    const disabled = isDisabled();
+    customDropdown.toggleAttribute("disabled", disabled);
+    customDropdown.setAttribute("aria-disabled", String(disabled));
+    customDropdown.setAttribute("aria-required", String(selectEl.required));
+    if (disabled) {
+      customDropdown.removeAttribute("tabindex");
+      closeCustomDropdown(customDropdown);
+    } else customDropdown.setAttribute("tabindex", "0");
+    const labelIds = labels.map(label => label.id).filter(Boolean);
+    const labelledBy = selectEl.getAttribute("aria-labelledby");
+    if (labelledBy || labelIds.length) {
+      customDropdown.setAttribute("aria-labelledby", labelledBy || labelIds.join(" "));
+      customDropdown.removeAttribute("aria-label");
+    } else {
+      customDropdown.removeAttribute("aria-labelledby");
+      const name = selectEl.getAttribute("aria-label") || labels.map(label => label.textContent?.trim()).filter(Boolean).join(" ") || selectEl.title;
+      if (name) customDropdown.setAttribute("aria-label", name);else customDropdown.removeAttribute("aria-label");
+    }
+    const selected = selectEl.options[selectEl.selectedIndex];
+    previewLi.textContent = selected?.text ?? "";
+    for (const [option, item] of items) {
+      const chosen = option === selected;
+      item.toggleAttribute("selected", chosen);
+      item.setAttribute("aria-selected", String(chosen));
+      const unavailable = !usable(option);
+      item.toggleAttribute("disabled", unavailable);
+      item.setAttribute("aria-disabled", String(unavailable));
+    }
+    if (active && !usable(active)) setActive(selected && usable(selected) ? selected : null);
+    if (customDropdown.hasAttribute("open") && !active) setActive(selected && usable(selected) ? selected : available()[0] || null);
+  };
+  const rebuildOptions = () => {
+    const newItems = new Map();
+    let group = null;
+    let groupList = null;
+    listbox.replaceChildren();
+    Array.from(selectEl.options).forEach((option, index) => {
+      const parent = option.parentElement instanceof HTMLOptGroupElement ? option.parentElement : null;
+      if (parent !== group) {
+        group = parent;
+        groupList = null;
+      }
+      if (parent && !groupList) {
+        const wrapper = _jsx("li", {
+          class: "fluent-select-group"
+        });
+        wrapper.setAttribute("role", "group");
+        wrapper.setAttribute("aria-label", parent.label);
+        wrapper.hidden = parent.hidden;
+        const heading = _jsx("span", {
+          class: "fluent-select-group__label"
+        });
+        heading.textContent = parent.label;
+        heading.setAttribute("aria-hidden", "true");
+        groupList = _jsx("ul", {});
+        groupList.setAttribute("role", "presentation");
+        wrapper.append(heading, groupList);
+        listbox.append(wrapper);
+      }
+      const item = _jsx("li", {});
+      item.id = `${listbox.id}-option-${index}`;
+      item.textContent = option.text;
+      item.setAttribute("role", "option");
+      item.hidden = option.hidden || !!parent?.hidden;
+      (groupList || listbox).append(item);
+      newItems.set(option, item);
+    });
+    items = newItems;
+    if (active && !items.has(active)) active = null;
+    sync();
+  };
+  const selectOption = option => {
+    if (isDisabled() || !usable(option)) return;
+    selectEl.selectedIndex = Array.from(selectEl.options).indexOf(option);
+    sync();
+    selectEl.dispatchEvent(new Event("input", {
+      bubbles: true
+    }));
+    selectEl.dispatchEvent(new Event("change", {
+      bubbles: true
+    }));
+  };
+  const onLabelClick = event => {
+    if (event.target instanceof Element && event.target.closest("a, button, input, select, textarea")) return;
+    if (!isDisabled()) customDropdown.focus();
+  };
+  const onReset = () => {
+    window.clearTimeout(resetTimer);
+    resetTimer = window.setTimeout(() => {
+      if (selectEl.isConnected) {
+        rebuildOptions();
+        setActive(null);
+      }
+    }, 0);
+  };
+  const ancestorObserver = new MutationObserver(() => sync());
+  const refreshAncestors = () => {
+    ancestorObserver.disconnect();
+    fieldsets = Array.from(function* () {
+      let parent = selectEl.parentElement;
+      while (parent) {
+        if (parent instanceof HTMLFieldSetElement) yield parent;
+        parent = parent.parentElement;
+      }
+    }());
+    fieldsets.forEach(fieldset => {
+      ancestorObserver.observe(fieldset, {
+        attributes: true,
+        attributeFilter: ["disabled"]
+      });
+    });
+    const nextForm = selectEl.form;
+    if (form !== nextForm) {
+      form?.removeEventListener("reset", onReset);
+      form = nextForm;
+      form?.addEventListener("reset", onReset);
+    }
+    const nextLabels = Array.from(selectEl.labels || []);
+    labels.forEach(label => {
+      label.removeEventListener("click", onLabelClick);
+    });
+    labels = nextLabels;
+    labels.forEach(label => {
+      label.addEventListener("click", onLabelClick);
+    });
+    sync();
+  };
+  rebuildOptions();
+  selectEl.parentNode?.insertBefore(customDropdown, selectEl.nextSibling);
+  customDropdown.addEventListener("click", e => {
+    if (customDropdown.hasAttribute("disabled")) return;
+    const targetLi = e.target.closest('[role="option"]');
+    if (targetLi && listbox.contains(targetLi)) {
+      const option = Array.from(items).find(([, item]) => item === targetLi)?.[0];
+      if (option && usable(option)) selectOption(option);
+      closeCustomDropdown(customDropdown);
+      e.stopPropagation();
+      return;
+    }
+    if (e.target.closest('[role="group"]')) return;
+    const isOpen = customDropdown.hasAttribute("open");
+    if (isOpen) {
+      closeCustomDropdown(customDropdown);
+    } else {
+      document.querySelectorAll("cbi-dropdown[open], .cbi-dropdown[open], .fluent-custom-select[open]").forEach(el => {
+        if (el instanceof HTMLElement && el.classList.contains("fluent-custom-select")) {
+          closeCustomDropdown(el);
+        } else if (el instanceof HTMLElement) {
+          el.removeAttribute("open");
+          clearFloatingDropdownStyles(el);
+          el.closest(".cbi-value-field, .cbi-value")?.classList.remove("cbi-dropdown-open");
+        }
+      });
+      rebuildOptions();
+      updateDropdownPosition(customDropdown, selectEl);
+      customDropdown.setAttribute("open", "");
+      customDropdown.setAttribute("aria-expanded", "true");
+      customDropdown.closest(".cbi-value-field, .cbi-value")?.classList.add("cbi-dropdown-open");
+      setActive(usable(selectEl.options[selectEl.selectedIndex]) ? selectEl.options[selectEl.selectedIndex] : available()[0] || null);
+      const watchOpen = () => {
+        if (!customDropdown.hasAttribute("open")) {
+          openFrame = 0;
+          return;
+        }
+        sync();
+        openFrame = requestAnimationFrame(watchOpen);
+      };
+      if (!openFrame) openFrame = requestAnimationFrame(watchOpen);
+    }
+    e.stopPropagation();
+  });
+  customDropdown.addEventListener("keydown", e => {
+    if (customDropdown.hasAttribute("disabled")) return;
+    const isOpen = customDropdown.hasAttribute("open");
+    const options = available();
+    const activeIndex = active ? options.indexOf(active) : -1;
+    switch (e.key) {
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        if (!isOpen) {
+          customDropdown.click();
+        } else {
+          if (active) {
+            selectOption(active);
+            closeCustomDropdown(customDropdown);
+          }
+        }
+        break;
+      case "Escape":
+        if (isOpen) {
+          e.preventDefault();
+          closeCustomDropdown(customDropdown);
+        }
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        if (!isOpen) {
+          customDropdown.click();
+        } else if (options.length > 0) {
+          setActive(options[(activeIndex + 1) % options.length]);
+        }
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        if (!isOpen) {
+          customDropdown.click();
+        } else if (options.length > 0) {
+          setActive(options[(activeIndex - 1 + options.length) % options.length]);
+        }
+        break;
+      case "Home":
+      case "End":
+        e.preventDefault();
+        if (!isOpen) customDropdown.click();
+        setActive(e.key === "Home" ? options[0] || null : options[options.length - 1] || null);
+        break;
+      case "Tab":
+        if (isOpen) {
+          closeCustomDropdown(customDropdown);
+        }
+        break;
+      default:
+        if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+          typeahead += e.key.toLocaleLowerCase();
+          window.clearTimeout(typeaheadTimer);
+          typeaheadTimer = window.setTimeout(() => {
+            typeahead = "";
+          }, 700);
+          const match = options.find(option => option.text.trim().toLocaleLowerCase().startsWith(typeahead));
+          if (match) {
+            if (!isOpen) customDropdown.click();
+            setActive(match);
+          }
+        }
+    }
+  });
+  const syncSelection = () => {
+    sync();
+    setActive(null);
+  };
+  selectEl.addEventListener("change", syncSelection);
+  selectEl.addEventListener("input", syncSelection);
+  customDropdown.addEventListener("focus", () => {
+    refreshAncestors();
+    rebuildOptions();
+  });
+  const optionObserver = new MutationObserver(mutations => {
+    if (mutations.some(mutation => mutation.type === "childList" || mutation.target !== selectEl)) rebuildOptions();else sync();
+    if (mutations.some(mutation => mutation.attributeName === "form" || mutation.attributeName === "id")) refreshAncestors();
+  });
+  optionObserver.observe(selectEl, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: ["disabled", "hidden", "label", "selected", "value", "required", "aria-label", "aria-labelledby", "id", "form"]
+  });
+  refreshAncestors();
+  selectLifecycles.set(selectEl, {
+    dropdown: customDropdown,
+    refreshAncestors,
+    dispose: () => {
+      closeCustomDropdown(customDropdown);
+      if (openFrame) cancelAnimationFrame(openFrame);
+      window.clearTimeout(resetTimer);
+      window.clearTimeout(typeaheadTimer);
+      optionObserver.disconnect();
+      ancestorObserver.disconnect();
+      form?.removeEventListener("reset", onReset);
+      labels.forEach(label => {
+        label.removeEventListener("click", onLabelClick);
+      });
+      selectEl.removeEventListener("change", syncSelection);
+      selectEl.removeEventListener("input", syncSelection);
+      customDropdown.remove();
+      selectEl.removeAttribute("data-fluent-transformed");
+      if (nativeDisplay) selectEl.style.setProperty("display", nativeDisplay, nativeDisplayPriority);else selectEl.style.removeProperty("display");
+      selectLifecycles.delete(selectEl);
+    }
+  });
+}
+  return { setupFluentSelects };
+})();
 ;// CONCATENATED MODULE: ./web/resources/utils/table-wrapper.ts
 let table_wrapper_e = "table.table, table.cbi-section-table, div.table, div.cbi-section-table";
 function table_wrapper_t(e) {
@@ -2298,74 +2739,153 @@ const setupMenuFeatures = (r)=>{
 };
 
 ;// CONCATENATED MODULE: ./web/resources/utils/sidebar-controller.ts
-function applyDesktopSidebarState(e) {
-    document.body.setAttribute("data-sidebar-state", e), document.dispatchEvent(new CustomEvent("fluent-sidebar-state-change"));
+const { applyDesktopSidebarState, getDesktopSidebarState, closeCollapsedPopups, adjustBrandTextSize, handleSidebarToggle, handleDesktopSidebarToggle, initSidebarController } = (() => {
+  const _jsx = typeof jsx !== "undefined" ? jsx : undefined;
+  const _jsxs = typeof jsxs !== "undefined" ? jsxs : undefined;
+  const _Fragment = typeof Fragment !== "undefined" ? Fragment : undefined;
+function applyDesktopSidebarState(state) {
+  document.body.setAttribute("data-sidebar-state", state);
+  document.dispatchEvent(new CustomEvent("fluent-sidebar-state-change"));
 }
 function getDesktopSidebarState() {
-    try {
-        let e = localStorage.getItem("fluent-sidebar-state");
-        return "collapsed" === e || "expanded" === e ? e : "expanded";
-    } catch (e) {
-        return "expanded";
-    }
+  try {
+    const storedState = localStorage.getItem("fluent-sidebar-state");
+    return storedState === "collapsed" || storedState === "expanded" ? storedState : "expanded";
+  } catch (_) {
+    return "expanded";
+  }
 }
 function closeCollapsedPopups() {
-    document.querySelectorAll("#mainmenu ul.nav > li > a.menu.popup-open").forEach((e)=>{
-        e.classList.remove("popup-open");
-    }), document.querySelectorAll("#mainmenu ul.nav > li > ul.slide-menu.popup-open").forEach((e)=>{
-        e.classList.remove("popup-open"), e.style.display = "none", e.style.top = "";
-    });
+  document.querySelectorAll("#mainmenu ul.nav > li > a.menu.popup-open").forEach(node => {
+    node.classList.remove("popup-open");
+  });
+  document.querySelectorAll("#mainmenu ul.nav > li > ul.slide-menu.popup-open").forEach(node => {
+    const menu = node;
+    menu.classList.remove("popup-open");
+    menu.style.display = "none";
+    menu.style.top = "";
+  });
 }
 function adjustBrandTextSize() {
-    let e = document.querySelector(".sidenav-header .brand-text");
-    if (e) {
-        let t = e.parentElement;
-        if (t) {
-            let a = t.clientWidth - 32;
-            if (a > 0) {
-                let t = 16;
-                for(e.style.fontSize = `${t}px`; e.scrollWidth > a && t > 9;)t -= 0.5, e.style.fontSize = `${t}px`;
-            }
+  const brandText = document.querySelector(".sidenav-header .brand-text");
+  if (brandText) {
+    const container = brandText.parentElement;
+    if (container) {
+      const maxW = container.clientWidth - 32;
+      if (maxW > 0) {
+        let fontSize = 16;
+        brandText.style.fontSize = `${fontSize}px`;
+        while (brandText.scrollWidth > maxW && fontSize > 9) {
+          fontSize -= 0.5;
+          brandText.style.fontSize = `${fontSize}px`;
         }
+      }
     }
+  }
 }
-function handleSidebarToggle(e) {
-    let t = document.querySelectorAll("a.showSide"), a = document.querySelector("#mainmenu"), d = document.querySelector(".darkMask"), o = document.querySelector(".main-right");
-    0 !== t.length && a && d && o && (Array.from(t).some((e)=>e.classList.contains("active")) ? (t.forEach((e)=>{
-        e.classList.remove("active");
-    }), a.classList.remove("active"), o.classList.remove("active"), d.classList.remove("active")) : (t.forEach((e)=>{
-        e.classList.add("active");
-    }), a.classList.add("active"), o.classList.add("active"), d.classList.add("active"), adjustBrandTextSize()));
+function handleSidebarToggle(_ev) {
+  const showSideButtons = document.querySelectorAll("a.showSide");
+  const sidebar = document.querySelector("#mainmenu");
+  const darkMask = document.querySelector(".darkMask");
+  const scrollbarArea = document.querySelector(".main-right");
+  if (showSideButtons.length === 0 || !sidebar || !darkMask || !scrollbarArea) {
+    return;
+  }
+  const isActive = Array.from(showSideButtons).some(button => button.classList.contains("active"));
+  if (isActive) {
+    showSideButtons.forEach(button => {
+      button.classList.remove("active");
+      button.setAttribute("aria-expanded", "false");
+    });
+    sidebar.classList.remove("active");
+    scrollbarArea.classList.remove("active");
+    darkMask.classList.remove("active");
+  } else {
+    showSideButtons.forEach(button => {
+      button.classList.add("active");
+      button.setAttribute("aria-expanded", "true");
+    });
+    sidebar.classList.add("active");
+    scrollbarArea.classList.add("active");
+    darkMask.classList.add("active");
+    adjustBrandTextSize();
+  }
 }
-function handleDesktopSidebarToggle(e) {
-    if (e.preventDefault(), e.stopPropagation(), window.innerWidth <= 768) return;
-    let t = "collapsed" == ("collapsed" === document.body.getAttribute("data-sidebar-state") ? "collapsed" : "expanded") ? "expanded" : "collapsed";
+function handleDesktopSidebarToggle(ev) {
+  ev.preventDefault();
+  ev.stopPropagation();
+  if (window.innerWidth <= 768) {
+    return;
+  }
+  const currentState = document.body.getAttribute("data-sidebar-state") === "collapsed" ? "collapsed" : "expanded";
+  const nextState = currentState === "collapsed" ? "expanded" : "collapsed";
+  closeCollapsedPopups();
+  try {
+    localStorage.setItem("fluent-sidebar-state", nextState);
+  } catch (_) {}
+  applyDesktopSidebarState(nextState);
+  if (nextState === "expanded") {
+    adjustBrandTextSize();
+  }
+}
+let sidebarEventsBound = false;
+function initSidebarController(handlerTarget) {
+  if (sidebarEventsBound) {
+    return;
+  }
+  sidebarEventsBound = true;
+  const sidebarToggles = document.querySelectorAll("a.showSide");
+  const darkMask = document.querySelector(".darkMask");
+  const desktopSidebarToggle = document.querySelector(".sidebar-collapse-toggle");
+  const mobileToggleHandler = ui.createHandlerFn(handlerTarget, "handleSidebarToggle") ?? (ev => {
+    handleSidebarToggle(ev);
+  });
+  const desktopToggleHandler = ui.createHandlerFn(handlerTarget, "handleDesktopSidebarToggle") ?? (ev => {
+    handleDesktopSidebarToggle(ev);
+  });
+  sidebarToggles.forEach(toggle => {
+    toggle.addEventListener("click", mobileToggleHandler);
+    toggle.addEventListener("keydown", ev => {
+      const keyEv = ev;
+      if (keyEv.key === "Enter" || keyEv.key === " ") {
+        keyEv.preventDefault();
+        mobileToggleHandler(keyEv);
+      }
+    });
+  });
+  if (darkMask) {
+    darkMask.addEventListener("click", mobileToggleHandler);
+  }
+  if (desktopSidebarToggle) {
+    desktopSidebarToggle.addEventListener("click", desktopToggleHandler);
+  }
+  if (window.innerWidth > 768) {
+    applyDesktopSidebarState(getDesktopSidebarState());
+  } else {
+    document.body.setAttribute("data-sidebar-state", "expanded");
+  }
+  window.addEventListener("resize", () => {
+    adjustBrandTextSize();
+    if (window.innerWidth > 768) {
+      applyDesktopSidebarState(getDesktopSidebarState());
+    } else {
+      document.body.setAttribute("data-sidebar-state", "expanded");
+    }
+  });
+  document.addEventListener("click", event => {
+    if (window.innerWidth <= 768 || document.body.getAttribute("data-sidebar-state") !== "collapsed") {
+      return;
+    }
+    const clickNode = event.target;
+    const sidebar = document.querySelector("#mainmenu");
+    if (clickNode && sidebar?.contains(clickNode)) {
+      return;
+    }
     closeCollapsedPopups();
-    try {
-        localStorage.setItem("fluent-sidebar-state", t);
-    } catch (e) {}
-    applyDesktopSidebarState(t), "expanded" === t && adjustBrandTextSize();
+  });
 }
-let sidebar_controller_e = !1;
-function initSidebarController(t) {
-    if (sidebar_controller_e) return;
-    sidebar_controller_e = !0;
-    let a = document.querySelectorAll("a.showSide"), d = document.querySelector(".darkMask"), o = document.querySelector(".sidebar-collapse-toggle"), n = ui.createHandlerFn(t, "handleSidebarToggle") ?? (()=>{
-        handleSidebarToggle();
-    }), r = ui.createHandlerFn(t, "handleDesktopSidebarToggle") ?? ((e)=>{
-        handleDesktopSidebarToggle(e);
-    });
-    a.forEach((e)=>{
-        e.addEventListener("click", n);
-    }), d && d.addEventListener("click", n), o && o.addEventListener("click", r), window.innerWidth > 768 ? applyDesktopSidebarState(getDesktopSidebarState()) : document.body.setAttribute("data-sidebar-state", "expanded"), window.addEventListener("resize", ()=>{
-        adjustBrandTextSize(), window.innerWidth > 768 ? applyDesktopSidebarState(getDesktopSidebarState()) : document.body.setAttribute("data-sidebar-state", "expanded");
-    }), document.addEventListener("click", (e)=>{
-        if (window.innerWidth <= 768 || "collapsed" !== document.body.getAttribute("data-sidebar-state")) return;
-        let t = e.target, a = document.querySelector("#mainmenu");
-        t && a?.contains(t) || closeCollapsedPopups();
-    });
-}
-
+  return { applyDesktopSidebarState, getDesktopSidebarState, closeCollapsedPopups, adjustBrandTextSize, handleSidebarToggle, handleDesktopSidebarToggle, initSidebarController };
+})();
 ;// CONCATENATED MODULE: ./web/resources/utils/slide-animations.ts
 let slide_animations_t = {
     fast: 200,
@@ -2441,225 +2961,336 @@ const SlideAnimations = {
 };
 
 ;// CONCATENATED MODULE: ./web/resources/menu-fluent.tsx
+const { main } = (() => {
+  const _jsx = typeof jsx !== "undefined" ? jsx : undefined;
+  const _jsxs = typeof jsxs !== "undefined" ? jsxs : undefined;
+  const _Fragment = typeof Fragment !== "undefined" ? Fragment : undefined;
 
 
 
 
 
 
-let menu_fluent_v = !1;
-function menu_fluent_y(e) {
-    menu_fluent_v || (menu_fluent_v = !0, setupMenuFeatures()), setupMenuFeatures(e);
+
+
+let utilitiesInitialized = false;
+function initThemeUtilities(presentation) {
+  if (!utilitiesInitialized) {
+    utilitiesInitialized = true;
+    setupMenuFeatures();
+  }
+  setupMenuFeatures(presentation);
 }
-const main = baseclass.extend({
-    async __init__ () {
-        setupMenuStartup(), initSidebarController(this);
-        let e = getResolvedMenuLayout(), t = getCachedMenu(), l = !1;
-        if (t) {
-            let i = buildMenuPresentation(t.tree, e ?? null);
-            this.render(t.tree, i), menu_fluent_y(i), l = !0;
-        }
-        try {
-            let i = void 0 === e, [a] = await Promise.all([
-                ui.menu.load(),
-                i ? L.uci.load("fluent") : Promise.resolve()
-            ]), s = saveMenuCache(a);
-            if (!l || s !== t?.raw) {
-                if (i) {
-                    let t = L.uci.get_first("fluent", "global", "menu_layout");
-                    e = "string" == typeof t || Array.isArray(t) ? t : null;
-                }
-                let t = buildMenuPresentation(a, e ?? null);
-                this.render(a, t), menu_fluent_y(t);
-            }
-        } catch (e) {
-            l || console.error("Fluent menu: Failed to load menu data", e);
-        }
-    },
-    render (e, t) {
-        let l = e, n = "";
-        if (t.configured) this.renderConfiguredMenu(t);
-        else {
-            let t = ui.menu.getChildren(e);
-            for(let e = 0; e < t.length; e++)(L.env.requestpath.length ? t[e].name === L.env.requestpath[0] : 0 === e) && this.renderMainMenu(t[e], t[e].name);
-        }
-        if (L.env.dispatchpath.length >= 3) {
-            for(let e = 0; e < 3 && l; e++){
-                let t = L.env.dispatchpath[e];
-                l = l.children?.[t], n = n + (n ? "/" : "") + t;
-            }
-            l && this.renderTabMenu(l, n, void 0, t.hiddenPaths);
-        } else {
-            let e = document.querySelector("#tabmenu");
-            e && (e.innerHTML = "", e.style.display = "none");
-        }
-        saveRenderedHtmlCache();
-    },
-    handleMenuExpand (e) {
-        let t = e.currentTarget;
-        if (!t) return;
-        let l = t.parentNode, n = t.nextElementSibling, i = window.innerWidth > 768 && "collapsed" === document.body.getAttribute("data-sidebar-state"), a = !1;
-        if (document.querySelectorAll(i ? ".main .main-left .nav > li > ul.slide-menu.popup-open" : ".main .main-left .nav > li > ul.slide-menu.active").forEach((e)=>{
-            a || e !== n || (a = !0), e.classList.remove("popup-open", "active"), e.previousElementSibling?.classList.remove("popup-open", "active"), SlideAnimations.stop(e), i ? (e.style.display = "none", e.style.top = "") : SlideAnimations.slideUp(e, "fast");
-        }), n) {
-            if (!a) {
-                let e = l?.querySelector(".slide-menu");
-                if (e) {
-                    if (n.classList.add(i ? "popup-open" : "active"), t.classList.add(i ? "popup-open" : "active"), i) {
-                        SlideAnimations.stop(e), e.style.display = "block";
-                        let l = t.getBoundingClientRect(), n = e.offsetHeight, i = Math.max(8, window.innerHeight - n - 8), a = l.top - 8;
-                        e.style.top = `${Math.min(i, Math.max(8, a))}px`;
-                    } else e.style.top = "", SlideAnimations.slideDown(e, "fast");
-                    e.querySelectorAll("li > a").forEach((e)=>{
-                        e.addEventListener("click", ()=>{
-                            closeCollapsedPopups();
-                        }, {
-                            once: !0
-                        });
-                    });
-                }
-                t.blur();
-            }
-            document.dispatchEvent(new CustomEvent("fluent-menu-expand")), e.preventDefault(), e.stopPropagation();
-        }
-    },
-    renderMainMenu (n, i, a) {
-        let r = (a || 0) + 1, s = a && n.title ? n.title.replace(/ /g, "_") : void 0, d = jsx("ul", {
-            class: a ? "slide-menu" : "nav",
-            "data-parent": s || void 0
-        }), u = ui.menu.getChildren(n);
-        if (0 === u.length || r > 2) return jsx(Fragment, {});
-        for(let l = 0; l < u.length; l++){
-            let a = u[l], s = L.env.dispatchpath[r] === a.name && L.env.dispatchpath[r - 1] === n.name, c = this.renderMainMenu(a, `${i}/${a.name}`, r), o = c.children.length > 0, p = o ? "slide" : null, h = o ? "menu" : "item";
-            s && (d.classList.add("active"), p = p ? `${p} active` : "null active");
-            let m = s ? `${h} active` : h, f = jsxs("li", {
-                class: p ?? void 0,
-                children: [
-                    jsxs("a", {
-                        href: L.url(i, a.name),
-                        onclick: 1 === r ? ui.createHandlerFn(this, "handleMenuExpand") : null,
-                        class: m,
-                        "data-title": (a.title || "").replace(/ /g, "_"),
-                        children: [
-                            1 === r || 2 === r ? jsx("span", {
-                                class: "menu-icon"
-                            }) : null,
-                            jsx("span", {
-                                class: "menu-label",
-                                children: _(a.title || "")
-                            })
-                        ]
-                    }),
-                    c
-                ]
-            });
-            d.appendChild(f);
-        }
-        if (1 === r) {
-            let e = document.querySelector("#mainmenu");
-            if (e) {
-                let t = "function" == typeof e.querySelector ? e.querySelector("ul.nav") : null;
-                t && "function" == typeof t.replaceWith ? t.replaceWith(d) : e.appendChild(d), e.style.display = "", adjustBrandTextSize();
-            }
-        }
-        return d;
-    },
-    renderConfiguredMenu (l) {
-        let n = jsx("ul", {
-            class: "nav"
-        });
-        for (let i of l.categories){
-            if (l.hiddenCategoryIds.has(i.id)) continue;
-            let a = i.items.filter((e)=>!l.hiddenPaths.has(e.path));
-            if (!i.primary && 0 === a.length) continue;
-            let r = jsx("ul", {
-                class: "slide-menu",
-                "data-parent": i.title.replace(/ /g, "_")
-            }), s = !1;
-            for (let l of a){
-                let n = l.pathSegments.every((e, t)=>L.env.dispatchpath[t] === e);
-                s ||= n, r.appendChild(jsx("li", {
-                    class: n ? "active" : void 0,
-                    children: jsxs("a", {
-                        href: L.url(l.path),
-                        class: `item${n ? " active" : ""}`,
-                        "data-title": l.rawTitle.replace(/ /g, "_"),
-                        children: [
-                            jsx("span", {
-                                class: "menu-icon"
-                            }),
-                            jsx("span", {
-                                class: "menu-label",
-                                children: l.title
-                            })
-                        ]
-                    })
-                }));
-            }
-            s && r.classList.add("active"), i.primary && L.env.dispatchpath.length <= 2 && (s ||= i.primary.pathSegments.every((e, t)=>L.env.dispatchpath[t] === e));
-            let d = a.length > 0, u = i.primary?.path ?? a[0]?.path ?? "#", c = i.primary?.rawTitle ?? i.title, o = `${d ? "slide" : ""}${s ? " active" : ""}`.trim() || void 0;
-            n.appendChild(jsxs("li", {
-                class: o,
-                children: [
-                    jsxs("a", {
-                        href: "#" === u ? u : L.url(u),
-                        onclick: d ? ui.createHandlerFn(this, "handleMenuExpand") : null,
-                        class: `${d ? "menu" : "item"}${s ? " active" : ""}`,
-                        "data-title": c.replace(/ /g, "_"),
-                        children: [
-                            jsx("span", {
-                                class: "menu-icon"
-                            }),
-                            jsx("span", {
-                                class: "menu-label",
-                                children: i.title
-                            })
-                        ]
-                    }),
-                    d ? r : null
-                ]
-            }));
-        }
-        let i = document.querySelector("#mainmenu");
-        if (i) {
-            let e = "function" == typeof i.querySelector ? i.querySelector("ul.nav") : null;
-            e && "function" == typeof e.replaceWith ? e.replaceWith(n) : i.appendChild(n), i.style.display = "", adjustBrandTextSize();
-        }
-        return n;
-    },
-    renderTabMenu (t, n, i, a) {
-        let r = L.env.dispatchpath.slice(0, 2).join("/"), s = L.env.dispatchpath.slice(0, 3).join("/");
-        if (a.has(r) || a.has(s)) return jsx(Fragment, {});
-        let d = document.querySelector("#tabmenu"), u = (i || 0) + 1, c = jsx("ul", {
-            class: "tabs"
-        }), o = ui.menu.getChildren(t), p = null;
-        if (0 === o.length) return d && 1 === u && (d.innerHTML = "", d.style.display = "none"), jsx(Fragment, {});
-        for(let t = 0; t < o.length; t++){
-            let l = o[t], i = L.env.dispatchpath[u + 2] === l.name, a = i ? " active" : "", r = jsx("li", {
-                class: `tabmenu-item-${l.name}${a}`,
-                children: jsx("a", {
-                    href: L.url(n, l.name),
-                    children: _(l.title || "")
-                })
-            });
-            c.appendChild(r), i && (p = l);
-        }
-        if (d && (1 === u && (d.innerHTML = ""), d.appendChild(c), d.style.display = "", p)) {
-            let e = this.renderTabMenu(p, `${n}/${p.name}`, u, a);
-            e.children.length > 0 && d.appendChild(e);
-        }
-        return c;
-    },
-    adjustBrandTextSize () {
-        adjustBrandTextSize();
-    },
-    handleSidebarToggle (e) {
-        handleSidebarToggle(e);
-    },
-    handleDesktopSidebarToggle (e) {
-        handleDesktopSidebarToggle(e);
+const module = {
+  async __init__() {
+    setupMenuStartup();
+    initSidebarController(this);
+    let layoutValue = getResolvedMenuLayout();
+    const cached = getCachedMenu();
+    let rendered = false;
+    if (cached) {
+      const presentation = buildMenuPresentation(cached.tree, layoutValue ?? null);
+      this.render(cached.tree, presentation);
+      initThemeUtilities(presentation);
+      rendered = true;
     }
-});
-
+    try {
+      const needsUci = layoutValue === undefined;
+      const [data] = await Promise.all([ui.menu.load(), needsUci ? L.uci.load("fluent") : Promise.resolve()]);
+      const freshRaw = saveMenuCache(data);
+      if (!rendered || freshRaw !== cached?.raw) {
+        if (needsUci) {
+          const configuredValue = L.uci.get_first("fluent", "global", "menu_layout");
+          layoutValue = typeof configuredValue === "string" || Array.isArray(configuredValue) ? configuredValue : null;
+        }
+        const presentation = buildMenuPresentation(data, layoutValue ?? null);
+        this.render(data, presentation);
+        initThemeUtilities(presentation);
+      }
+    } catch (e) {
+      if (!rendered) {
+        console.error("Fluent menu: Failed to load menu data", e);
+      }
+    }
+  },
+  render(tree, presentation) {
+    let node = tree;
+    let url = "";
+    if (presentation.configured) {
+      this.renderConfiguredMenu(presentation);
+    } else {
+      const children = ui.menu.getChildren(tree);
+      for (let i = 0; i < children.length; i++) {
+        const isActive = L.env.requestpath.length ? children[i].name === L.env.requestpath[0] : i === 0;
+        if (isActive) {
+          this.renderMainMenu(children[i], children[i].name);
+        }
+      }
+    }
+    if (L.env.dispatchpath.length >= 3) {
+      for (let i = 0; i < 3 && node; i++) {
+        const path = L.env.dispatchpath[i];
+        node = node.children?.[path];
+        url = url + (url ? "/" : "") + path;
+      }
+      if (node) {
+        this.renderTabMenu(node, url, undefined, presentation.hiddenPaths);
+      }
+    } else {
+      const container = document.querySelector("#tabmenu");
+      if (container) {
+        container.innerHTML = "";
+        container.style.display = "none";
+      }
+    }
+    saveRenderedHtmlCache();
+  },
+  handleMenuExpand(ev) {
+    const target = ev.currentTarget;
+    if (!target) return;
+    const slide = target.parentNode;
+    const slideMenu = target.nextElementSibling;
+    const isCollapsedDesktop = window.innerWidth > 768 && document.body.getAttribute("data-sidebar-state") === "collapsed";
+    let shouldCollapse = false;
+    const openMenus = document.querySelectorAll(isCollapsedDesktop ? ".main .main-left .nav > li > ul.slide-menu.popup-open" : ".main .main-left .nav > li > ul.slide-menu.active");
+    openMenus.forEach(ulNode => {
+      const ul = ulNode;
+      if (!shouldCollapse && ul === slideMenu) {
+        shouldCollapse = true;
+      }
+      ul.classList.remove("popup-open", "active");
+      ul.previousElementSibling?.classList.remove("popup-open", "active");
+      SlideAnimations.stop(ul);
+      if (isCollapsedDesktop) {
+        ul.style.display = "none";
+        ul.style.top = "";
+      } else {
+        SlideAnimations.slideUp(ul, "fast");
+      }
+    });
+    if (!slideMenu) {
+      return;
+    }
+    if (!shouldCollapse) {
+      const slideMenuElement = slide?.querySelector(".slide-menu");
+      if (slideMenuElement) {
+        slideMenu.classList.add(isCollapsedDesktop ? "popup-open" : "active");
+        target.classList.add(isCollapsedDesktop ? "popup-open" : "active");
+        if (isCollapsedDesktop) {
+          SlideAnimations.stop(slideMenuElement);
+          slideMenuElement.style.display = "block";
+          const targetRect = target.getBoundingClientRect();
+          const popupHeight = slideMenuElement.offsetHeight;
+          const viewportPadding = 8;
+          const maxTop = Math.max(viewportPadding, window.innerHeight - popupHeight - viewportPadding);
+          const alignedTop = targetRect.top - 8;
+          slideMenuElement.style.top = `${Math.min(maxTop, Math.max(viewportPadding, alignedTop))}px`;
+        } else {
+          slideMenuElement.style.top = "";
+          SlideAnimations.slideDown(slideMenuElement, "fast");
+        }
+        slideMenuElement.querySelectorAll("li > a").forEach(node => {
+          const link = node;
+          link.addEventListener("click", () => {
+            closeCollapsedPopups();
+          }, {
+            once: true
+          });
+        });
+      }
+      target.blur();
+    }
+    document.dispatchEvent(new CustomEvent("fluent-menu-expand"));
+    ev.preventDefault();
+    ev.stopPropagation();
+  },
+  renderMainMenu(tree, url, level) {
+    const currentLevel = (level || 0) + 1;
+    const parentTitle = level && tree.title ? tree.title.replace(/ /g, "_") : undefined;
+    const menuContainer = _jsx("ul", {
+      class: level ? "slide-menu" : "nav",
+      "data-parent": parentTitle || undefined
+    });
+    const children = ui.menu.getChildren(tree);
+    if (children.length === 0 || currentLevel > 2) {
+      return _jsx(_Fragment, {});
+    }
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      const isActive = L.env.dispatchpath[currentLevel] === child.name && L.env.dispatchpath[currentLevel - 1] === tree.name;
+      const submenu = this.renderMainMenu(child, `${url}/${child.name}`, currentLevel);
+      const hasChildren = submenu.children.length > 0;
+      let slideClass = hasChildren ? "slide" : null;
+      const menuClass = hasChildren ? "menu" : "item";
+      if (isActive) {
+        menuContainer.classList.add("active");
+        slideClass = slideClass ? `${slideClass} active` : "active";
+      }
+      const menuClassCombined = isActive ? `${menuClass} active` : menuClass;
+      const menuItem = _jsxs("li", {
+        class: slideClass ?? undefined,
+        children: [_jsxs("a", {
+          href: L.url(url, child.name),
+          onclick: currentLevel === 1 && hasChildren ? ui.createHandlerFn(this, "handleMenuExpand") : null,
+          class: menuClassCombined,
+          "data-title": (child.title || "").replace(/ /g, "_"),
+          children: [currentLevel === 1 || currentLevel === 2 ? _jsx("span", {
+            class: "menu-icon"
+          }) : null, _jsx("span", {
+            class: "menu-label",
+            children: _(child.title || "")
+          })]
+        }), submenu]
+      });
+      menuContainer.appendChild(menuItem);
+    }
+    if (currentLevel === 1) {
+      const mainMenuElement = document.querySelector("#mainmenu");
+      if (mainMenuElement) {
+        const existingNav = typeof mainMenuElement.querySelector === "function" ? mainMenuElement.querySelector("ul.nav") : null;
+        if (existingNav && typeof existingNav.replaceWith === "function") {
+          existingNav.replaceWith(menuContainer);
+        } else {
+          mainMenuElement.appendChild(menuContainer);
+        }
+        mainMenuElement.style.display = "";
+        adjustBrandTextSize();
+      }
+    }
+    return menuContainer;
+  },
+  renderConfiguredMenu(presentation) {
+    const menuContainer = _jsx("ul", {
+      class: "nav"
+    });
+    for (const category of presentation.categories) {
+      if (presentation.hiddenCategoryIds.has(category.id)) continue;
+      const visibleItems = category.items.filter(item => !presentation.hiddenPaths.has(item.path));
+      if (!category.primary && visibleItems.length === 0) continue;
+      const submenu = _jsx("ul", {
+        class: "slide-menu",
+        "data-parent": category.title.replace(/ /g, "_")
+      });
+      let isActive = false;
+      for (const item of visibleItems) {
+        const itemIsActive = item.pathSegments.every((segment, index) => L.env.dispatchpath[index] === segment);
+        isActive ||= itemIsActive;
+        submenu.appendChild(_jsx("li", {
+          class: itemIsActive ? "active" : undefined,
+          children: _jsxs("a", {
+            href: L.url(item.path),
+            class: `item${itemIsActive ? " active" : ""}`,
+            "data-title": item.rawTitle.replace(/ /g, "_"),
+            children: [_jsx("span", {
+              class: "menu-icon"
+            }), _jsx("span", {
+              class: "menu-label",
+              children: item.title
+            })]
+          })
+        }));
+      }
+      if (isActive) submenu.classList.add("active");
+      if (category.primary && L.env.dispatchpath.length <= 2) {
+        isActive ||= category.primary.pathSegments.every((segment, index) => L.env.dispatchpath[index] === segment);
+      }
+      const hasChildren = visibleItems.length > 0;
+      const href = category.primary?.path ?? visibleItems[0]?.path ?? "#";
+      const rawTitle = category.primary?.rawTitle ?? category.title;
+      const itemClass = `${hasChildren ? "slide" : ""}${isActive ? " active" : ""}`.trim() || undefined;
+      menuContainer.appendChild(_jsxs("li", {
+        class: itemClass,
+        children: [_jsxs("a", {
+          href: href === "#" ? href : L.url(href),
+          onclick: hasChildren ? ui.createHandlerFn(this, "handleMenuExpand") : null,
+          class: `${hasChildren ? "menu" : "item"}${isActive ? " active" : ""}`,
+          "data-title": rawTitle.replace(/ /g, "_"),
+          children: [_jsx("span", {
+            class: "menu-icon"
+          }), _jsx("span", {
+            class: "menu-label",
+            children: category.title
+          })]
+        }), hasChildren ? submenu : null]
+      }));
+    }
+    const mainMenuElement = document.querySelector("#mainmenu");
+    if (mainMenuElement) {
+      const existingNav = typeof mainMenuElement.querySelector === "function" ? mainMenuElement.querySelector("ul.nav") : null;
+      if (existingNav && typeof existingNav.replaceWith === "function") {
+        existingNav.replaceWith(menuContainer);
+      } else {
+        mainMenuElement.appendChild(menuContainer);
+      }
+      mainMenuElement.style.display = "";
+      adjustBrandTextSize();
+    }
+    return menuContainer;
+  },
+  renderTabMenu(tree, url, level, hiddenPaths) {
+    const primaryPath = L.env.dispatchpath.slice(0, 2).join("/");
+    const itemPath = L.env.dispatchpath.slice(0, 3).join("/");
+    if (hiddenPaths.has(primaryPath) || hiddenPaths.has(itemPath)) {
+      return _jsx(_Fragment, {});
+    }
+    const container = document.querySelector("#tabmenu");
+    const currentLevel = (level || 0) + 1;
+    const tabContainer = _jsx("ul", {
+      class: "tabs"
+    });
+    const children = ui.menu.getChildren(tree);
+    let activeNode = null;
+    if (children.length === 0) {
+      if (container && currentLevel === 1) {
+        container.innerHTML = "";
+        container.style.display = "none";
+      }
+      return _jsx(_Fragment, {});
+    }
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      const isActive = L.env.dispatchpath[currentLevel + 2] === child.name;
+      const activeClass = isActive ? " active" : "";
+      const className = `tabmenu-item-${child.name}${activeClass}`;
+      const tabItem = _jsx("li", {
+        class: className,
+        children: _jsx("a", {
+          href: L.url(url, child.name),
+          children: _(child.title || "")
+        })
+      });
+      tabContainer.appendChild(tabItem);
+      if (isActive) {
+        activeNode = child;
+      }
+    }
+    if (container) {
+      if (currentLevel === 1) {
+        container.innerHTML = "";
+      }
+      container.appendChild(tabContainer);
+      container.style.display = "";
+      if (activeNode) {
+        const nestedTabs = this.renderTabMenu(activeNode, `${url}/${activeNode.name}`, currentLevel, hiddenPaths);
+        if (nestedTabs.children.length > 0) {
+          container.appendChild(nestedTabs);
+        }
+      }
+    }
+    return tabContainer;
+  },
+  adjustBrandTextSize() {
+    adjustBrandTextSize();
+  },
+  handleSidebarToggle(ev) {
+    handleSidebarToggle(ev);
+  },
+  handleDesktopSidebarToggle(ev) {
+    handleDesktopSidebarToggle(ev);
+  }
+};
+const main = baseclass.extend(module);
+  return { main };
+})();
 
 return main;

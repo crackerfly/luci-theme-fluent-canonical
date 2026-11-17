@@ -1,4 +1,4 @@
-// Design tokens — Canonical v3.2 colour contract on FluentUI 2 geometry.
+// Design tokens — Canonical v3.2 colour contract on FluentUI 2 geometry (theme contract v3.5.2).
 //
 // Three layers, later layers may only reference earlier ones:
 //   1. Reference  --ref-*      theme-independent raw ramps and locked anchors
@@ -26,9 +26,11 @@
   --ref-neutral-450: #8d97ab;
   --ref-neutral-500: #7a8396;
   --ref-neutral-550: #69748b;
+  --ref-neutral-575: #646d80;
   --ref-neutral-600: #596277;
   --ref-neutral-700: #4d566c;
   --ref-neutral-800: #1a2232;
+  --ref-neutral-825: #1d1d1f;
   --ref-neutral-850: #141b29;
   --ref-neutral-900: #101622;
   --ref-neutral-925: #0b0f18;
@@ -105,7 +107,7 @@
   // TYPOGRAPHY
   // ============================================================
   --fluent-font-family:
-    "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto,
+    Inter, "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto,
     "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Helvetica Neue", sans-serif;
   --fluent-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 
@@ -141,9 +143,9 @@
   --fluent-space-xxxl: 48px;
 
   // ============================================================
-  // RADIUS — nested radii step down by at least 2px
+  // RADIUS — concentric nested radii step down (R_inner = max(2px, R_outer - gap))
   // NOTE: header.ut overrides --fluent-radius-sm/-md at runtime from the UCI
-  // `border_radius` option (default 8 → md 8px, sm 4px). The values below are
+  // `border_radius` option (default 8 -> md 8px, sm 4px). The values below are
   // the build-time defaults and must stay in sync with fluent-defaults.ts.
   // ============================================================
   --fluent-radius-xs: 4px; // small badges
@@ -156,15 +158,18 @@
   --fluent-radius-round: 50%;
 
   // ============================================================
-  // MOTION
+  // MOTION PHYSICS (Frequency -> Purpose -> Curve -> Duration)
   // ============================================================
-  --fluent-duration-fast: 120ms; // hover / press
-  --fluent-duration-normal: 180ms; // controls, overlays
-  --fluent-duration-slow: 280ms; // content reflow
+  --fluent-duration-fast: 120ms; // hover / tactile press
+  --fluent-duration-normal: 180ms; // controls, popovers, dropdowns
+  --fluent-duration-slow: 280ms; // drawers, modals, content reflow
   --fluent-duration-slower: 400ms;
-  --fluent-easing-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --fluent-easing-decelerate: cubic-bezier(0, 0, 0, 1);
-  --fluent-easing-accelerate: cubic-bezier(1, 0, 1, 1);
+  --fluent-easing-standard: cubic-bezier(0.2, 0.8, 0.2, 1); // in-screen slider / reflow
+  --fluent-easing-out-strong: cubic-bezier(0.23, 1, 0.32, 1); // instant-response popovers & press
+  --fluent-easing-effects: cubic-bezier(0.31, 0.94, 0.34, 1); // zero-overshoot opacity / color
+  --fluent-easing-sheet: cubic-bezier(0.32, 0.72, 0, 1); // iOS-damped mobile drawer / sheet
+  --fluent-easing-decelerate: cubic-bezier(0.23, 1, 0.32, 1);
+  --fluent-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
   --fluent-easing-easy-ease: cubic-bezier(0.33, 0, 0.67, 1);
 
   // ============================================================
@@ -250,13 +255,21 @@
 @supports (color: oklch(50% 0 0)) {
   :root {
     --ref-neutral-0: oklch(1 0 0);
+    --ref-neutral-50: oklch(0.9795 0.0054 274.97);
+    --ref-neutral-75: oklch(0.9701 0.007 268.55);
     --ref-neutral-90: oklch(0.96 0.019 276.35);
+    --ref-neutral-100: oklch(0.9576 0.0087 264.52);
     --ref-neutral-200: oklch(0.8996 0.0176 264.48);
     --ref-neutral-300: oklch(0.7897 0.0324 269.74);
     --ref-neutral-400: oklch(0.718 0.034 266.07);
     --ref-neutral-450: oklch(0.675 0.0317 264.34);
+    --ref-neutral-500: oklch(0.6091 0.0307 265.31);
     --ref-neutral-550: oklch(0.5582 0.0382 265.01);
+    --ref-neutral-575: oklch(0.534 0.0318 265.24);
+    --ref-neutral-600: oklch(0.4964 0.0355 266.86);
+    --ref-neutral-700: oklch(0.454 0.0379 267.48);
     --ref-neutral-800: oklch(0.2521 0.0327 263.72);
+    --ref-neutral-825: oklch(0.2316 0.0038 286.1);
     --ref-neutral-850: oklch(0.2223 0.0295 263.69);
     --ref-neutral-900: oklch(0.2003 0.0259 263.72);
     --ref-neutral-925: oklch(0.1689 0.02 265.79);

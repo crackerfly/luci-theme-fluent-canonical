@@ -1,6 +1,5 @@
 // ============================================================
 // MAC SELECTOR - Stacked Overlay Modal & Square Edit Button
-// Uses Fluent UI System Icons via SCSS mixins and LuCI dropdowns
 // ============================================================
 @use "../mixins" as *;
 @use "../icons" as *;
@@ -44,13 +43,14 @@
   position: fixed;
   inset: 0;
   z-index: 2500;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--fluent-modal-overlay);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--fluent-space-lg);
-  animation: fluent-mac-fade-in 0.2s cubic-bezier(0, 0, 0.2, 1);
+  animation: fluent-mac-fade-in 180ms var(--fluent-easing-effects);
 }
 
 @keyframes fluent-mac-fade-in {
@@ -63,17 +63,17 @@
 }
 
 .fluent-mac-overlay-card {
-  background: var(--fluent-bg-card);
-  border: 1px solid var(--fluent-border);
-  border-radius: var(--fluent-radius-lg);
-  box-shadow: var(--fluent-shadow-lg, 0 12px 32px rgba(0, 0, 0, 0.3));
+  background: var(--fluent-modal-bg);
+  border: none;
+  border-radius: var(--fluent-modal-radius);
+  box-shadow: var(--fluent-shadow-xl);
   width: min(90vw, 440px);
   max-width: 100%;
   display: flex;
   flex-direction: column;
-  overflow: visible !important; // Prevent clipping dropdown popups
+  overflow: visible !important;
   position: relative;
-  animation: fluent-mac-pop-in 0.2s cubic-bezier(0, 0, 0.2, 1);
+  animation: fluent-mac-pop-in 180ms var(--fluent-easing-out-strong);
 
   .fluent-mac-overlay-header {
     display: flex;
@@ -120,7 +120,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--fluent-space-lg);
-    overflow: visible !important; // Ensure dropdown can float outside without clip
+    overflow: visible !important;
   }
 
   .fluent-mac-field-block {
@@ -138,9 +138,10 @@
 
     .fluent-mac-modal-input {
       width: 100%;
-      font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+      font-family: var(--fluent-font-mono);
       font-size: var(--fluent-font-size-md);
       font-weight: var(--fluent-font-weight-semibold);
+      font-variant-numeric: tabular-nums;
       text-align: center;
       letter-spacing: 1px;
       padding: var(--fluent-space-sm);
@@ -190,10 +191,10 @@
 @keyframes fluent-mac-pop-in {
   from {
     opacity: 0;
-    transform: scale(0.95) translateY(-10px);
+    transform: scale(0.95) translateY(-8px);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: none;
   }
 }

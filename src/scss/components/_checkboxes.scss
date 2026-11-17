@@ -11,7 +11,6 @@ $checkmark-svg-disabled: url("../assets/checkmark-disabled.svg"); // fill = --fl
 
 // ============================================================
 // FLUENT UI SWITCH (default for checkboxes outside tables)
-// Width: 40px, Height: 20px, Thumb: 12px
 // ============================================================
 input[type="checkbox"] {
   appearance: none !important;
@@ -32,14 +31,12 @@ input[type="checkbox"] {
   background-position: center !important;
   cursor: pointer !important;
   transition:
-    background-color 0.1s cubic-bezier(0.33, 0, 0.67, 1),
-    border-color 0.1s cubic-bezier(0.33, 0, 0.67, 1) !important;
+    background-color 120ms var(--fluent-easing-effects),
+    border-color 120ms var(--fluent-easing-effects) !important;
   outline: none !important;
   vertical-align: middle !important;
   flex-shrink: 0 !important;
   margin: 0 !important;
-  margin-bottom: 0 !important;
-  margin-inline-end: 0 !important;
   padding: 0 !important;
   box-sizing: border-box !important;
 
@@ -61,8 +58,9 @@ input[type="checkbox"] {
     background-color: var(--fluent-text-secondary) !important;
     background-image: none !important;
     transition:
-      transform 0.1s cubic-bezier(0.33, 0, 0.67, 1),
-      background-color 0.1s cubic-bezier(0.33, 0, 0.67, 1) !important;
+      transform 140ms var(--fluent-easing-out-strong),
+      width 120ms var(--fluent-easing-out-strong),
+      background-color 120ms var(--fluent-easing-effects) !important;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.24), 0 1px 2px rgba(0, 0, 0, 0.28) !important;
     box-sizing: border-box !important;
   }
@@ -74,9 +72,6 @@ input[type="checkbox"] {
     background-color: var(--fluent-primary) !important;
     border-color: var(--fluent-primary) !important;
     background-image: none !important;
-    background-size: auto !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
 
     &::before {
       @include reverse-inline-motion(translateX(20px) !important);
@@ -167,18 +162,15 @@ $table-checkbox-contexts: (".table", ".cbi-section-table", ".cbi-dropdown", "td"
     height: 20px !important;
     min-width: 20px !important;
     min-height: 20px !important;
-    border-radius: var(--fluent-radius-md) !important;
+    border-radius: var(--fluent-radius-sm) !important;
     border: 1px solid var(--fluent-checkbox-border) !important;
-    border-width: 1px !important;
-    border-style: solid !important;
     background-color: var(--fluent-checkbox-bg) !important;
     background-image: none !important;
     background-size: auto !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
     margin: 0 auto !important;
-    margin-inline-end: 3px !important;
-    margin-bottom: 0 !important;
+    margin-inline-end: 4px !important;
     vertical-align: middle !important;
     box-sizing: border-box !important;
 
@@ -239,7 +231,7 @@ $table-checkbox-contexts: (".table", ".cbi-section-table", ".cbi-dropdown", "td"
 }
 
 // ============================================================
-// RADIO BUTTONS
+// RADIO BUTTONS (CSS016: scale(0.85) + opacity: 0, never scale(0))
 // ============================================================
 label:has(input[type="radio"]) {
   display: inline-flex !important;
@@ -250,7 +242,7 @@ label:has(input[type="radio"]) {
   font-family: var(--fluent-font-family);
   font-size: var(--fluent-font-size-base);
   line-height: var(--fluent-line-height-normal);
-  transition: color var(--fluent-duration-fast) var(--fluent-easing-standard);
+  transition: color var(--fluent-duration-fast) var(--fluent-easing-effects);
   user-select: none;
 
   &:has(input[type="radio"]:checked) {
@@ -267,7 +259,7 @@ label:has(input[type="radio"]) {
         border-color: var(--fluent-primary-hover);
         &::before {
           background: var(--fluent-primary-hover);
-          transform: translate(-50%, -50%) scale(1.1);
+          transform: translate(-50%, -50%) scale(1.08);
         }
       }
     }
@@ -286,7 +278,8 @@ input[type="radio"] {
   cursor: pointer;
   position: relative;
   flex-shrink: 0;
-  transition: border-color var(--fluent-duration-fast) var(--fluent-easing-standard);
+  transition: border-color var(--fluent-duration-fast) var(--fluent-easing-effects);
+
   &::before {
     content: "";
     position: absolute;
@@ -296,16 +289,19 @@ input[type="radio"] {
     height: 8px;
     background: var(--fluent-checkbox-checked-bg);
     border-radius: var(--fluent-radius-round);
-    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
     transition:
-      transform var(--fluent-duration-fast) var(--fluent-easing-standard),
-      background-color var(--fluent-duration-fast) var(--fluent-easing-standard);
+      opacity 120ms var(--fluent-easing-effects),
+      transform 140ms var(--fluent-easing-out-strong),
+      background-color 120ms var(--fluent-easing-effects);
   }
 
   &:checked {
     border-color: var(--fluent-checkbox-checked-bg);
 
     &::before {
+      opacity: 1;
       transform: translate(-50%, -50%) scale(1);
     }
   }

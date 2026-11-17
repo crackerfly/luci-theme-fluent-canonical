@@ -4,7 +4,7 @@
 
 - **Repo**: `LazuliKao/luci-theme-fluent` (separate, not `luci-theme-argon`)
 - **Branch**: `openwrt-24.10`, `main`
-- **Targets**: OpenWrt 24.10.7 (opkg/ipk), OpenWrt 25.12.4 (apk)
+- **Targets**: OpenWrt 24.10.7 (opkg/ipk), OpenWrt 25.12.6 (apk)
 
 ## Quick Start
 
@@ -94,7 +94,7 @@ luci-theme-fluent/
 │   └── rsbuild.config.ts, package.json, tsconfig.json
 ├── .github/workflows/
 │   ├── ci.yml                      # Push/PR: SCSS build → lint → 2 SDK matrix builds → nightly release
-│   ├── release.yml                 # Tag push: build for 24.10.7 + 25.12.4 → GitHub release
+│   ├── release.yml                 # Tag push: build for 24.10.7 + 25.12.6 → GitHub release
 │   └── build.sh                    # SDK download + compile script (shared by both workflows)
 └── package.json                    # Workspace build tooling
 ```
@@ -153,7 +153,7 @@ pnpm run i18n:build         # All three steps
 
 | Workflow | Trigger | Jobs |
 |---|---|---|
-| `ci.yml` | Push/PR to `main`/`openwrt-24.10` | SCSS build → lint → SDK build (24.10.7 ipk + 25.12.4 apk) → nightly release |
+| `ci.yml` | Push/PR to `main`/`openwrt-24.10` | SCSS build → lint → SDK build (24.10.7 ipk + 25.12.6 apk) → nightly release |
 | `release.yml` | Tag push `v*` | CSS build → SDK builds → GitHub release |
 
 **Nightly**: Creates pre-release tag named `nightly` with both ipk and apk packages.

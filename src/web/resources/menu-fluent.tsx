@@ -81,8 +81,6 @@ const module: Module = {
 
   /**
    * Main render function for the menu system
-   * @param {Object} tree - Menu tree structure from LuCI
-   * @param {Object} presentation - Built presentation structure
    */
   render(this: Module, tree: MenuNode, presentation: MenuPresentation) {
     let node: MenuNode | undefined = tree;
@@ -127,8 +125,6 @@ const module: Module = {
 
   /**
    * Handle menu expand/collapse functionality
-   * Manages the sliding animation and active states of menu items
-   * @param {Event} ev - Click event from menu item
    */
   handleMenuExpand(ev: Event) {
     const target = ev.currentTarget as HTMLElement | null;
@@ -209,11 +205,6 @@ const module: Module = {
 
   /**
    * Render the main navigation menu
-   * Creates hierarchical menu structure with active states and click handlers
-   * @param {Object} tree - Menu tree node to render
-   * @param {string} url - Base URL for menu items
-   * @param {number} level - Current nesting level (0-based)
-   * @returns {Element} - Generated menu element
    */
   renderMainMenu(this: Module, tree: MenuNode, url: string, level?: number): HTMLElement {
     const currentLevel = (level || 0) + 1;
@@ -242,7 +233,7 @@ const module: Module = {
 
       if (isActive) {
         menuContainer.classList.add("active");
-        slideClass = slideClass ? `${slideClass} active` : "null active";
+        slideClass = slideClass ? `${slideClass} active` : "active";
       }
 
       const menuClassCombined = isActive ? `${menuClass} active` : menuClass;
@@ -252,7 +243,7 @@ const module: Module = {
         <li class={slideClass ?? undefined}>
           <a
             href={L.url(url, child.name)}
-            onclick={currentLevel === 1 ? ui.createHandlerFn(this, "handleMenuExpand") : null}
+            onclick={currentLevel === 1 && hasChildren ? ui.createHandlerFn(this, "handleMenuExpand") : null}
             class={menuClassCombined}
             data-title={(child.title || "").replace(/ /g, "_")}
           >
@@ -286,8 +277,6 @@ const module: Module = {
 
   /**
    * Render custom configured menu presentation
-   * @param {Object} presentation - Presentation configuration
-   * @returns {Element} - Generated menu element
    */
   renderConfiguredMenu(this: Module, presentation: MenuPresentation): HTMLElement {
     const menuContainer = (<ul class="nav"></ul>) as HTMLElement;
@@ -354,12 +343,6 @@ const module: Module = {
 
   /**
    * Render tab navigation menu
-   * Creates horizontal tab menu for deeper navigation levels
-   * @param {Object} tree - Menu tree node to render
-   * @param {string} url - Base URL for tab items
-   * @param {number} level - Current nesting level (0-based)
-   * @param {ReadonlySet<string>} hiddenPaths - Hidden path set
-   * @returns {Element} - Generated tab menu element
    */
   renderTabMenu(this: Module, tree: MenuNode, url: string, level: number | undefined, hiddenPaths: ReadonlySet<string>): HTMLElement {
     const primaryPath = L.env.dispatchpath.slice(0, 2).join("/");
@@ -399,13 +382,11 @@ const module: Module = {
 
       tabContainer.appendChild(tabItem);
 
-      // Store reference to active node for recursive rendering
       if (isActive) {
         activeNode = child;
       }
     }
 
-    // Append tab container to main tab menu element
     if (container) {
       if (currentLevel === 1) {
         container.innerHTML = "";
@@ -413,7 +394,6 @@ const module: Module = {
       container.appendChild(tabContainer);
       container.style.display = "";
 
-      // Recursively render nested tab menus if there's an active node
       if (activeNode) {
         const nestedTabs = this.renderTabMenu(activeNode, `${url}/${activeNode.name}`, currentLevel, hiddenPaths);
         if (nestedTabs.children.length > 0) {

@@ -1,4 +1,4 @@
-// Light theme — Canonical v3.2 semantic mapping.
+// Light theme — Canonical v3.2 semantic mapping (theme contract v3.5.2).
 // Every key here also exists in themes/_dark.scss; only the values differ.
 
 @use "../mixins" as *;
@@ -105,12 +105,13 @@
   --fluent-chart-5: var(--ref-magenta-800);
   --fluent-chart-6: var(--ref-green-800);
 
-  // ---- Elevation ------------------------------------------------------
-  --fluent-shadow-sm: 0 10px 28px rgba(38, 48, 78, 0.08);
-  --fluent-shadow-md: 0 10px 28px rgba(38, 48, 78, 0.08);
-  --fluent-shadow-medium: 0 10px 28px rgba(38, 48, 78, 0.08);
-  --fluent-shadow-lg: 0 18px 48px rgba(38, 48, 78, 0.18);
-  --fluent-shadow-xl: 0 28px 72px rgba(38, 48, 78, 0.22);
+  // ---- Elevation (Canonical v3.5.2 dual-layer contact + ambient) ------
+  --fluent-shadow-sm: 0 1px 2px rgba(38, 48, 78, 0.04), 0 6px 18px rgba(38, 48, 78, 0.06);
+  --fluent-shadow-md: 0 2px 4px rgba(38, 48, 78, 0.04), 0 10px 28px rgba(38, 48, 78, 0.08);
+  --fluent-shadow-medium: 0 2px 4px rgba(38, 48, 78, 0.04), 0 10px 28px rgba(38, 48, 78, 0.08);
+  --fluent-shadow-lg: 0 4px 10px rgba(38, 48, 78, 0.08), 0 18px 48px rgba(38, 48, 78, 0.18);
+  --fluent-shadow-xl: 0 8px 16px rgba(38, 48, 78, 0.1), 0 28px 72px rgba(38, 48, 78, 0.22);
+  --fluent-shadow-brand-button: 0 2px 4px rgba(2, 74, 216, 0.14), 0 8px 18px rgba(2, 74, 216, 0.24);
 
   // ---- Shell ----------------------------------------------------------
   --fluent-sidebar-bg: var(--ref-neutral-0);
@@ -137,7 +138,6 @@
   --fluent-calendar-picker-invert: 0;
 
   // ---- Buttons --------------------------------------------------------
-  // Primary is a fixed four-role pairing; no gradient, no brightness filter.
   --fluent-btn-primary-bg: var(--fluent-primary);
   --fluent-btn-primary-bg-hover: var(--fluent-primary-hover);
   --fluent-btn-primary-bg-active: var(--fluent-primary-active);

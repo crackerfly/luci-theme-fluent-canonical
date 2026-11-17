@@ -1,5 +1,5 @@
 // Layouts - Login Page
-// Microsoft-style Login Page Design for FluentUI 2
+// Microsoft-style Login Page Design for FluentUI 2 (Canonical v3.5.2)
 @use "../icons" as *;
 @use "../mixins" as *;
 
@@ -17,7 +17,7 @@ body.login-page {
 @keyframes fluent-login-fade-in {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.985);
+    transform: translateY(16px) scale(0.985);
   }
 
   to {
@@ -36,7 +36,9 @@ body.login-page {
   width: 100vw !important;
   min-width: 100vw !important;
   max-width: 100vw !important;
+  min-height: 100vh !important;
   min-height: 100dvh !important;
+  height: 100vh !important;
   height: 100dvh !important;
   position: relative !important;
   overflow: hidden !important;
@@ -83,21 +85,31 @@ body.login-page {
 
   .volume-control {
     position: fixed !important;
+    padding: 0 !important;
+    border: none !important;
+    background-color: transparent !important;
     inset-inline-end: 20px !important;
     inset-block-start: 20px !important;
-    width: 24px !important;
-    height: 24px !important;
+    width: 32px !important;
+    height: 32px !important;
     z-index: 5000 !important;
     cursor: pointer !important;
-    background-size: contain !important;
+    background-size: 24px 24px !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
     background-image: url(../img/volume_high.svg) !important;
-    opacity: 0.6 !important;
-    transition: opacity var(--fluent-duration-fast) var(--fluent-easing-standard) !important;
+    opacity: 0.72 !important;
+    border-radius: var(--fluent-radius-md) !important;
+    transition:
+      opacity var(--fluent-duration-fast) var(--fluent-easing-effects),
+      transform var(--fluent-duration-fast) var(--fluent-easing-out-strong) !important;
 
     &:hover {
       opacity: 1 !important;
+    }
+
+    &:active {
+      transform: scale(0.95) !important;
     }
 
     &.mute {
@@ -107,8 +119,8 @@ body.login-page {
 
   // LOGIN CONTAINER - Centers the login box within the remaining viewport
   .login-container {
-    backdrop-filter: blur(var(--fluent-blur-radius)) !important;
     -webkit-backdrop-filter: blur(var(--fluent-blur-radius)) !important;
+    backdrop-filter: blur(var(--fluent-blur-radius)) !important;
     position: relative !important;
     top: auto !important;
     inset-inline-start: auto !important;
@@ -143,13 +155,11 @@ body.login-page {
       // Microsoft sign-in card token alignment
       background: color-mix(in srgb, var(--fluent-bg-card) calc(var(--fluent-blur-opacity) * 100%), transparent) !important;
       // Elevated surface over the wallpaper: depth comes from the shadow token
-      // alone, so no persistent rim is stacked under it. The dark block below
-      // keeps the same contract with its own shadow scale.
+      // alone, so no persistent rim is stacked under it.
       border: 1px solid transparent !important;
-      border-radius: var(--fluent-radius-lg) !important;
+      border-radius: var(--fluent-radius-xl) !important;
       box-shadow: var(--fluent-shadow-lg) !important;
-      will-change: transform, opacity;
-      animation: fluent-login-fade-in var(--fluent-duration-slow) var(--fluent-easing-easy-ease);
+      animation: fluent-login-fade-in var(--fluent-duration-slow) var(--fluent-easing-out-strong);
 
       // ============================================================
       // CARD HEADER & LOGO
@@ -179,7 +189,9 @@ body.login-page {
         align-items: center !important;
         justify-content: center !important;
         color: var(--fluent-text) !important;
-        transition: background-color var(--fluent-duration-fast) var(--fluent-easing-standard) !important;
+        transition:
+          background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+          transform var(--fluent-duration-fast) var(--fluent-easing-out-strong) !important;
 
         svg {
           width: 20px !important;
@@ -189,12 +201,16 @@ body.login-page {
         }
 
         &:hover {
-          background-color: var(--fluent-bg-active) !important;
+          background-color: var(--fluent-bg-hover) !important;
+        }
+
+        &:active {
+          transform: translateY(-50%) scale(0.94) !important;
         }
 
         &:focus-visible {
           outline: 2px solid var(--fluent-focus-color) !important;
-          background-color: var(--fluent-bg-active) !important;
+          background-color: var(--fluent-bg-hover) !important;
         }
       }
 
@@ -205,7 +221,7 @@ body.login-page {
         gap: 10px !important;
         text-decoration: none !important;
 
-@include brand-mark(48px, null, true);
+        @include brand-mark(48px, null, true);
       }
 
       // ============================================================
@@ -217,7 +233,7 @@ body.login-page {
       // ============================================================
       .login-title {
         font-family: var(--fluent-font-family) !important;
-        font-size: 24px !important; // Microsoft H1
+        font-size: var(--fluent-font-size-xl) !important;
         font-weight: var(--fluent-font-weight-semibold) !important;
         color: var(--fluent-text) !important;
         margin: 0 0 10px 0 !important;
@@ -230,11 +246,11 @@ body.login-page {
 
       .login-subtitle {
         font-family: var(--fluent-font-family) !important;
-        font-size: 13px !important;
+        font-size: var(--fluent-font-size-base) !important;
         color: var(--fluent-text-secondary) !important;
         margin: 0 0 24px 0 !important;
         text-align: center !important;
-        line-height: 18px !important;
+        line-height: 20px !important;
       }
 
       // ============================================================
@@ -257,8 +273,8 @@ body.login-page {
           grid-row: 1 / -1 !important;
           width: 100% !important;
           transition:
-            transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1),
-            opacity 0.25s cubic-bezier(0.1, 0.9, 0.2, 1) !important;
+            transform var(--fluent-duration-slow) var(--fluent-easing-out-strong),
+            opacity var(--fluent-duration-normal) var(--fluent-easing-effects) !important;
         }
 
         --login-step-enter-offset: 40px;
@@ -308,18 +324,18 @@ body.login-page {
         .errorbox {
           position: relative !important;
           padding: 0 !important;
-          padding-inline-start: 16px !important;
-          margin: 2px 0 0 0 !important;
+          padding-inline-start: 18px !important;
+          margin: 6px 0 0 0 !important;
           border-radius: 0 !important;
           display: block !important;
           text-align: start !important;
           background: transparent !important;
           border: none !important;
           box-shadow: none !important;
-          color: var(--fluent-error) !important;
+          color: var(--fluent-error-text) !important;
 
           font-family: var(--fluent-font-family) !important;
-          font-size: 12px !important;
+          font-size: var(--fluent-font-size-sm) !important;
           font-weight: var(--fluent-font-weight-regular) !important;
           line-height: 16px !important;
           box-sizing: border-box !important;
@@ -361,17 +377,17 @@ body.login-page {
             display: block !important;
             box-sizing: border-box !important;
             width: 100% !important;
-            height: var(--fluent-control-height) !important;
-            min-height: var(--fluent-control-height) !important;
-            padding: 0 10px !important;
+            height: 36px !important;
+            min-height: 36px !important;
+            padding: 0 12px !important;
 
             background-color: var(--fluent-input-bg) !important;
+            background-image: none !important;
             border: 1px solid var(--fluent-input-border) !important;
-            border-bottom: 1px solid var(--fluent-input-border) !important;
-            border-radius: 4px !important;
+            border-radius: var(--fluent-radius-md) !important;
 
             font-family: var(--fluent-font-family) !important;
-            font-size: 14px !important;
+            font-size: var(--fluent-font-size-base) !important;
             color: var(--fluent-text) !important;
             line-height: normal !important;
 
@@ -379,24 +395,17 @@ body.login-page {
             outline: none !important;
             margin: 0 !important;
 
-            // Focus Bottom Line Transition
-            background-image: linear-gradient(0deg, var(--fluent-primary) 0%, var(--fluent-primary) 100%) !important;
-            background-position: bottom !important;
-            background-size: 0 2px !important;
-            background-repeat: no-repeat !important;
-
             transition:
-              border-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-              background-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-              background-size var(--fluent-duration-fast) var(--fluent-easing-standard) !important;
+              border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+              background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+              box-shadow var(--fluent-duration-fast) var(--fluent-easing-effects) !important;
 
             &:hover:not(:focus):not(:disabled) {
               border-color: var(--fluent-input-border-hover) !important;
-              border-bottom-color: var(--fluent-text) !important;
             }
 
-            // Global editable-field focus recipe (spec MUST): exact brand
-            // border + soft brand ring. No local underline substitute.
+            // Global editable-field focus recipe (Canonical v3.5.2): exact brand
+            // border + 4px soft brand ring.
             &:focus {
               border-color: var(--fluent-field-focus-border) !important;
               box-shadow: 0 0 0 4px var(--fluent-field-focus-ring) !important;
@@ -425,22 +434,24 @@ body.login-page {
             transform: translateY(-50%) !important;
             background-color: var(--fluent-bg-card) !important;
             padding-inline: 4px !important;
+            border-radius: var(--fluent-radius-xs) !important;
             color: var(--fluent-text-secondary) !important;
             font-family: var(--fluent-font-family) !important;
-            font-size: 14px !important;
+            font-size: var(--fluent-font-size-base) !important;
             pointer-events: none !important;
             transition:
-              background-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-              border-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-              box-shadow var(--fluent-duration-fast) var(--fluent-easing-standard) !important;
+              top var(--fluent-duration-fast) var(--fluent-easing-out-strong),
+              font-size var(--fluent-duration-fast) var(--fluent-easing-out-strong),
+              color var(--fluent-duration-fast) var(--fluent-easing-effects),
+              background-color var(--fluent-duration-fast) var(--fluent-easing-effects) !important;
           }
 
           // Float states
           .ms-input:focus ~ .ms-label,
           .ms-input:not(:placeholder-shown) ~ .ms-label {
             top: 0 !important;
-            font-size: 12px !important;
-            color: var(--fluent-primary) !important;
+            font-size: var(--fluent-font-size-sm) !important;
+            color: var(--fluent-accent-text) !important;
           }
 
           // Keep faded color when not focused but has content
@@ -449,18 +460,16 @@ body.login-page {
           }
 
           // Invalid float label color
-          .ms-input.cbi-input-invalid:focus ~ .ms-label {
-            color: var(--fluent-error) !important;
-          }
+          .ms-input.cbi-input-invalid:focus ~ .ms-label,
           .ms-input.cbi-input-invalid:not(:placeholder-shown) ~ .ms-label {
-            color: var(--fluent-error) !important;
+            color: var(--fluent-error-text) !important;
           }
         }
 
         // Password Wrapper (to give spacing for eye icon)
         .password-wrapper {
           .ms-input {
-            padding-inline: 10px 36px !important;
+            padding-inline: 12px 38px !important;
           }
         }
 
@@ -473,10 +482,15 @@ body.login-page {
           // Sits inside the field's 1px border on all sides; the old asymmetric
           // 1px/2px inset dated from the two-tone bottom border.
           inset-block: 1px !important;
-          width: 30px !important;
+          width: 34px !important;
           background: transparent !important;
           border: none !important;
-          @include logical-radius(0, 1px, 1px, 0);
+          @include logical-radius(
+            0,
+            calc(var(--fluent-radius-md) - 1px),
+            calc(var(--fluent-radius-md) - 1px),
+            0
+          );
           cursor: pointer !important;
           display: flex !important;
           align-items: center !important;
@@ -484,8 +498,8 @@ body.login-page {
           color: var(--fluent-text-secondary) !important;
           outline: none !important;
           transition:
-            background-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-            color var(--fluent-duration-fast) var(--fluent-easing-standard) !important;
+            background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+            color var(--fluent-duration-fast) var(--fluent-easing-effects) !important;
 
           &:hover {
             background-color: var(--fluent-bg-hover) !important;
@@ -493,7 +507,8 @@ body.login-page {
           }
 
           &:focus-visible {
-            outline: 1px solid var(--fluent-primary) !important;
+            outline: 2px solid var(--fluent-focus-color) !important;
+            outline-offset: -2px !important;
             background-color: var(--fluent-bg-hover) !important;
           }
 
@@ -520,23 +535,26 @@ body.login-page {
         align-items: center !important;
         justify-content: center !important;
         width: 100% !important;
-        height: var(--fluent-control-height) !important;
+        height: 36px !important;
         padding: 8px 16px !important;
         background: var(--fluent-btn-primary-bg) !important;
         border: 1px solid var(--fluent-btn-primary-bg) !important;
-        border-radius: 4px !important;
+        border-radius: var(--fluent-radius-md) !important;
+        box-shadow: var(--fluent-shadow-brand-button) !important;
         color: var(--fluent-text-on-primary) !important;
 
         font-family: var(--fluent-font-family) !important;
-        font-size: 14px !important;
-        font-weight: 400 !important;
+        font-size: var(--fluent-font-size-base) !important;
+        font-weight: var(--fluent-font-weight-semibold) !important;
         text-align: center !important;
         line-height: 20px !important;
         cursor: pointer !important;
         outline: none !important;
         transition:
-          background var(--fluent-duration-fast) var(--fluent-easing-standard),
-          border-color var(--fluent-duration-fast) var(--fluent-easing-standard) !important;
+          background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+          border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+          box-shadow var(--fluent-duration-fast) var(--fluent-easing-effects),
+          transform var(--fluent-duration-fast) var(--fluent-easing-out-strong) !important;
 
         &:hover {
           background: var(--fluent-btn-primary-bg-hover) !important;
@@ -546,6 +564,8 @@ body.login-page {
         &:active {
           background: var(--fluent-btn-primary-bg-active) !important;
           border-color: var(--fluent-btn-primary-bg-active) !important;
+          transform: scale(0.98) !important;
+          box-shadow: none !important;
         }
 
         &:focus-visible {
@@ -572,15 +592,17 @@ body.login-page {
         height: 32px !important;
         padding: 0 12px !important;
         background: transparent !important;
-        border: 1px solid rgba(0, 0, 0, 0.25) !important;
-        border-radius: 100px !important;
+        border: 1px solid var(--fluent-border-strong) !important;
+        border-radius: var(--fluent-radius-circular) !important;
         box-sizing: border-box !important;
         color: var(--fluent-text) !important;
-        font-size: 12px !important;
-        transition: background-color var(--fluent-duration-fast) var(--fluent-easing-standard) !important;
+        font-size: var(--fluent-font-size-sm) !important;
+        transition:
+          background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+          border-color var(--fluent-duration-fast) var(--fluent-easing-effects) !important;
 
         &:hover {
-          background-color: rgba(0, 0, 0, 0.05) !important;
+          background-color: var(--fluent-bg-hover) !important;
         }
 
         &__text {
@@ -589,8 +611,8 @@ body.login-page {
           text-overflow: ellipsis !important;
           white-space: nowrap !important;
           font-family: var(--fluent-font-family) !important;
-          font-size: 13px !important;
-          font-weight: 400 !important;
+          font-size: var(--fluent-font-size-sm) !important;
+          font-weight: var(--fluent-font-weight-regular) !important;
           line-height: 1.5 !important;
           color: var(--fluent-text) !important;
         }
@@ -598,11 +620,11 @@ body.login-page {
     }
   }
 
-  // FOOTER - Pinned to the bottom of the login page flow
+  // FOOTER - Pinned to the bottom of the login page flow with iOS safe-area support
   footer {
     position: fixed !important;
     inset-inline: 0 !important;
-    inset-block-end: 18px !important;
+    inset-block-end: max(18px, env(safe-area-inset-bottom, 18px)) !important;
     width: 100% !important;
     text-align: center !important;
     z-index: 10 !important;
@@ -618,9 +640,8 @@ body.login-page {
       justify-content: center !important;
       gap: 16px !important;
       flex-wrap: wrap !important;
-      font-size: 12px !important;
+      font-size: var(--fluent-font-size-sm) !important;
       color: var(--fluent-text-secondary) !important;
-      opacity: 0.75 !important;
       width: auto !important;
       max-width: 100% !important;
     }
@@ -628,8 +649,8 @@ body.login-page {
     a.luci-link {
       color: var(--fluent-text-secondary) !important;
       text-decoration: none !important;
-      font-weight: normal !important;
-      transition: color var(--fluent-duration-fast) var(--fluent-easing-standard) !important;
+      font-weight: var(--fluent-font-weight-regular) !important;
+      transition: color var(--fluent-duration-fast) var(--fluent-easing-effects) !important;
 
       &:hover {
         color: var(--fluent-text) !important;
@@ -643,8 +664,8 @@ body.login-page {
   background: radial-gradient(circle at 50% 50%, var(--fluent-bg) 0%, var(--fluent-bg-page) 100%) !important;
 
   .login-container {
-    backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
     -webkit-backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
+    backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
 
     .login-form {
       background: color-mix(in srgb, var(--fluent-bg-card) calc(var(--fluent-blur-opacity-dark) * 100%), transparent) !important;
@@ -658,7 +679,7 @@ body.login-page {
 
       .form-login {
         .errorbox {
-          color: var(--fluent-error) !important;
+          color: var(--fluent-error-text) !important;
 
           &::after {
             background-image: url("../assets/login-error-dark.svg") !important;
@@ -680,14 +701,6 @@ body.login-page {
                 box-shadow: 0 0 0 4px var(--fluent-error-light) !important;
               }
             }
-          }
-        }
-
-        .login-account-pill {
-          border-color: rgba(255, 255, 255, 0.25) !important;
-
-          &:hover {
-            background-color: rgba(255, 255, 255, 0.1) !important;
           }
         }
       }
@@ -715,6 +728,7 @@ body.login-page {
 
     .login-container {
       max-width: 100% !important;
+      min-height: 100vh !important;
       min-height: 100dvh !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
@@ -722,7 +736,7 @@ body.login-page {
 
       .login-form {
         min-height: auto !important;
-        padding: 22px 24px 24px !important;
+        padding: 24px !important;
         border: none !important;
         border-radius: 0 !important;
         box-shadow: none !important;
@@ -737,7 +751,7 @@ body.login-page {
         }
 
         .login-title {
-          font-size: 20px !important;
+          font-size: var(--fluent-font-size-lg) !important;
           line-height: 26px !important;
           margin-bottom: 12px !important;
         }
@@ -754,7 +768,7 @@ body.login-page {
     }
 
     footer {
-      bottom: 12px !important;
+      bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
       padding: 0 16px !important;
 
       div {

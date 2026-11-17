@@ -7,3 +7,13 @@
 @use "layouts/main";
 @use "themes/light";
 @use "themes/dark";
+
+// Lite omits the JS top loading bar and menu search modules (upstream 23c8d52)
+.fluent-loading-bar,
+body > div.main > div.main-right > header .header__search-slot {
+  display: none !important;
+}
+
+body > div.main > div.main-right > header .header__brand {
+  flex: 1 1 auto;
+}

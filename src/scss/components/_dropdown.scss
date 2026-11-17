@@ -7,27 +7,27 @@
 @use "../icons" as *;
 
 // ============================================================
-// DROPDOWN KEYFRAMES
+// DROPDOWN KEYFRAMES (CSS016: scale(0.96), transform: none end state)
 // ============================================================
 @keyframes fluent-dropdown-slide-in {
   from {
     opacity: 0;
-    transform: translateY(-8px) scaleY(0.95);
+    transform: translateY(-4px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scaleY(1);
+    transform: none;
   }
 }
 
 @keyframes fluent-dropdown-slide-in-up {
   from {
     opacity: 0;
-    transform: translateY(8px) scaleY(0.95);
+    transform: translateY(4px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scaleY(1);
+    transform: none;
   }
 }
 
@@ -51,16 +51,15 @@ cbi-dropdown,
     direction: rtl;
   }
 
-  // Size overrides for dropdown layout
-  padding: 0 var(--fluent-space-xs);
-  gap: var(--fluent-space-xxs);
+  padding: 0 var(--fluent-space-sm);
+  gap: var(--fluent-space-xs);
   min-width: 120px;
 
   // Typography & cursor overrides
   line-height: 20px;
   outline-style: none;
   cursor: pointer;
-  @include input-focus-ripple-v1; // Apply focus ripple effect to the entire dropdown container
+  @include input-focus-ripple-v1;
 
   &[open] {
     z-index: var(--fluent-zindex-dropdown);
@@ -110,7 +109,7 @@ cbi-dropdown,
     white-space: nowrap;
     flex: 1;
     padding-block: 0;
-    padding-inline: 3.5px 0;
+    padding-inline: var(--fluent-space-xs) 0;
     margin: 0;
     list-style: none;
     gap: var(--fluent-space-xxs);
@@ -125,7 +124,7 @@ cbi-dropdown,
 
     > li {
       display: none;
-      flex-shrink: 0; // Prevent selected items/tags from being squished
+      flex-shrink: 0;
       padding: 0 !important;
       margin: 0;
       overflow: hidden;
@@ -193,35 +192,33 @@ cbi-dropdown,
     display: none;
   }
 
-  // In multi-select dropdowns, allow all selected preview items to render; they will be clipped/faded by container overflow mask.
-
   // ----------------------------------------------------------
-  // OPEN / EXPAND INDICATOR (chevron)
+  // OPEN / EXPAND INDICATOR (chevron, 8px from inline-end)
   // ----------------------------------------------------------
   > span.open {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
     cursor: pointer;
     margin-inline-start: auto !important;
     margin-inline-end: 0;
     color: var(--fluent-text-secondary);
-    transition: color var(--fluent-duration-fast) var(--fluent-easing-standard);
+    transition: color var(--fluent-duration-fast) var(--fluent-easing-effects);
     position: relative;
     z-index: 1;
-    font-size: 0 !important; // Hide original text node ("▾")
+    font-size: 0 !important;
 
     // FluentUI Chevron Down Icon via SVG Mask
     &::before {
       @include fluent-mask-icon-by-name("chevron-down-20-regular", 16px, currentColor);
       content: "";
       transition:
-        background-color var(--fluent-duration-fast) var(--fluent-easing-standard),
-        transform 0.2s cubic-bezier(0.4, 0, 0.23, 1);
+        background-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+        transform 160ms var(--fluent-easing-out-strong);
     }
 
     svg {
@@ -229,7 +226,7 @@ cbi-dropdown,
       height: 16px;
       fill: currentColor;
       color: inherit;
-      transition: color var(--fluent-duration-fast) var(--fluent-easing-standard);
+      transition: color var(--fluent-duration-fast) var(--fluent-easing-effects);
 
       path {
         fill: currentColor;
@@ -268,7 +265,7 @@ cbi-dropdown,
     white-space: nowrap;
     color: var(--fluent-text-disabled);
     padding-block: 0;
-    padding-inline: 3.5px 0;
+    padding-inline: var(--fluent-space-xs) 0;
     pointer-events: none;
     font-size: var(--fluent-font-size-base);
     line-height: 20px;
@@ -298,10 +295,7 @@ cbi-dropdown,
       background: transparent;
     }
 
-    &:hover > span.open {
-      background: transparent;
-    }
-
+    &:hover > span.open,
     &:active > span.open,
     &.focus > span.open,
     &:focus-within > span.open,
@@ -347,7 +341,7 @@ cbi-dropdown,
     // Appearance
     background-color: var(--fluent-dropdown-bg);
     border: 1px solid var(--fluent-dropdown-border);
-    border-radius: var(--fluent-radius-md);
+    border-radius: var(--fluent-radius-lg);
     outline: 1px solid transparent;
 
     // Shadow
@@ -358,15 +352,18 @@ cbi-dropdown,
     min-width: 100%;
     z-index: var(--fluent-zindex-dropdown);
 
-    // Padding
-    padding: var(--fluent-space-xxs);
+    padding: var(--fluent-space-xs);
     margin: 0;
-    margin-top: var(--fluent-space-xxs);
+    margin-top: var(--fluent-space-xs);
     list-style: none;
 
-    // Animation
-    animation: fluent-dropdown-slide-in 0.2s cubic-bezier(0.4, 0, 0.23, 1) forwards;
-    transform-origin: top;
+    // Origin-aware popover entrance (Ease-Out Strong)
+    animation: fluent-dropdown-slide-in 160ms var(--fluent-easing-out-strong) forwards;
+    transform-origin: top left;
+
+    @include rtl {
+      transform-origin: top right;
+    }
 
     // --------------------------------------------------------
     // SCROLLBAR STYLING
@@ -399,11 +396,11 @@ cbi-dropdown,
       box-sizing: border-box;
       position: relative;
       width: 100%;
-      flex-shrink: 0; // prevent Flex items from shrinking when the container's max-height is insufficient
+      flex-shrink: 0;
 
       // Size
       min-height: var(--fluent-input-height);
-      padding: 5px var(--fluent-space-xs);
+      padding: 6px var(--fluent-space-sm);
 
       // Appearance
       border-radius: var(--fluent-radius-md);
@@ -448,8 +445,9 @@ cbi-dropdown,
 
       // Transition
       transition:
-        background-color 0.05s var(--fluent-easing-standard),
-        color 0.05s var(--fluent-easing-standard);
+        background-color 80ms var(--fluent-easing-effects),
+        box-shadow 80ms var(--fluent-easing-effects),
+        color 80ms var(--fluent-easing-effects);
 
       // Ensure inner spans and badges fill width
       > span,
@@ -466,8 +464,7 @@ cbi-dropdown,
         color: var(--fluent-text);
       }
 
-      // Selected state — committed value. Brand weak background plus the
-      // persistent check mark; never a full outline and never a weight change.
+      // Selected state — committed value. Brand weak background + checkmark, constant 400 weight.
       &[selected] {
         background-color: var(--fluent-dropdown-option-selected);
         color: var(--fluent-text);
@@ -479,8 +476,23 @@ cbi-dropdown,
         background-color: var(--fluent-primary-lighter);
       }
 
-      // Focus / Active state
-      &.focus,
+      // Keyboard active / focus state: distinct 2px brand inset start bar (ui-spec.md §8.7)
+      &.is-active,
+      &.focus {
+        background-color: var(--fluent-dropdown-option-hover);
+        box-shadow: inset 2px 0 0 var(--fluent-primary);
+        color: var(--fluent-text);
+
+        @include rtl {
+          box-shadow: inset -2px 0 0 var(--fluent-primary);
+        }
+      }
+
+      &[selected].is-active,
+      &[selected].focus {
+        background-color: var(--fluent-primary-lighter);
+      }
+
       &:active {
         background-color: var(--fluent-bg-active);
         color: var(--fluent-text);
@@ -520,42 +532,148 @@ cbi-dropdown,
       // Create item input field
       .create-item-input {
         width: 100%;
-        min-height: 24px;
-        padding: 2px var(--fluent-space-xs);
+        min-height: 28px;
+        padding: 4px var(--fluent-space-sm);
         box-sizing: border-box;
-
         background-color: var(--fluent-bg);
         border: 1px solid var(--fluent-input-border);
         border-radius: var(--fluent-radius-sm);
-
         font-family: var(--fluent-font-family);
         font-size: var(--fluent-font-size-base);
         color: var(--fluent-text);
-
         outline: none;
-        transition: border-color var(--fluent-duration-fast) var(--fluent-easing-standard);
+        transition:
+          border-color var(--fluent-duration-fast) var(--fluent-easing-effects),
+          box-shadow var(--fluent-duration-fast) var(--fluent-easing-effects);
+
+        &:focus {
+          border-color: var(--fluent-field-focus-border);
+          box-shadow: 0 0 0 4px var(--fluent-field-focus-ring);
+        }
       }
     }
   }
 
   // ----------------------------------------------------------
-  // LEGACY SELECT / INPUT-SELECT (kept for compatibility)
+  // OPTGROUP SUPPORT IN CUSTOM SELECT (upstream b3a9d9c + Canonical v3.5.2)
+  // ----------------------------------------------------------
+  &.fluent-custom-select > ul.dropdown {
+    > .fluent-select-group {
+      display: block;
+      padding: 0;
+      min-height: unset;
+      background: transparent !important;
+      box-shadow: none !important;
+      cursor: default;
+      white-space: normal;
+      overflow: visible;
+
+      &::before {
+        content: none !important;
+        display: none !important;
+      }
+
+      > .fluent-select-group__label {
+        display: block;
+        padding: 6px var(--fluent-space-sm) 4px;
+        font-size: var(--fluent-font-size-sm);
+        font-weight: var(--fluent-font-weight-semibold);
+        line-height: 18px;
+        color: var(--fluent-text-muted);
+      }
+
+      > ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+
+        > li[role="option"] {
+          display: flex;
+          align-items: center;
+          position: relative;
+          min-height: var(--fluent-input-height);
+          padding: 6px var(--fluent-space-sm) 6px 32px;
+          border-radius: var(--fluent-radius-md);
+          color: var(--fluent-text);
+          font-size: var(--fluent-font-size-base);
+          font-weight: var(--fluent-font-weight-regular);
+          line-height: 20px;
+          cursor: pointer;
+
+          &::before {
+            content: "";
+            position: absolute;
+            inset-inline-start: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-color: transparent;
+            --icon-check: url("../assets/checkmark-mask.svg");
+            mask-image: var(--icon-check);
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-position: center;
+          }
+
+          &:hover {
+            background-color: var(--fluent-dropdown-option-hover);
+          }
+
+          &[selected] {
+            background-color: var(--fluent-dropdown-option-selected);
+            font-weight: var(--fluent-font-weight-regular);
+
+            &::before {
+              background-color: var(--fluent-text);
+            }
+          }
+
+          &.is-active {
+            background-color: var(--fluent-dropdown-option-hover);
+            box-shadow: inset 2px 0 0 var(--fluent-primary);
+
+            @include rtl {
+              box-shadow: inset -2px 0 0 var(--fluent-primary);
+            }
+          }
+
+          &[selected].is-active {
+            background-color: var(--fluent-primary-lighter);
+          }
+
+          &[disabled] {
+            color: var(--fluent-text-disabled);
+            cursor: not-allowed;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  }
+
+  // ----------------------------------------------------------
+  // LEGACY SELECT / INPUT-SELECT (8px caret inset, 32px clearance)
   // ----------------------------------------------------------
   > select {
     @include input-base;
     @include input-focus-ripple-v2;
     width: 100%;
     box-sizing: border-box;
-    padding-inline-end: var(--fluent-space-xl);
+    padding-inline-end: var(--fluent-space-xxl);
     cursor: pointer;
   }
 
   > .cbi-input-select {
     @include input-base;
-    @include input-focus-ripple-v2(url("../assets/select-chevron.svg"), 10px, 10px 6px);
+    @include input-focus-ripple-v2(url("../assets/select-chevron.svg"), 8px, 12px 8px);
     width: 100%;
     box-sizing: border-box;
-    padding-inline-end: var(--fluent-space-xl);
+    padding-inline-end: var(--fluent-space-xxl);
     cursor: pointer;
 
     // See _select.scss: the caret is a background image, so dark mode swaps the
@@ -592,7 +710,7 @@ cbi-dropdown,
   }
 
   // ----------------------------------------------------------
-  // MULTI-SELECT DROPDOWN OPTIMIZATION (FluentUI Style Checkboxes)
+  // MULTI-SELECT DROPDOWN OPTIMIZATION
   // ----------------------------------------------------------
   ul.dropdown:not(.preview) > li {
     form {
@@ -628,11 +746,12 @@ cbi-dropdown,
       min-width: 16px !important;
       min-height: 16px !important;
       border: 1px solid var(--fluent-checkbox-border) !important;
-      border-radius: 4px !important;
+      border-radius: var(--fluent-radius-sm) !important;
       background-color: var(--fluent-checkbox-bg) !important;
       margin: 0 !important;
       margin-inline-end: var(--fluent-space-sm) !important;
       cursor: pointer !important;
+      pointer-events: none;
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
@@ -641,8 +760,8 @@ cbi-dropdown,
       background-image: none !important;
       mask-image: none !important;
       transition:
-        background-color 0.1s ease,
-        border-color 0.1s ease !important;
+        background-color 100ms var(--fluent-easing-effects),
+        border-color 100ms var(--fluent-easing-effects) !important;
 
       &::before {
         content: none !important;
@@ -659,13 +778,9 @@ cbi-dropdown,
         background-color: var(--fluent-input-bg-disabled) !important;
         border-color: var(--fluent-border-hover) !important;
         cursor: not-allowed !important;
-        opacity: 1 !important; // Prevent double fading of the checkmark
+        opacity: 1 !important;
         background-image: none !important;
       }
-    }
-    input[type="checkbox"] {
-      pointer-events: none;
-      border-radius: var(--fluent-radius-sm) !important;
     }
     // Selected state: applied if the checkbox itself is checked, OR if the parent li is selected.
     // Explicitly define background-image for hover, focus, active, and parent focus/hover states to prevent the tick from disappearing.
@@ -714,8 +829,8 @@ cbi-dropdown,
     }
   }
 
-  // Single-select dropdown option checkmark (FluentUI style)
-  &:not([multiple]) > ul.dropdown:not(.preview) > li {
+  // Single-select dropdown option checkmark
+  &:not([multiple]) > ul.dropdown:not(.preview) > li:not(.fluent-select-group) {
     position: relative !important;
     padding-inline-start: 32px;
 
@@ -728,8 +843,8 @@ cbi-dropdown,
       width: 16px !important;
       height: 16px !important;
       background-color: transparent !important;
-      transition: background-color 0.1s ease !important;
-      z-index: 2 !important; // Ensure checkmark is always on top of the zonebadge background
+      transition: background-color 100ms var(--fluent-easing-effects) !important;
+      z-index: 2 !important;
       --icon-check: url("../assets/checkmark-mask.svg");
       mask-image: var(--icon-check) !important;
       mask-size: contain !important;
@@ -750,7 +865,6 @@ cbi-dropdown,
   // ----------------------------------------------------------
   // ZONEBADGE STYLING SPECIAL ADAPTATION
   // ----------------------------------------------------------
-  // Style zonebadge elements inside the dropdown options list
   &[open] > ul:not(.preview) > li:has(.zonebadge) {
     padding: 0 !important;
     padding-inline-start: 0 !important;
@@ -768,7 +882,7 @@ cbi-dropdown,
       align-items: center !important;
       flex-wrap: wrap !important;
       justify-content: flex-start !important;
-      gap: 4px var(--fluent-space-xs) !important; // Clean gap spacing between badge name and interface badges
+      gap: 4px var(--fluent-space-xs) !important;
       width: 100% !important;
       height: 100% !important;
       min-height: var(--fluent-input-height) !important;
@@ -777,8 +891,8 @@ cbi-dropdown,
       border: none !important;
       border-radius: inherit !important;
       box-shadow: none !important;
-      padding: 5px var(--fluent-space-xs) !important;
-      color: var(--fluent-zonebadge-text) !important; // Dark text for pastel contrast
+      padding: 6px var(--fluent-space-sm) !important;
+      color: var(--fluent-zonebadge-text) !important;
 
       strong,
       em {
@@ -796,7 +910,7 @@ cbi-dropdown,
         align-items: center !important;
         justify-content: center !important;
         gap: 4px !important;
-        padding: 1px 5px !important;
+        padding: 2px 6px !important;
         min-height: unset !important;
         height: auto !important;
         line-height: 1.2 !important;
@@ -814,7 +928,7 @@ cbi-dropdown,
           width: 14px !important;
           height: 14px !important;
           vertical-align: middle !important;
-          background: currentColor !important; // Use currentColor (which is the zonebadge text color) as the icon mask fill
+          background: currentColor !important;
         }
       }
     }
@@ -830,7 +944,7 @@ cbi-dropdown,
   // Style selected zone badges inside the collapsed preview bar as neat tags
   &:not([open]) > ul > li:has(.zonebadge),
   &[open] > ul.preview > li:has(.zonebadge) {
-    display: none; // Unselected items stay hidden
+    display: none;
 
     &[selected],
     &[display] {
@@ -847,7 +961,6 @@ cbi-dropdown,
       display: inline-flex !important;
       align-items: center !important;
       padding: 2px var(--fluent-space-sm) !important;
-      padding-inline-start: var(--fluent-space-sm) !important;
       min-height: 20px !important;
       height: 20px !important;
       border-radius: var(--fluent-radius-sm) !important;
@@ -864,7 +977,7 @@ cbi-dropdown,
       }
 
       .ifacebadge {
-        display: none !important; // Hide interface list inside collapsed preview
+        display: none !important;
       }
     }
   }
@@ -875,9 +988,13 @@ cbi-dropdown,
       bottom: 100%;
       top: auto !important;
       margin-top: 0 !important;
-      margin-bottom: var(--fluent-space-xxs) !important;
-      transform-origin: bottom !important;
-      animation: fluent-dropdown-slide-in-up 0.2s cubic-bezier(0.4, 0, 0.23, 1) forwards !important;
+      margin-bottom: var(--fluent-space-xs) !important;
+      transform-origin: bottom left !important;
+      animation: fluent-dropdown-slide-in-up 160ms var(--fluent-easing-out-strong) forwards !important;
+
+      @include rtl {
+        transform-origin: bottom right !important;
+      }
       min-width: 100%;
       width: max-content;
       inset-inline-end: auto !important;
@@ -886,30 +1003,33 @@ cbi-dropdown,
       top: 100%;
       bottom: auto !important;
       margin-bottom: 0 !important;
-      margin-top: var(--fluent-space-xxs) !important;
-      transform-origin: top !important;
-      animation: fluent-dropdown-slide-in 0.2s cubic-bezier(0.4, 0, 0.23, 1) forwards !important;
+      margin-top: var(--fluent-space-xs) !important;
+      transform-origin: top left !important;
+      animation: fluent-dropdown-slide-in 160ms var(--fluent-easing-out-strong) forwards !important;
+
+      @include rtl {
+        transform-origin: top right !important;
+      }
       min-width: 100%;
       width: max-content;
       inset-inline-end: auto !important;
     }
-
-    &[data-fluent-floating="modal"][open] > ul.dropdown:not(.preview) {
-      position: fixed;
-      top: var(--fluent-dropdown-top) !important;
-      bottom: auto !important;
-      inset-inline-start: var(--fluent-dropdown-left) !important;
-      inset-inline-end: auto !important;
-      min-width: var(--fluent-dropdown-width);
-      // width: max-content;
-      // max-width: calc(100vw - 16px) !important;
-      max-height: var(--fluent-dropdown-max-height);
-      margin: 0 !important;
-      z-index: calc(var(--fluent-zindex-dropdown) + 1);
-    }
   }
 
-  // Position open dropdowns (both native and custom select) using anchor positioning when supported
+  // Shared modal fixed-floating fallback for BOTH custom selects and native cbi-dropdowns (fixes Issue #15)
+  &[data-fluent-floating="modal"][open] > ul.dropdown:not(.preview) {
+    position: fixed !important;
+    top: var(--fluent-dropdown-top) !important;
+    bottom: auto !important;
+    left: var(--fluent-dropdown-left) !important;
+    right: auto !important;
+    min-width: var(--fluent-dropdown-width) !important;
+    max-height: var(--fluent-dropdown-max-height) !important;
+    margin: 0 !important;
+    z-index: calc(var(--fluent-zindex-dropdown) + 10) !important;
+  }
+
+  // Position open dropdowns using CSS Anchor Positioning when supported
   &[open] > ul.dropdown:not(.preview) {
     @supports (anchor-name: --a) {
       position: fixed !important;
@@ -918,7 +1038,7 @@ cbi-dropdown,
       min-width: anchor-size(width) !important;
       max-height: min(var(--fluent-dropdown-max-height-limit), var(--fluent-dropdown-max-height), 45dvh) !important;
       margin: 0 !important;
-      margin-top: var(--fluent-space-xxs) !important;
+      margin-top: var(--fluent-space-xs) !important;
       left: anchor(left) !important;
       right: auto !important;
 
@@ -936,27 +1056,35 @@ cbi-dropdown,
         top: auto !important;
         bottom: anchor(top) !important;
         margin-top: 0 !important;
-        margin-bottom: var(--fluent-space-xxs) !important;
+        margin-bottom: var(--fluent-space-xs) !important;
         max-height: min(var(--fluent-dropdown-max-height-limit), var(--fluent-dropdown-max-height), 45dvh) !important;
-        transform-origin: bottom !important;
-        animation: fluent-dropdown-slide-in-up 0.2s cubic-bezier(0.4, 0, 0.23, 1) forwards !important;
+        transform-origin: bottom left !important;
+        animation: fluent-dropdown-slide-in-up 160ms var(--fluent-easing-out-strong) forwards !important;
+
+        @include rtl {
+          transform-origin: bottom right !important;
+        }
       }
     }
   }
 
-  &[data-open-direction="up"][open] > ul.dropdown:not(.preview) {
+  &[data-open-direction="up"][open]:not([data-fluent-floating="modal"]) > ul.dropdown:not(.preview) {
     top: auto !important;
     bottom: 100% !important;
     margin-top: 0 !important;
-    margin-bottom: var(--fluent-space-xxs) !important;
-    transform-origin: bottom !important;
-    animation: fluent-dropdown-slide-in-up 0.2s cubic-bezier(0.4, 0, 0.23, 1) forwards !important;
+    margin-bottom: var(--fluent-space-xs) !important;
+    transform-origin: bottom left !important;
+    animation: fluent-dropdown-slide-in-up 160ms var(--fluent-easing-out-strong) forwards !important;
+
+    @include rtl {
+      transform-origin: bottom right !important;
+    }
 
     @supports (anchor-name: --a) {
       top: auto !important;
       bottom: anchor(top) !important;
       margin-top: 0 !important;
-      margin-bottom: var(--fluent-space-xxs) !important;
+      margin-bottom: var(--fluent-space-xs) !important;
       max-height: min(var(--fluent-dropdown-max-height-limit), var(--fluent-dropdown-max-height), 45dvh) !important;
     }
   }

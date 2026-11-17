@@ -1,6 +1,6 @@
 {
   "name": "luci-theme-fluent",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "type": "module",
   "description": "FluentUI theme for OpenWrt LuCI",
   "scripts": {
@@ -13,6 +13,7 @@
     "build:lite": "cd src && pnpm run build:lite",
     "watch:css": "cd src && pnpm exec rsbuild build --environment css --env-mode full --watch",
     "watch:js": "cd src && pnpm exec rsbuild build --environment js --env-mode full --watch",
+    "watch:dashboard": "cd src && pnpm run watch:dashboard",
     "watch:lite": "cd src && pnpm run watch:lite",
     "watch": "cd src && pnpm run watch",
     "lint": "biome lint --no-errors-on-unmatched package/luci-theme-fluent/htdocs package/luci-mod-fluentdashboard/htdocs src/web/resources src/web/fluentdashboard src/rsbuild.dashboard.config.ts luci-dashboard-i18n.config.ts",
@@ -21,12 +22,13 @@
     "i18n:extract": "pnpm run i18n:extract-ucode -- --generate && luci-types i18n --no-translate",
     "i18n:build": "pnpm run i18n:extract-ucode -- --generate && dotenvx run -- luci-types i18n",
     "i18n:dashboard": "luci-types i18n --config luci-dashboard-i18n.config.ts --no-translate",
-    "test": "pnpm run test:menu-layout && pnpm run test:apply-change-preview && pnpm run test:dashboard",
+    "test": "pnpm run test:menu-layout && pnpm run test:apply-change-preview && pnpm run test:dashboard && pnpm run test:update",
     "test:menu-layout": "tsx --test src/web/resources/menu-layout.test.ts",
     "test:apply-change-preview": "tsx --test src/web/resources/utils/apply-change-preview.test.ts",
     "test:dashboard": "tsx --test src/web/fluentdashboard/model.test.ts",
     "dev:remote": "luci-types dev",
     "dev:lite:remote": "tsx src/script/dev-lite-remote.ts",
+    "dev:dashboard:remote": "tsx src/script/dev-dashboard-remote.ts",
     "icons:generate": "tsx src/script/generate-icons.ts",
     "screenshot": "pnpm run screenshot:run && pnpm run screenshot:showcase && pnpm run screenshot:run:zh-Hans && pnpm run screenshot:showcase:zh-Hans",
     "screenshot:run": "tsx src/script/screenshot/run.ts",
@@ -34,7 +36,8 @@
     "screenshot:run:zh-Hans": "tsx src/script/screenshot/run.ts -- --lang=zh-Hans",
     "screenshot:showcase:zh-Hans": "tsx src/script/screenshot/generate-showcase.ts -- --lang=zh-Hans",
     "typecheck": "cd src && pnpm exec tsc -p tsconfig.json --noEmit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:update": "tsx --test src/web/resources/utils/update.test.ts"
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx,jsx,json}": [

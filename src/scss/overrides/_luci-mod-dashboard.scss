@@ -2,18 +2,18 @@
 @use "overrides-utils" as *;
 
 // ============================================================
-// LCI-MOD-DASHBOARD — FluentUI style overrides
-// Target: the luci-mod-dashboard plugin's dashboard page
+// LUCI-MOD-DASHBOARD — FluentUI style overrides (OpenWrt 25.12.6)
+// Target: the official luci-mod-dashboard plugin's dashboard page
 // Scoped via body[data-page="admin-dashboard"]
 // ============================================================
 
 @include plugin("admin-dashboard") {
   // ──────────────────────────────────────────────────────────
-  // DASHBOARD CARD LAYOUT
+  // DASHBOARD CARD LAYOUT & CHART TOKENS
   // ──────────────────────────────────────────────────────────
   --text-color-high: var(--fluent-text);
   --text-color-medium: var(--fluent-text-secondary);
-  --text-color-low: var(--fluent-text-secondary);
+  --text-color-low: var(--fluent-text-muted);
 
   // .section-content {
   //   display: flex;
@@ -30,10 +30,24 @@
     flex: 1 1 calc(50% - var(--fluent-space-lg));
     min-width: 320px;
     box-sizing: border-box;
+    font-variant-numeric: tabular-nums;
+
+    svg {
+      text {
+        fill: var(--fluent-text-secondary);
+        font-family: var(--fluent-font-family);
+        font-variant-numeric: tabular-nums;
+      }
+
+      line,
+      .grid {
+        stroke: var(--fluent-border);
+      }
+    }
   }
 
   // ──────────────────────────────────────────────────────────
-  // RADIO INFO GRID  (wireless radios)
+  // RADIO INFO GRID (wireless radios)
   // ──────────────────────────────────────────────────────────
 
   .router-status-wifi .settings-info {
@@ -43,14 +57,15 @@
   }
 
   .radio-info {
-    background: var(--fluent-bg);
-    border: 1px solid var(--fluent-table-border);
+    background: var(--fluent-bg-secondary);
+    border: 1px solid var(--fluent-border);
     border-radius: var(--fluent-radius-md);
     padding: var(--fluent-space-sm) var(--fluent-space-md);
     font-size: var(--fluent-font-size-sm);
+    font-variant-numeric: tabular-nums;
 
     p {
-      margin: 3px 0;
+      margin: 4px 0;
       line-height: var(--fluent-line-height-normal);
     }
 
@@ -62,28 +77,28 @@
   }
 
   // ──────────────────────────────────────────────────────────
-  // STATUS LABELS  (label-success / label-danger)
+  // STATUS LABELS (Canonical v3.5.2 Shade 0 bg + Shade 11 text, 400 weight)
   // ──────────────────────────────────────────────────────────
 
   .label {
-    display: inline-block;
-    padding: 1px 8px;
-    border-radius: var(--fluent-radius-sm);
-    font-size: var(--fluent-font-size-xs);
-    font-weight: var(--fluent-font-weight-semibold);
-    line-height: 1.6;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: var(--fluent-radius-circular);
+    font-size: var(--fluent-font-size-sm);
+    font-weight: var(--fluent-font-weight-regular);
+    line-height: 1.4;
+    letter-spacing: 0.01em;
   }
 
   .label-success {
     background: var(--fluent-success-light);
-    color: var(--fluent-success);
+    color: var(--fluent-success-text);
   }
 
   .label-danger {
     background: var(--fluent-error-light);
-    color: var(--fluent-error);
+    color: var(--fluent-error-text);
   }
 
   .label-warning {
@@ -107,24 +122,26 @@
       }
 
       .th {
-        padding: 8px 12px;
+        padding: 10px 12px;
         font-size: var(--fluent-font-size-sm);
         font-weight: var(--fluent-font-weight-semibold);
         color: var(--fluent-text-secondary);
-        border-bottom: 2px solid var(--fluent-table-border);
+        border-bottom: 1px solid var(--fluent-table-border);
         white-space: nowrap;
-        text-align: left;
+        text-align: start;
       }
 
       .td {
-        padding: 8px 12px;
-        font-size: var(--fluent-font-size-sm);
+        padding: 10px 12px;
+        font-size: var(--fluent-font-size-base);
+        font-variant-numeric: tabular-nums;
         color: var(--fluent-text);
         border-bottom: 1px solid var(--fluent-table-border);
         vertical-align: middle;
         position: static;
         top: auto;
         overflow: visible;
+        overflow-wrap: anywhere;
 
         &:nth-child(3) {
           min-width: 140px;
@@ -138,7 +155,7 @@
       .tfoot {
         .td {
           font-weight: var(--fluent-font-weight-semibold);
-          border-top: 2px solid var(--fluent-table-border);
+          border-top: 1px solid var(--fluent-border-strong);
           border-bottom: none;
         }
       }
@@ -147,14 +164,15 @@
 
   // Transmitted data (up/down in wireless clients table)
   .wireless-table-transfer {
+    font-variant-numeric: tabular-nums;
+
     br + span {
       font-size: var(--fluent-font-size-xs);
     }
   }
 
   // ──────────────────────────────────────────────────────────
-  // PROGRESS BAR  (signal strength)
-  // Matches _progress.scss but in dashboard context
+  // PROGRESS BAR (signal strength)
   // ──────────────────────────────────────────────────────────
 
   .cbi-progressbar {

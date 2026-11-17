@@ -64,6 +64,7 @@ export function handleSidebarToggle(_ev?: Event) {
   if (isActive) {
     showSideButtons.forEach((button) => {
       button.classList.remove("active");
+      button.setAttribute("aria-expanded", "false");
     });
     sidebar.classList.remove("active");
     scrollbarArea.classList.remove("active");
@@ -71,6 +72,7 @@ export function handleSidebarToggle(_ev?: Event) {
   } else {
     showSideButtons.forEach((button) => {
       button.classList.add("active");
+      button.setAttribute("aria-expanded", "true");
     });
     sidebar.classList.add("active");
     scrollbarArea.classList.add("active");
@@ -122,8 +124,8 @@ export function initSidebarController(handlerTarget: unknown) {
 
   const mobileToggleHandler =
     ui.createHandlerFn(handlerTarget, "handleSidebarToggle") ??
-    (() => {
-      handleSidebarToggle();
+    ((ev?: Event) => {
+      handleSidebarToggle(ev);
     });
 
   const desktopToggleHandler =
@@ -134,6 +136,13 @@ export function initSidebarController(handlerTarget: unknown) {
 
   sidebarToggles.forEach((toggle) => {
     toggle.addEventListener("click", mobileToggleHandler);
+    toggle.addEventListener("keydown", (ev) => {
+      const keyEv = ev as KeyboardEvent;
+      if (keyEv.key === "Enter" || keyEv.key === " ") {
+        keyEv.preventDefault();
+        mobileToggleHandler(keyEv);
+      }
+    });
   });
   if (darkMask) {
     darkMask.addEventListener("click", mobileToggleHandler);

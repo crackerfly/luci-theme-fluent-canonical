@@ -1,80 +1,71 @@
 #!/bin/sh
 
-. /lib/functions.sh
 . /usr/share/libubox/jshn.sh
 
 readonly bg_path="/www/luci-static/fluent/background"
 readonly tmp_path="/tmp/fluent_background.tmp"
 
 case "$1" in
-"list")
-	json_init
-	json_add_object "avail"
-	json_close_object
-	json_add_object "remove"
-		json_add_string "filename" "filename"
-	json_close_object
-	json_add_object "rename"
-		json_add_string "newname" "filename"
-	json_close_object
-	json_add_object "set_mode"
-		json_add_string "mode" "mode"
-	json_close_object
-	json_dump
-	json_cleanup
-	;;
-"call")
-	case "$2" in
-	"avail")
+	list)
 		json_init
-		json_add_int "avail" "$(df | grep -E '/$' | awk '{print $4}')"
+		json_add_object avail
+		json_close_object
+		for pair in remove:filename rename:newname set_mode:mode; do
+			json_add_object "${pair%:*}"
+			json_add_string "${pair#*:}" ""
+			json_close_object
+		done
 		json_dump
-		json_cleanup
 		;;
-	"remove")
-		read -r input
-		json_load "$input"
-		json_get_var filename "filename"
-		json_cleanup
-		if dirname "$filename" | grep -q ".."; then
-			echo '{ "result": 255 }'
-			exit 255
-		fi
-		rm -f "$bg_path/$filename"
-		echo '{ "result": 0 }'
-		;;
-	"rename")
-		read -r input
-		json_load "$input"
-		json_get_var newname "newname"
-		json_cleanup
-		if dirname "$newname" | grep -q ".."; then
-			echo '{ "result": 255 }'
-			exit 255
-		fi
-		mkdir -p "$bg_path"
-		if mv "$tmp_path" "$bg_path/$newname" 2>/dev/null; then
-			chmod 0644 "$bg_path/$newname"
-			echo '{ "result": 0 }'
-		else
-			echo '{ "result": 1 }'
-		fi
-		;;
-	"set_mode")
-		read -r input
-		json_load "$input"
-		json_get_var mode "mode"
-		json_cleanup
-		case "$mode" in
-			light|dark|auto) ;;
-			*) echo '{ "result": 255 }'; exit 255 ;;
+	call)
+		case "$2" in
+			avail)
+				avail_kb=$(df -Pk /www 2>/dev/null | awk 'NR==2 {print $4}')
+				json_init
+				json_add_int avail "${avail_kb:-0}"
+				json_dump
+				;;
+			remove|rename)
+				read -r input
+				json_load "$input"
+				if [ "$2" = remove ]; then
+					json_get_var name filename
+				else
+					json_get_var name newname
+				fi
+				case "$name" in
+					''|.|..|*/*) echo '{"result":255}'; exit 0 ;;
+				esac
+				if [ "$2" = remove ]; then
+					if [ -L "$bg_path/$name" ]; then
+						echo '{"result":255}'
+						exit 0
+					fi
+					rm -f "$bg_path/$name"
+					result=$?
+				else
+					if [ ! -f "$tmp_path" ] || [ -L "$tmp_path" ] || [ -L "$bg_path/$name" ]; then
+						rm -f "$tmp_path"
+						echo '{"result":255}'
+						exit 0
+					fi
+					mkdir -p "$bg_path"
+					mv -f "$tmp_path" "$bg_path/$name" && chmod 0644 "$bg_path/$name"
+					result=$?
+				fi
+				printf '{"result":%s}\n' "$result"
+				;;
+			set_mode)
+				read -r input
+				json_load "$input"
+				json_get_var mode mode
+				case "$mode" in
+					light|dark|auto) ;;
+					*) echo '{"result":255}'; exit 0 ;;
+				esac
+				uci -q set fluent.@global[0].mode="$mode" && uci -q commit fluent
+				printf '{"result":%s}\n' "$?"
+				;;
 		esac
-		if uci -q set fluent.@global[0].mode="$mode" && uci -q commit fluent; then
-			echo '{ "result": 0 }'
-		else
-			echo '{ "result": 1 }'
-		fi
 		;;
-	esac
-	;;
 esac

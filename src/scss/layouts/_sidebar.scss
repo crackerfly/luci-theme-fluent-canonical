@@ -5,6 +5,17 @@
 @use "sass:map";
 @use "sass:list";
 
+@keyframes fluent-rail-popover-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 $sidebar-icons: (
   "Dashboard": (
     "reg": "__icon__(fluent:home-20-regular)",
@@ -106,6 +117,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
   top: var(--fluent-header-height, 48px);
   inset-inline-start: 0;
   width: var(--fluent-sidebar-width, 260px);
+  height: calc(100vh - var(--fluent-header-height, 48px));
   height: calc(100dvh - var(--fluent-header-height, 48px));
   background: var(--fluent-sidebar-bg);
   border-inline-end: 1px solid var(--fluent-border);
@@ -114,7 +126,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
   overflow-x: hidden;
   transition:
     width var(--fluent-duration-normal) var(--fluent-easing-standard),
-    transform var(--fluent-duration-normal) var(--fluent-easing-standard);
+    transform var(--fluent-duration-slow) var(--fluent-easing-sheet);
 
   @include custom-scrollbar;
 
@@ -128,6 +140,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
 
 .main-right {
   margin-inline-start: var(--fluent-sidebar-width, 260px);
+  height: 100vh;
   height: 100dvh;
   padding-top: var(--fluent-header-height, 48px);
   display: flex;
@@ -151,7 +164,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
     transition:
       top var(--fluent-duration-normal) var(--fluent-easing-standard),
       height var(--fluent-duration-normal) var(--fluent-easing-standard),
-      opacity var(--fluent-duration-normal) var(--fluent-easing-standard);
+      opacity var(--fluent-duration-normal) var(--fluent-easing-effects);
     pointer-events: none;
     z-index: 10;
 
@@ -180,9 +193,9 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
     box-shadow: none;
     position: relative;
     transition:
-      background var(--fluent-duration-fast) var(--fluent-easing-standard),
-      color var(--fluent-duration-fast) var(--fluent-easing-standard),
-      border-color var(--fluent-duration-fast) var(--fluent-easing-standard);
+      background var(--fluent-duration-fast) var(--fluent-easing-effects),
+      color var(--fluent-duration-fast) var(--fluent-easing-effects),
+      border-color var(--fluent-duration-fast) var(--fluent-easing-effects);
 
     .menu-icon {
       position: relative;
@@ -208,7 +221,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
         mask-position: center;
         mask-image: var(--icon-data);
         -webkit-mask-image: var(--icon-data);
-        transition: opacity var(--fluent-duration-normal) var(--fluent-easing-standard);
+        transition: opacity var(--fluent-duration-normal) var(--fluent-easing-effects);
       }
 
       &::before {
@@ -274,7 +287,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
     list-style: none;
     cursor: pointer;
     user-select: none;
-    transition: background-color var(--fluent-duration-normal) var(--fluent-easing-standard);
+    transition: background-color var(--fluent-duration-normal) var(--fluent-easing-effects);
 
     a {
       display: block;
@@ -337,7 +350,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
           margin: 2px 0;
           border-radius: var(--fluent-radius-md);
           background: none;
-          transition: background var(--fluent-duration-fast) var(--fluent-easing-standard);
+          transition: background var(--fluent-duration-fast) var(--fluent-easing-effects);
 
           &::before {
             content: "";
@@ -348,7 +361,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
             width: 4px;
             background-color: transparent;
             border-radius: var(--fluent-radius-sm);
-            transition: background-color var(--fluent-duration-fast) var(--fluent-easing-standard);
+            transition: background-color var(--fluent-duration-fast) var(--fluent-easing-effects);
           }
 
           &::after {
@@ -366,8 +379,13 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
             gap: var(--fluent-space-xs);
             box-shadow: none;
             transition:
-              color var(--fluent-duration-fast) var(--fluent-easing-standard),
-              background var(--fluent-duration-fast) var(--fluent-easing-standard);
+              color var(--fluent-duration-fast) var(--fluent-easing-effects),
+              background var(--fluent-duration-fast) var(--fluent-easing-effects);
+
+            &:focus-visible {
+              outline: 2px solid var(--fluent-focus-color);
+              outline-offset: -2px;
+            }
 
             .menu-icon {
               display: inline-flex;
@@ -393,7 +411,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
                 mask-position: center;
                 mask-image: var(--icon-data);
                 -webkit-mask-image: var(--icon-data);
-                transition: opacity var(--fluent-duration-normal) var(--fluent-easing-standard);
+                transition: opacity var(--fluent-duration-normal) var(--fluent-easing-effects);
               }
 
               &::before {
@@ -413,7 +431,7 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
-              font-size: 13px;
+              font-size: var(--fluent-font-size-base);
             }
 
             $submenu-icons-spec: (
@@ -991,8 +1009,8 @@ $default-fill-encoded: str-replace(str-replace($default-fill, "<", "%3C"), ">", 
         top: 50%;
         transform: translateY(-50%) rotate(-90deg);
         transition:
-          transform var(--fluent-duration-fast) var(--fluent-easing-standard),
-          background-color var(--fluent-duration-fast) var(--fluent-easing-standard);
+          transform var(--fluent-duration-fast) var(--fluent-easing-out-strong),
+          background-color var(--fluent-duration-fast) var(--fluent-easing-effects);
         @include fluent-mask-icon-by-name("chevron-down-20-regular", 14px, var(--fluent-text-secondary));
       }
 
@@ -1087,16 +1105,22 @@ body[data-sidebar-state="collapsed"] {
         top: auto;
         inset-inline-start: calc(var(--fluent-sidebar-collapsed-width, 48px) + var(--fluent-space-sm));
         min-width: 220px;
+        max-height: calc(100vh - 16px);
         max-height: calc(100dvh - 16px);
         margin: 0;
         padding: var(--fluent-space-xs);
         overflow-y: auto;
         overflow-x: hidden;
         background: var(--fluent-bg-card, var(--fluent-sidebar-bg));
-        border: 1px solid var(--fluent-border);
+        border: 1px solid var(--fluent-dropdown-border, transparent);
         border-radius: var(--fluent-radius-lg);
         box-shadow: var(--fluent-shadow-lg);
         z-index: calc(var(--fluent-zindex-menu) + 20);
+        transform-origin: top left;
+
+        @include rtl {
+          transform-origin: top right;
+        }
 
         li a {
           padding: 0 var(--fluent-space-sm);
@@ -1104,6 +1128,7 @@ body[data-sidebar-state="collapsed"] {
 
         &.popup-open {
           display: block;
+          animation: fluent-rail-popover-in 140ms var(--fluent-easing-out-strong);
         }
       }
     }
@@ -1164,7 +1189,10 @@ body[data-sidebar-state="collapsed"] {
   .main-left {
     z-index: calc(var(--fluent-zindex-modal) + 150);
     top: 0;
+    height: 100vh;
     height: 100dvh;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    transition: transform var(--fluent-duration-slow) var(--fluent-easing-sheet);
 
     .sidebar__search-slot {
       display: block;
@@ -1181,12 +1209,13 @@ body[data-sidebar-state="collapsed"] {
     position: fixed;
     top: 0;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: var(--fluent-modal-overlay, rgba(0, 0, 0, 0.42));
+    -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
     z-index: calc(var(--fluent-zindex-modal) + 149);
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--fluent-duration-normal) var(--fluent-easing-standard);
+    transition: opacity var(--fluent-duration-slow) var(--fluent-easing-sheet);
 
     &.active {
       opacity: 1;

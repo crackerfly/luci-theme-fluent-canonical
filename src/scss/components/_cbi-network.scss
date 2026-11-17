@@ -1,23 +1,22 @@
 // ============================================================
 // CBI NETWORK - LuCI Network Status Components
-// FluentUI 2 badges, zone indicators, interface cards, log output
 // ============================================================
 @use "../mixins" as *;
-$indicator-inline-offset: 10px;
+
 .ifacebadge {
   display: inline-flex;
   align-items: center;
   gap: var(--fluent-space-xs);
   min-height: calc(var(--fluent-input-height) - var(--fluent-space-sm));
   max-width: 100%;
-  padding: var(--fluent-space-xxs) var(--fluent-space-sm);
-  border: 1px solid var(--fluent-border);
+  padding: 2px var(--fluent-space-sm);
+  border: 0;
   border-radius: var(--fluent-radius-sm);
   background: var(--fluent-primary-lightest);
   color: var(--fluent-text);
   font-size: var(--fluent-font-size-sm);
-  font-weight: var(--fluent-font-weight-semibold);
-  line-height: var(--fluent-line-height-tight);
+  font-weight: var(--fluent-font-weight-regular);
+  line-height: var(--fluent-line-height-normal);
   box-sizing: border-box;
   vertical-align: middle;
 
@@ -82,7 +81,6 @@ td > .ifacebadge,
 
 .zonebadge .ifacebadge {
   background: var(--fluent-bg-page);
-  border-color: var(--fluent-table-border);
 }
 
 .zonebadge > input[type="text"] {
@@ -104,8 +102,7 @@ td > .ifacebadge,
 }
 
 .zonebadge-empty {
-  border-style: dashed;
-  border-inline-start-color: var(--fluent-warning);
+  border: 1px dashed var(--fluent-warning);
   background: var(--fluent-bg-page);
   color: var(--fluent-text-secondary);
 }
@@ -124,7 +121,7 @@ td > .ifacebadge,
   align-items: center;
   gap: var(--fluent-space-xs);
   min-height: calc(var(--fluent-input-height) - var(--fluent-space-sm));
-  padding: var(--fluent-space-xxs) var(--fluent-space-sm);
+  padding: 2px var(--fluent-space-sm);
   border: 1px solid var(--fluent-border);
   border-radius: var(--fluent-radius-sm);
   background: var(--fluent-bg-page);
@@ -140,14 +137,15 @@ td > .ifacebadge,
   border-radius: var(--fluent-radius-lg);
   background: var(--fluent-black);
   color: var(--fluent-white);
-  font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-family: var(--fluent-font-mono);
   font-size: var(--fluent-font-size-sm);
   line-height: var(--fluent-line-height-relaxed);
   box-sizing: border-box;
 }
 
 #syslog:focus {
-  border-color: var(--fluent-border-active);
+  border-color: var(--fluent-field-focus-border);
+  box-shadow: 0 0 0 4px var(--fluent-field-focus-ring);
   outline: none;
 }
 
@@ -160,7 +158,7 @@ td > .ifacebadge,
   border-radius: var(--fluent-radius-lg);
   background: var(--fluent-black);
   color: var(--fluent-white);
-  font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-family: var(--fluent-font-mono);
   font-size: var(--fluent-font-size-sm);
   line-height: var(--fluent-line-height-relaxed);
   white-space: pre-wrap;

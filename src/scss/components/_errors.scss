@@ -55,13 +55,13 @@ $fluent-error-inputs: (
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--fluent-error);
+  color: var(--fluent-error-text);
   font-family: var(--fluent-font-family);
   font-size: var(--fluent-font-size-sm);
   font-weight: var(--fluent-font-weight-regular);
   line-height: 16px;
   margin-top: 4px;
-  animation: fluent-error-fade-in 0.15s var(--fluent-easing-standard) forwards;
+  animation: fluent-error-fade-in 150ms var(--fluent-easing-out-strong) forwards;
 
   svg {
     flex-shrink: 0;
@@ -79,7 +79,7 @@ $fluent-error-inputs: (
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
@@ -102,7 +102,7 @@ input[data-tooltip-style="error"],
   border-radius: var(--fluent-radius-md);
   padding: var(--fluent-space-md);
   margin-bottom: var(--fluent-space-md);
-  color: var(--fluent-error);
+  color: var(--fluent-error-text);
   font-size: var(--fluent-font-size-base);
 
   h4 {

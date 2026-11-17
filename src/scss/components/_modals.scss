@@ -1,6 +1,5 @@
 // ============================================================
 // MODALS - FluentUI 2 Modal Dialog Styles
-// Radius: 8px, Overlay: rgba(0,0,0,0.4)
 // ============================================================
 @use "../mixins" as *;
 @use "../icons" as *;
@@ -30,13 +29,15 @@
   background: var(--fluent-modal-bg);
   border-radius: var(--fluent-modal-radius);
   box-shadow: var(--fluent-shadow-xl);
-  padding: var(--fluent-modal-padding); // Restore standard padding
+  padding: var(--fluent-modal-padding);
   width: 90%;
   min-width: 280px;
   max-width: 800px;
+  max-height: 85vh;
   max-height: 85dvh;
-  overflow: hidden; // Prevent scrolling on the modal container itself
+  overflow: hidden;
   position: relative;
+  transform-origin: center;
   @include slide-in-up;
 
   // Simple dialogs / alert dialogs should be narrower
@@ -108,8 +109,8 @@
     padding-bottom: var(--fluent-space-xs);
     flex: 1 1 auto;
     overflow-y: auto;
-    overflow-y: overlay; // Overlay scrollbar: doesn't reserve gutter space when content fits
-    min-height: 20px; // Essential for nested flexbox scrolling
+    overflow-y: overlay;
+    min-height: 20px;
     @include custom-scrollbar;
   }
 
@@ -129,6 +130,7 @@
       box-shadow: none;
     }
   }
+
   .modal-body {
     margin-bottom: var(--fluent-space-lg);
     font-size: var(--fluent-font-size-base);
@@ -170,7 +172,7 @@
       // align-items: center;
       margin-top: var(--fluent-space-sm);
       margin-bottom: var(--fluent-space-sm);
-      overflow: visible !important; // Prevent clipping of the spinner icon due to modal's overflow-y: auto
+      overflow: visible !important;
     }
   }
 
@@ -179,7 +181,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: var(--fluent-space-xs);
+    gap: var(--fluent-space-sm);
   }
 }
 
@@ -201,7 +203,7 @@
       min-width: 96px;
     }
     .cbi-button + .cbi-button {
-      margin-inline-start: var(--fluent-space-sm);
+      margin-inline-start: 0;
     }
   }
   > .cbi-section {
@@ -217,6 +219,7 @@
 body.modal-overlay-active {
   overflow: hidden;
   height: 100vh;
+  height: 100dvh;
 
   #modal_overlay {
     display: flex;
@@ -327,19 +330,20 @@ body.modal-overlay-active {
   flex-direction: column !important;
   gap: var(--fluent-space-sm) !important;
   width: min(90%, 680px) !important;
+  max-height: 50vh !important;
   max-height: 50dvh !important;
   overflow-y: auto !important;
   margin: 0 auto !important;
   pointer-events: auto !important;
   padding: 2px !important;
-  order: 1 !important; // Position on top visually
+  order: 1 !important;
   @include custom-scrollbar;
   @include slide-in-up;
 }
 
 // Style the saving status toast to render below the changes preview
 .modal.alert-message.notice.spinning {
-  order: 2 !important; // Position below visually
+  order: 2 !important;
 }
 
 // Individual config file card
@@ -363,8 +367,8 @@ body.modal-overlay-active {
   font-family: var(--fluent-font-family) !important;
   font-size: var(--fluent-font-size-sm) !important;
   font-weight: var(--fluent-font-weight-semibold) !important;
-  color: var(--fluent-brand-80) !important;
-  letter-spacing: 0.5px !important;
+  color: var(--fluent-accent-text) !important;
+  letter-spacing: 0.4px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
@@ -385,20 +389,20 @@ body.modal-overlay-active {
   cursor: pointer !important;
   pointer-events: auto !important;
   transition:
-    background var(--fluent-duration-fast) var(--fluent-easing-standard),
-    color var(--fluent-duration-fast) var(--fluent-easing-standard) !important;
+    background var(--fluent-duration-fast) var(--fluent-easing-effects),
+    color var(--fluent-duration-fast) var(--fluent-easing-effects) !important;
 
   &::before {
     @include fluent-mask-icon-by-name("dismiss-20-regular", 14px, currentColor);
   }
 
   &:hover {
-    background: var(--fluent-card-border) !important;
+    background: var(--fluent-bg-hover) !important;
     color: var(--fluent-text) !important;
   }
 
   &:active {
-    background: color-mix(in srgb, var(--fluent-card-border) 80%, #000000) !important;
+    background: var(--fluent-bg-active) !important;
   }
 }
 
@@ -455,7 +459,7 @@ body.modal-overlay-active {
     flex-direction: row-reverse !important;
     flex-wrap: wrap !important;
     justify-content: flex-start !important;
-    gap: var(--fluent-space-xs) !important;
+    gap: var(--fluent-space-sm) !important;
     border-top: none !important;
   }
 }

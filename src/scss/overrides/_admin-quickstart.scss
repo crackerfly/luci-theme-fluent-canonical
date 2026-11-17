@@ -4,16 +4,15 @@
 @use "overrides-utils" as *;
 @use "../mixins" as *;
 @use "../themes/light" as *;
+
 // ── 1. Light Mode Variable Forwarding ───────────────────────
+// NOTE: Do NOT apply `.network_container canvas { filter: invert(1)... }` in
+// Light mode — that caused iStoreOS QuickStart / NetworkGuide canvas charts
+// to render dark-inverted on light surfaces (upstream Issue #10).
 body[data-page^="admin-quickstart"],
 body[data-page^="admin-network_guide"],
 body[data-page^="admin-nas-raid"],
 body[data-page^="admin-network-interfaceconfig"] {
-  .network_container {
-    canvas {
-      filter: invert(1) hue-rotate(180deg) contrast(1.25) brightness(1.1);
-    }
-  }
   #actioner {
     z-index: 9999;
 
@@ -35,16 +34,16 @@ body[data-page^="admin-network-interfaceconfig"] {
     --item-label_value-span-color: var(--fluent-text);
     --app-container_status-label_bg: var(--fluent-bg-hover);
     --item_btn-border: 1px solid var(--fluent-primary);
-    --item_btn-color: var(--fluent-primary);
+    --item_btn-color: var(--fluent-accent-text);
     --tit-color: var(--fluent-text);
     --popup-bg-color: var(--fluent-modal-bg);
     --tag-bg-color: var(--fluent-bg-hover);
     --gradient-bg-color: linear-gradient(90deg, transparent 0%, var(--fluent-card-bg) 62%, var(--fluent-card-bg) 100%);
     --breadcrumbs-tit-color: var(--fluent-text-secondary);
     --breadcrumbs-tit-color1: var(--fluent-text);
-    --border-color: var(--fluent-card-border);
+    --border-color: var(--fluent-border);
     --SystemUpdateBanner-bg-color: var(--fluent-bg-hover);
-    --SystemUpdateBanner-border-color: var(--fluent-card-border);
+    --SystemUpdateBanner-border-color: var(--fluent-border);
     --btn-border-color: var(--fluent-border);
     --card-txt-color: var(--fluent-text);
     --SystemInfo-bg-color: var(--fluent-card-bg);
@@ -53,6 +52,16 @@ body[data-page^="admin-network-interfaceconfig"] {
 
 // ── 2. Dark Mode Inversion Hack (Light Baseline -> Filter Invert) ──
 @include theme-dark {
+  body[data-page^="admin-network_guide"],
+  body[data-page^="admin-nas-raid"],
+  body[data-page^="admin-network-interfaceconfig"] {
+    .network_container {
+      canvas {
+        filter: invert(1) hue-rotate(180deg) contrast(1.25) brightness(1.1);
+      }
+    }
+  }
+
   body[data-page^="admin-network_guide"] {
     .title {
       color: var(--fluent-text) !important;
@@ -66,6 +75,7 @@ body[data-page^="admin-network-interfaceconfig"] {
       background-color: unset !important;
     }
   }
+
   body[data-page^="admin-quickstart"] {
     #actioner > form,
     > #{$override-dialog-root},
@@ -116,7 +126,7 @@ body[data-page^="admin-network-interfaceconfig"] {
       border-radius: var(--fluent-card-radius);
 
       filter: invert(1) hue-rotate(180deg);
-      transition: filter var(--fluent-duration-normal) var(--fluent-easing-standard);
+      transition: filter var(--fluent-duration-normal) var(--fluent-easing-effects);
 
       // ── 2.1 Re-invert Real Media, Avatars & Hardware Illustrations ──
       #main > div > div:nth-child(1) > div:has(> a:first-child):has(svg),
@@ -131,9 +141,9 @@ body[data-page^="admin-network-interfaceconfig"] {
       .app-back,
       .btn-pink {
         filter: invert(1) hue-rotate(180deg) !important;
-        background: var(--fluent-error) !important;
-        color: var(--fluent-text-on-primary) !important;
-        border-color: var(--fluent-error) !important;
+        background: var(--fluent-delete-bg) !important;
+        color: var(--fluent-delete-fg) !important;
+        border-color: transparent !important;
       }
       // ── 2.2 Re-invert Buttons to Restore Authentic Fluent Colors ──
       .cbi-button,
@@ -141,9 +151,9 @@ body[data-page^="admin-network-interfaceconfig"] {
       .add-button,
       .app-next {
         filter: invert(1) hue-rotate(180deg) !important;
-        background: var(--fluent-primary) !important;
+        background: var(--fluent-btn-primary-bg) !important;
         color: var(--fluent-text-on-primary) !important;
-        border-color: var(--fluent-primary) !important;
+        border-color: var(--fluent-btn-primary-bg) !important;
       }
     }
   }
