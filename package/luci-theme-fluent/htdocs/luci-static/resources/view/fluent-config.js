@@ -989,10 +989,10 @@ let login_p = new Set([
 const registerLoginTab = (e)=>{
     e.tab("login", _("Login page"), _("Customize the login page background, card opacity, and blur radius for light and dark modes."));
     {
-        let t = e.taboption("login", login_a.ListValue, "login_bg", "Background source", "Select the background image source for the login page.");
-        t.value("microsoft", "Microsoft dynamic canvas"), t.value("custom", "Custom background"), t.value("bing", "Bing daily wallpaper"), t.default = FLUENT_DEFAULTS.login_bg, omitDefaultValue(t);
+        let t = e.taboption("login", login_a.ListValue, "login_bg", _("Background source"), _("Select the background image source for the login page."));
+        t.value("microsoft", _("Medusae particle canvas")), t.value("custom", _("Custom background")), t.value("bing", _("Bing daily wallpaper")), t.default = FLUENT_DEFAULTS.login_bg, omitDefaultValue(t);
     }
-    e.taboption("login", login_k, "_bg_mgr", "Custom backgrounds", "Upload and manage custom background images for the login page.").depends("login_bg", "custom");
+    e.taboption("login", login_k, "_bg_mgr", _("Custom backgrounds"), _("Upload and manage custom background images for the login page.")).depends("login_bg", "custom");
     let t = createModeSubtabs(e, "login", "login_mode_tabs");
     {
         let e = t.taboption("light", login_a.ListValue, "transparency", _("Login card opacity"), _("Opacity of the login card in light mode. 0 is fully transparent and 1 is fully opaque."));

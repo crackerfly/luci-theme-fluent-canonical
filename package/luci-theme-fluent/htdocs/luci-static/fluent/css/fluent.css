@@ -7309,12 +7309,12 @@ cbi-dropdown ul.dropdown:not(.preview) > li[selected] input[type="checkbox"]:dis
   background-size: 12px 12px !important;
 }
 
-cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li, .cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li, .fluent-custom-select:not([multiple]) > ul.dropdown:not(.preview) > li {
+cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li, .cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li, .fluent-custom-select[open]:not([multiple]) > ul.dropdown:not(.preview) > li {
   padding-inline-start: 32px;
   position: relative !important;
 }
 
-cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li:before, .cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li:before, .fluent-custom-select:not([multiple]) > ul.dropdown:not(.preview) > li:before {
+cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li:before, .cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li:before, .fluent-custom-select[open]:not([multiple]) > ul.dropdown:not(.preview) > li:before {
   --icon-check: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+CiAgPHBhdGggZD0iTTEzLjg1NCAzLjY0NmEuNS41IDAgMCAxIDAgLjcwOGwtNyA3YS41LjUgMCAwIDEtLjcwOCAwbC0zLjUtMy41YS41LjUgMCAxIDEgLjcwOC0uNzA4TDYuNSAxMC4yOTNsNi42NDYtNi42NDdhLjUuNSAwIDAgMSAuNzA4IDB6Ii8+Cjwvc3ZnPgo=);
   content: "" !important;
   inset-inline-start: 8px !important;
@@ -7336,11 +7336,11 @@ cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li:before, .cbi-dropd
   mask-repeat: no-repeat !important;
 }
 
-cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li[selected]:before, .cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li[selected]:before, .fluent-custom-select:not([multiple]) > ul.dropdown:not(.preview) > li[selected]:before {
+cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li[selected]:before, .cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li[selected]:before, .fluent-custom-select[open]:not([multiple]) > ul.dropdown:not(.preview) > li[selected]:before {
   background-color: var(--fluent-text) !important;
 }
 
-cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li[disabled][selected]:before, cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li[unselectable][selected]:before, .cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li[disabled][selected]:before, .cbi-dropdown:not([multiple]) > ul.dropdown:not(.preview) > li[unselectable][selected]:before, .fluent-custom-select:not([multiple]) > ul.dropdown:not(.preview) > li[disabled][selected]:before, .fluent-custom-select:not([multiple]) > ul.dropdown:not(.preview) > li[unselectable][selected]:before {
+cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li[disabled][selected]:before, cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li[unselectable][selected]:before, .cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li[disabled][selected]:before, .cbi-dropdown[open]:not([multiple]) > ul.dropdown:not(.preview) > li[unselectable][selected]:before, .fluent-custom-select[open]:not([multiple]) > ul.dropdown:not(.preview) > li[disabled][selected]:before, .fluent-custom-select[open]:not([multiple]) > ul.dropdown:not(.preview) > li[unselectable][selected]:before {
   background-color: var(--fluent-text-disabled) !important;
 }
 
@@ -12708,7 +12708,8 @@ body.login-page {
 }
 
 .login-page .login-container {
-  -webkit-backdrop-filter: blur(var(--fluent-blur-radius)) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
   top: auto !important;
   width: 100% !important;
   max-width: 488px !important;
@@ -13178,7 +13179,8 @@ html[dir="rtl"] .login-page .login-container .login-form .form-login, body[data-
 }
 
 [data-theme="dark"] .login-page .login-container {
-  -webkit-backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
 }
 
 [data-theme="dark"] .login-page .login-container .login-form {
@@ -16354,4 +16356,71 @@ body[data-page="admin-dashboard"] .dashboard-bg svg .grid {
   z-index: calc(var(--fluent-zindex-toast, 1300) + 100);
   pointer-events: none;
   background: linear-gradient(90deg, transparent, var(--fluent-primary), var(--fluent-accent-text), transparent);
+}
+
+/* Hotfix: Prevent closed ComboButton (Save & Apply) ghost ::before square & scope login blur to .login-form */
+cbi-dropdown:not([open]) > ul.dropdown > li::before,
+.cbi-dropdown:not([open]) > ul.dropdown > li::before,
+.fluent-custom-select:not([open]) > ul.dropdown > li::before {
+  content: none !important;
+  display: none !important;
+  mask-image: none !important;
+  background-color: transparent !important;
+}
+
+.login-page .login-container,
+[data-theme="dark"] .login-page .login-container {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.login-page .login-container .login-form {
+  -webkit-backdrop-filter: blur(var(--fluent-blur-radius)) !important;
+  backdrop-filter: blur(var(--fluent-blur-radius)) !important;
+}
+
+[data-theme="dark"] .login-page .login-container .login-form {
+  -webkit-backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
+  backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
+}
+
+@media (max-width: 575.98px) {
+  .login-page .login-container .login-form,
+  [data-theme="dark"] .login-page .login-container .login-form {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+.login-page:has(.login-medusae > canvas:not([hidden])),
+[data-theme="dark"] .login-page:has(.login-medusae > canvas:not([hidden])) {
+  background: var(--fluent-bg-page) !important;
+}
+
+.login-page .login-medusae {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+.login-page .login-medusae[hidden],
+.login-page .login-medusae > canvas[hidden] {
+  display: none !important;
+}
+
+.login-page .login-medusae > canvas {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+}
+
+@media print {
+  .login-page .login-medusae {
+    display: none !important;
+  }
 }

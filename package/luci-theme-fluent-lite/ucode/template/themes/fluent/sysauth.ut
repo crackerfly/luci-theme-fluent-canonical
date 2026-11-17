@@ -80,8 +80,8 @@
       login_bg = cfg.get_first('fluent', 'global', 'login_bg') || login_bg;
     }
 
-    if (login_bg === 'microsoft') {
-      return ['', 'MicrosoftDynamic', ''];
+    if (login_bg === 'microsoft' || login_bg === 'medusae') {
+      return ['', 'MedusaeDynamic', ''];
     }
 
     if (login_bg === 'bing') {
@@ -124,7 +124,7 @@
 %}
 
 <!-- Login Page Start -->
-<div class="login-page">
+<div class="login-page" id="auth-view">
   {% if (backgroundType === 'Video') { %}
   <!-- Video Player Start -->
   <div class="video">
@@ -148,204 +148,343 @@
     });
   </script>
   <!-- Video Player End -->
-  {% } else if (backgroundType === 'MicrosoftDynamic') { %}
-  <!-- Microsoft-style Dynamic Canvas Background -->
-  <canvas id="login-canvas" class="main-bg" aria-hidden="true"></canvas>
+  {% } else if (backgroundType === 'MedusaeDynamic') { %}
+  <!-- BreathDearMedusae Dynamic Canvas Background -->
+  <div id="login-medusae" class="main-bg login-medusae" aria-hidden="true"><canvas id="login-medusae-canvas" class="login-medusae-canvas" data-ui-canvas="decoration" aria-hidden="true" hidden></canvas></div>
   <script type="text/javascript">//<![CDATA[
-    (function() {
-      const canvas = document.getElementById('login-canvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+/* Integrated from Touch-Moon/Lab__BreathDearMedusae.
+ * Upstream commit: c8f0648eaf1d21ad607a3b202b159a8a60a59c1e
+ * The animation math and palette are preserved. Only settings and login-page
+ * lifecycle/viewport integration differ; upstream credits are retained in vendor/.
+ */
+(function () {
+  'use strict';
+  const view = document.getElementById('auth-view');
+  const host = document.getElementById('login-medusae');
+  const canvas = document.getElementById('login-medusae-canvas');
+  if (!view || !host || !canvas) return;
+  let ctx;
+  try { ctx = canvas.getContext('2d'); } catch (_) { return; }
+  if (!ctx) return;
 
-      let w = canvas.width = window.innerWidth;
-      let h = canvas.height = window.innerHeight;
-      let rafId = 0;
+  // BEGIN UPSTREAM SETTINGS, CONSTANTS AND HELPERS
+    // ── Colors (Google brand palette) ─────────────────────────────────────────
+    let COLOR_BASE     = [0,   0,   255]
+    const COLOR_ONE    = [66,  133, 245]   // Google blue
+    const COLOR_TWO    = [235, 66,  54]    // Google red
+    const COLOR_THREE  = [250, 186, 3]     // Google yellow
 
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const respectReducedMotion = document.body.getAttribute('data-prefers-reduced-motion') !== '0';
-      const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // ── Live controls (adjustable from the control panel) ──────────────────────
+    const P = {
+      breathSpeed:    1.28,    // breath frequency
+      haloRadius:     2.40,    // jellyfish size
+      activeSize:     0.024,  // rim glow size
+      cursorFollow:   0.72,    // how strongly particles follow the cursor
+      cursorStrength: 3.0,      // cursor reach / sway
+      density:        1.20,    // particle density (re-inits the grid)
+    }
 
-      // Dynamic color options based on theme
-      const colors = isDark ? {
-        bgStart: '#0b0f18',
-        bgEnd: '#080b12',
-        ribbons: [
-          {
-            y1: 0.6, y2: 0.1, thicknessStart: 0.35, thicknessEnd: 0.3, thicknessMid: 0.5,
-            cp1x: 0.3, cp1y: 0.4, cp2x: 0.7, cp2y: 0.2, speed: 0.0004, phase: 0,
-            c1: 'rgba(16, 28, 80, 0.42)', c2: 'rgba(8, 11, 18, 0)'
-          },
-          {
-            y1: 0.75, y2: 0.2, thicknessStart: 0.25, thicknessEnd: 0.2, thicknessMid: 0.4,
-            cp1x: 0.4, cp1y: 0.55, cp2x: 0.8, cp2y: 0.35, speed: 0.0006, phase: 1.8,
-            c1: 'rgba(2, 74, 216, 0.24)', c2: 'rgba(8, 11, 18, 0)'
-          },
-          {
-            y1: 0.5, y2: 0.35, thicknessStart: 0.15, thicknessEnd: 0.15, thicknessMid: 0.3,
-            cp1x: 0.2, cp1y: 0.65, cp2x: 0.6, cp2y: 0.45, speed: 0.0005, phase: 3.5,
-            c1: 'rgba(144, 88, 252, 0.22)', c2: 'rgba(8, 11, 18, 0)'
-          },
-          {
-            y1: 0.5, y2: 0.35, thicknessStart: 0.02, thicknessEnd: 0.02, thicknessMid: 0.04,
-            cp1x: 0.2, cp1y: 0.65, cp2x: 0.6, cp2y: 0.45, speed: 0.0005, phase: 3.5,
-            c1: 'rgba(147, 133, 255, 0.20)', c2: 'rgba(0, 0, 0, 0)'
-          }
-        ]
-      } : {
-        bgStart: '#e4eefa',
-        bgEnd: '#f2fbff',
-        ribbons: [
-          {
-            y1: 0.6, y2: 0.1, thicknessStart: 0.35, thicknessEnd: 0.3, thicknessMid: 0.5,
-            cp1x: 0.3, cp1y: 0.4, cp2x: 0.7, cp2y: 0.2, speed: 0.0004, phase: 0,
-            c1: 'rgba(2, 74, 216, 0.07)', c2: 'rgba(2, 74, 216, 0)'
-          },
-          {
-            y1: 0.75, y2: 0.2, thicknessStart: 0.25, thicknessEnd: 0.2, thicknessMid: 0.4,
-            cp1x: 0.4, cp1y: 0.55, cp2x: 0.8, cp2y: 0.35, speed: 0.0006, phase: 1.8,
-            c1: 'rgba(144, 88, 252, 0.05)', c2: 'rgba(144, 88, 252, 0)'
-          },
-          {
-            y1: 0.5, y2: 0.35, thicknessStart: 0.15, thicknessEnd: 0.15, thicknessMid: 0.3,
-            cp1x: 0.2, cp1y: 0.65, cp2x: 0.6, cp2y: 0.45, speed: 0.0005, phase: 3.5,
-            c1: 'rgba(0, 153, 93, 0.05)', c2: 'rgba(0, 153, 93, 0)'
-          },
-          {
-            y1: 0.5, y2: 0.35, thicknessStart: 0.02, thicknessEnd: 0.02, thicknessMid: 0.04,
-            cp1x: 0.2, cp1y: 0.65, cp2x: 0.6, cp2y: 0.45, speed: 0.0005, phase: 3.5,
-            c1: 'rgba(255, 255, 255, 0.72)', c2: 'rgba(255, 255, 255, 0)'
-          }
-        ]
-      };
+    // ── Grid ──────────────────────────────────────────────────────────────────
+    const GRID_X_BASE = 70, GRID_Y_BASE = 38
+    let GRID_X = GRID_X_BASE, GRID_Y = GRID_Y_BASE
+    const GRID_WIDTH = 40, GRID_HEIGHT = 22
+    const JITTER = 0.25
 
-      // Random particles (stardust / micro-particles)
-      let particles = [];
-      const particleCount = isDark ? 65 : 30;
+    // ── Halo ──────────────────────────────────────────────────────────────────
+    const HALO_RADIUS_BASE   = 2.4
+    const HALO_RADIUS_AMP    = 0.5
+    const HALO_SHAPE_AMP     = 0.75
+    const HALO_RIM_WIDTH     = 1.8
+    const HALO_SCALE_X       = 1.3
+    const HALO_SCALE_Y       = 1.0
 
-      function initParticles() {
-        particles = [];
-        for (let i = 0; i < particleCount; i++) {
-          particles.push({
-            x: Math.random() * w,
-            y: Math.random() * h,
-            size: Math.random() * 1.5 + 0.4,
-            alpha: Math.random() * 0.7 + 0.1,
-            targetAlpha: Math.random() * 0.7 + 0.1,
-            dx: (Math.random() - 0.5) * 0.06,
-            dy: (Math.random() - 0.5) * 0.06,
-            flicker: Math.random() * 0.008 + 0.002
-          });
+    // ── Outer oscillation ─────────────────────────────────────────────────────
+    const OUTER_OSC_FREQ            = 2.6
+    const OUTER_OSC_AMP             = 0.76
+    const OUTER_OSC_JITTER_STRENGTH = 0.025
+    const OUTER_OSC_JITTER_SPEED    = 0.3
+    const OUTER_START = 0.4, OUTER_END = 2.2
+
+    // ── Particles ─────────────────────────────────────────────────────────────
+    const PARTICLE_BASE_SIZE   = 0.008
+    const PARTICLE_ACTIVE_SIZE = 0.022
+    const BLOB_SCALE_X = 1.0, BLOB_SCALE_Y = 0.6
+    const ROTATION_SPEED  = 0.1
+    const ROTATION_JITTER = 0.1
+    const OSC_FACTOR = 1.0
+    const CURSOR_FOLLOW_STRENGTH = 0.8
+
+    // ── Cursor ────────────────────────────────────────────────────────────────
+    const CURSOR_RADIUS   = 0.065
+    const CURSOR_STRENGTH = 3
+    const CURSOR_DRAG     = 0.015
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    function hash(x, y) {
+      return ((Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1 + 1) % 1
+    }
+
+    function noise2d(px, py) {
+      const ix = Math.floor(px), iy = Math.floor(py)
+      const fx = px - ix,        fy = py - iy
+      const sx = fx*fx*(3-2*fx), sy = fy*fy*(3-2*fy)
+      const a = hash(ix,iy), b = hash(ix+1,iy)
+      const c = hash(ix,iy+1), d = hash(ix+1,iy+1)
+      return a + (b-a)*sx + (c-a)*sy + (a-b-c+d)*sx*sy
+    }
+
+    function smoothstep(e0, e1, x) {
+      const t = Math.max(0, Math.min(1, (x-e0)/(e1-e0)))
+      return t*t*(3-2*t)
+    }
+
+    function mixColor(a, b, t) {
+      return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]
+    }
+
+  // END UPSTREAM SETTINGS, CONSTANTS AND HELPERS
+  let particles = [];
+  const mouse = { x: 0, y: 0, hovering: false };
+  const smoothMouse = { x: 0, y: 0 };
+  let time = 0, last = null, frame = 0;
+  let failed = false, printing = false, pageActive = true;
+  let inViewport = typeof IntersectionObserver !== 'function';
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => (!document.body || !document.body.getAttribute || document.body.getAttribute('data-prefers-reduced-motion') !== '0') && motion.matches;
+  const visible = () => !view.hidden && !document.hidden && inViewport && !printing && pageActive;
+
+  // BEGIN UPSTREAM PARTICLE INITIALIZATION
+    function initParticles() {
+      particles = []
+      for (let y = 0; y < GRID_Y; y++) {
+        for (let x = 0; x < GRID_X; x++) {
+          const u = x / (GRID_X - 1)
+          const v = y / (GRID_Y - 1)
+          let px = (u - 0.5) * GRID_WIDTH
+          let py = (v - 0.5) * GRID_HEIGHT
+          px += (Math.random() - 0.5) * JITTER
+          py += (Math.random() - 0.5) * JITTER
+          particles.push({ ox: px, oy: py, random: Math.random() })
         }
       }
+    }
+  // END UPSTREAM PARTICLE INITIALIZATION
 
-      function drawRibbon(time, opt) {
-        ctx.beginPath();
-        const startX1 = -w * 0.2;
-        const startY1 = h * (opt.y1 + Math.sin(time * opt.speed + opt.phase) * 0.04);
-        const cp1x = w * (opt.cp1x + Math.cos(time * opt.speed * 0.8 + opt.phase) * 0.04);
-        const cp1y = h * (opt.cp1y + Math.sin(time * opt.speed * 1.1 + opt.phase) * 0.05);
-        const cp2x = w * (opt.cp2x + Math.sin(time * opt.speed * 0.9 + opt.phase * 1.5) * 0.04);
-        const cp2y = h * (opt.cp2y + Math.cos(time * opt.speed * 1.2 + opt.phase * 1.5) * 0.04);
-        const endX1 = w * 1.2;
-        const endY1 = h * (opt.y2 + Math.cos(time * opt.speed * 0.7 + opt.phase * 2) * 0.04);
+  // BEGIN UPSTREAM DRAWING
+  function draw() {
+    const t = time;
+      const w = canvas.width, h = canvas.height
+      const sm = smoothMouse
 
-        ctx.moveTo(startX1, startY1);
-        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX1, endY1);
+      const aspect = w / h
+      const vH = 2 * 5 * Math.tan((75 / 2) * Math.PI / 180)
+      const vW = vH * aspect
 
-        const endX2 = w * 1.2;
-        const endY2 = endY1 + h * opt.thicknessEnd;
-        ctx.lineTo(endX2, endY2);
-
-        const cp3x = cp2x;
-        const cp3y = cp2y + h * opt.thicknessMid;
-        const cp4x = cp1x;
-        const cp4y = cp1y + h * opt.thicknessMid;
-        const startX2 = startX1;
-        const startY2 = startY1 + h * opt.thicknessStart;
-
-        ctx.bezierCurveTo(cp3x, cp3y, cp4x, cp4y, startX2, startY2);
-        ctx.closePath();
-
-        const grad = ctx.createLinearGradient(0, h * opt.y1, w, h * opt.y2);
-        grad.addColorStop(0, opt.c1);
-        grad.addColorStop(1, opt.c2);
-
-        ctx.fillStyle = grad;
-        ctx.fill();
+      if (mouse.hovering) {
+        const baseX = (mouse.x * vW) / 2
+        const baseY = (mouse.y * vH) / 2
+        const jitterRadius = Math.min(vW, vH) * CURSOR_RADIUS
+        const jX = (Math.sin(t*0.35) + Math.sin(t*0.77+1.2)) * 0.5
+        const jY = (Math.cos(t*0.31) + Math.sin(t*0.63+2.4)) * 0.5
+        const targetX = baseX + jX * jitterRadius * P.cursorStrength
+        const targetY = baseY + jY * jitterRadius * P.cursorStrength
+        sm.x += (targetX - sm.x) * CURSOR_DRAG
+        sm.y += (targetY - sm.y) * CURSOR_DRAG
       }
 
-      function renderFrame(time, advanceParticles) {
-        const bgGrad = ctx.createLinearGradient(0, 0, w, h);
-        bgGrad.addColorStop(0, colors.bgStart);
-        bgGrad.addColorStop(1, colors.bgEnd);
-        ctx.fillStyle = bgGrad;
-        ctx.fillRect(0, 0, w, h);
+      const scaleX = w / vW, scaleY = h / vH
+      const cx = w * 0.5, cy = h * 0.5
 
-        colors.ribbons.forEach(opt => {
-          drawRibbon(time, opt);
-        });
+      const breathCycle = Math.sin(t * P.breathSpeed)
+      const baseRadius  = P.haloRadius + breathCycle * HALO_RADIUS_AMP
 
-        particles.forEach(p => {
-          if (advanceParticles) {
-            p.x += p.dx;
-            p.y += p.dy;
-            if (p.x < 0) p.x = w;
-            if (p.x > w) p.x = 0;
-            if (p.y < 0) p.y = h;
-            if (p.y > h) p.y = 0;
+      ctx.clearRect(0, 0, w, h)
 
-            if (Math.abs(p.alpha - p.targetAlpha) < 0.02) {
-              p.targetAlpha = Math.random() * (isDark ? 0.7 : 0.4) + 0.1;
-            }
-            p.alpha += (p.targetAlpha - p.alpha) * p.flicker;
-          }
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i]
 
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fillStyle = isDark ? `rgba(238, 241, 255, ${p.alpha})` : `rgba(2, 74, 216, ${p.alpha * 0.6})`;
-          ctx.fill();
-        });
+        let posX = p.ox, posY = p.oy
+        const driftSpeed = t * 0.15
+        const dx = Math.sin(driftSpeed + posY*0.5) + Math.sin(driftSpeed*0.5 + posY*2.0)
+        const dy = Math.cos(driftSpeed + posX*0.5) + Math.cos(driftSpeed*0.5 + posX*2.0)
+        posX += dx * 0.25
+        posY += dy * 0.25
+
+        const relX = posX - sm.x, relY = posY - sm.y
+        const scaledRelX = relX / Math.max(HALO_SCALE_X, 0.0001)
+        const scaledRelY = relY / Math.max(HALO_SCALE_Y, 0.0001)
+        const distFromMouse = Math.sqrt(scaledRelX*scaledRelX + scaledRelY*scaledRelY)
+        const dirLen = Math.max(Math.sqrt(relX*relX + relY*relY), 0.0001)
+        const dirX = relX / dirLen, dirY = relY / dirLen
+
+        const shapeFactor = noise2d(dirX*2.0, dirY*2.0 + t*0.1)
+        const currentRadius = baseRadius + shapeFactor * HALO_SHAPE_AMP
+        const rimInfluence = smoothstep(HALO_RIM_WIDTH, 0.0, Math.abs(distFromMouse - currentRadius))
+
+        const pushAmt = (breathCycle*0.5 + 0.5) * 0.5
+        posX += dirX * pushAmt * rimInfluence
+        posY += dirY * pushAmt * rimInfluence
+
+        const outerInfluence = smoothstep(baseRadius+OUTER_START, baseRadius+OUTER_END, distFromMouse)
+        const outerOsc = Math.sin(t*OUTER_OSC_FREQ + posX*0.6 + posY*0.6)
+        const outerJitterX = (noise2d(p.ox*4.0 + t*OUTER_OSC_JITTER_SPEED, p.oy*4.0)*2-1) * OUTER_OSC_JITTER_STRENGTH
+        const outerJitterY = (noise2d(p.oy*4.0 + t*OUTER_OSC_JITTER_SPEED, p.ox*4.0)*2-1) * OUTER_OSC_JITTER_STRENGTH
+        posX += (dirX*outerOsc*OUTER_OSC_AMP + outerJitterX) * outerInfluence
+        posY += (dirY*outerOsc*OUTER_OSC_AMP + outerJitterY) * outerInfluence
+
+        const bSize = PARTICLE_BASE_SIZE + Math.sin(t + posX) * 0.003
+        const currentScale = bSize + rimInfluence * P.activeSize
+        const stretch = rimInfluence * 0.02
+        const drawW = (currentScale + stretch) * BLOB_SCALE_X * scaleX
+        const drawH = currentScale * BLOB_SCALE_Y * scaleY
+
+        if (drawW < 0.3 && drawH < 0.3) continue
+
+        const oscPhase  = p.random * Math.PI * 2
+        const osc       = 0.5 + 0.5 * Math.sin(t*(0.25 + OSC_FACTOR*0.35) + oscPhase)
+        const speedScale  = 0.55 + 0.8 * osc
+        const jitterScale = 0.7  + 0.75 * osc
+
+        const driftLen = Math.max(Math.sqrt(dx*dx + dy*dy), 0.0001)
+        const driftX = dx/driftLen, driftY = dy/driftLen
+        const blendX = driftX + (dirX - driftX) * P.cursorFollow
+        const blendY = driftY + (dirY - driftY) * P.cursorFollow
+        const blendLen = Math.max(Math.sqrt(blendX*blendX + blendY*blendY), 0.0001)
+        const bDirX = blendX/blendLen, bDirY = blendY/blendLen
+
+        const rotJitter = Math.sin(t*ROTATION_SPEED*speedScale + posX*0.35 + posY*0.35) * (ROTATION_JITTER*jitterScale)
+        const perpX = -bDirY, perpY = bDirX
+        const jDirX = bDirX + perpX*rotJitter
+        const jDirY = bDirY + perpY*rotJitter
+        const jDirLen = Math.max(Math.sqrt(jDirX*jDirX + jDirY*jDirY), 0.0001)
+        const angle = Math.atan2(jDirY/jDirLen, jDirX/jDirLen)
+
+        const p1 = Math.sin(posX*0.8 + t*1.2)
+        const p2 = Math.sin(posY*0.8 + t*1.2*0.8 + p1)
+        let activeColor = mixColor(COLOR_ONE, COLOR_TWO, p1*0.5+0.5)
+        activeColor = mixColor(activeColor, COLOR_THREE, p2*0.5+0.5)
+        const colorMix  = smoothstep(0.1, 0.8, rimInfluence)
+        const finalColor = mixColor(COLOR_BASE, activeColor, colorMix)
+        const finalAlpha = 0.4 + 0.55 * rimInfluence
+
+        const screenX = cx + posX * scaleX
+        const screenY = cy - posY * scaleY
+
+        ctx.save()
+        ctx.translate(screenX, screenY)
+        ctx.rotate(-angle)
+        ctx.globalAlpha = finalAlpha
+
+        const r = Math.round(finalColor[0])
+        const g = Math.round(finalColor[1])
+        const b = Math.round(finalColor[2])
+        const grad = ctx.createRadialGradient(0,0,0, 0,0, Math.max(drawW, drawH))
+        grad.addColorStop(0,   `rgba(${r},${g},${b},1)`)
+        grad.addColorStop(0.7, `rgba(${r},${g},${b},0.8)`)
+        grad.addColorStop(1,   `rgba(${r},${g},${b},0)`)
+        ctx.fillStyle = grad
+
+        ctx.beginPath()
+        ctx.ellipse(0, 0, drawW, drawH, 0, 0, Math.PI*2)
+        ctx.fill()
+        ctx.restore()
       }
 
-      function shouldAnimate() {
-        return !document.hidden && !(respectReducedMotion && reducedMotionMedia.matches);
-      }
+      ctx.globalAlpha = 1
+  }
 
-      function animate(time) {
-        if (!shouldAnimate()) {
-          rafId = 0;
-          return;
-        }
-        renderFrame(time, true);
-        rafId = requestAnimationFrame(animate);
-      }
+  // END UPSTREAM DRAWING
 
-      function syncAnimationLoop() {
-        if (shouldAnimate()) {
-          if (!rafId) rafId = requestAnimationFrame(animate);
-        } else {
-          if (rafId) {
-            cancelAnimationFrame(rafId);
-            rafId = 0;
-          }
-          renderFrame(0, false);
-        }
-      }
+  function stop() {
+    if (frame) cancelAnimationFrame(frame);
+    frame = 0; last = null;
+  }
+  function fail() {
+    failed = true; canvas.hidden = true; stop();
+  }
+  function resize() {
+    const box = host.getBoundingClientRect();
+    if (box.width <= 0 || box.height <= 0) return false;
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.max(1, Math.round(box.width * dpr));
+    const h = Math.max(1, Math.round(box.height * dpr));
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w; canvas.height = h;
+    }
+    return true;
+  }
+  function syncTheme() {
+    const theme = document.documentElement.dataset
+      ? document.documentElement.dataset.theme
+      : document.documentElement.getAttribute('data-theme');
+    const isLight = theme === 'light';
+    COLOR_BASE[0] = isLight ? 200 : 0;
+    COLOR_BASE[1] = isLight ? 200 : 0;
+    COLOR_BASE[2] = isLight ? 220 : 255;
+  }
+  function paint() {
+    try { draw(); canvas.hidden = false; return true; }
+    catch (_) { fail(); return false; }
+  }
+  function tick(now) {
+    frame = 0;
+    if (!visible() || failed || reduced()) { last = null; return; }
+    // Keep the upstream 0.05s timestep ceiling and per-frame cursor drag.
+    const dt = last === null ? 0 : Math.min(Math.max(0, (now - last) / 1000), 0.05);
+    last = now; time += dt;
+    if (paint()) frame = requestAnimationFrame(tick);
+  }
+  function sync() {
+    host.hidden = view.hidden;
+    stop();
+    if (failed || !visible()) { mouse.hovering = false; return; }
+    try {
+      if (!resize()) return;
+      syncTheme();
+      if (reduced()) mouse.hovering = false;
+      if (paint() && !reduced()) frame = requestAnimationFrame(tick);
+    } catch (_) { fail(); }
+  }
+  document.addEventListener('pointermove', event => {
+    if (!visible() || reduced()) return;
+    const box = host.getBoundingClientRect();
+    if (box.width <= 0 || box.height <= 0) return;
+    mouse.x = ((event.clientX - box.left) / box.width) * 2 - 1;
+    mouse.y = -(((event.clientY - box.top) / box.height) * 2 - 1);
+    mouse.hovering = true;
+  }, { passive: true });
+  const release = () => { mouse.hovering = false; };
+  document.addEventListener('pointerleave', release, { passive: true });
+  document.addEventListener('pointercancel', release, { passive: true });
+  window.addEventListener('blur', release);
+  const observer = new MutationObserver(sync);
+  observer.observe(view, { attributes: true, attributeFilter: ['hidden'] });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (document.body) observer.observe(document.body, { attributes: true, attributeFilter: ['data-prefers-reduced-motion'] });
+  if (typeof IntersectionObserver === 'function') {
+    const intersection = new IntersectionObserver(entries => {
+      inViewport = entries.some(entry => entry.isIntersecting); sync();
+    });
+    intersection.observe(view);
+  }
+  if (typeof ResizeObserver === 'function') {
+    const resizeObserver = new ResizeObserver(sync); resizeObserver.observe(host);
+  }
+  if (motion.addEventListener) motion.addEventListener('change', sync);
+  else motion.addListener(sync);
+  window.addEventListener('resize', sync);
+  document.addEventListener('visibilitychange', sync);
+  window.addEventListener('pagehide', () => { pageActive = false; release(); stop(); });
+  window.addEventListener('pageshow', () => { pageActive = true; sync(); });
+  window.addEventListener('beforeprint', () => { printing = true; stop(); });
+  window.addEventListener('afterprint', () => { printing = false; sync(); });
 
-      initParticles();
-      syncAnimationLoop();
-
-      window.addEventListener('resize', () => {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-        initParticles();
-        if (!shouldAnimate()) renderFrame(0, false);
-      });
-
-      document.addEventListener('visibilitychange', syncAnimationLoop);
-      reducedMotionMedia.addEventListener('change', syncAnimationLoop);
-    })();
+  // Upstream density control did this before rebuilding its grid.
+  GRID_X = Math.max(2, Math.round(GRID_X_BASE * P.density));
+  GRID_Y = Math.max(2, Math.round(GRID_Y_BASE * P.density));
+  initParticles();
+  sync();
+})();
   //]]></script>
   {% } else if (bgUrl) { %}
   <!-- Image Background Start -->

@@ -117,7 +117,7 @@ luci-theme-fluent/
 - **FS**: `import { access, glob } from 'fs'`
 - **System info**: `ubus.call('system', 'board')`
 - **Escape**: `entityencode()` or `pcdata()`
-- **Login page** (`sysauth.ut`): 2-step form (username → password), Microsoft dynamic canvas / Bing/Unsplash / custom backgrounds, video support, HTTPS redirect check
+- **Login page** (`sysauth.ut`): 2-step form (username → password), Medusae particle canvas (BreathDearMedusae) / Bing / custom backgrounds, video support, HTTPS redirect check
 - **Header** (`header.ut`): Injects 40+ CSS vars from UCI, dark mode detection + localStorage persistence, loading bar, view transitions API, theme toggle button
 
 ## UCI Configuration (`/etc/config/fluent`)

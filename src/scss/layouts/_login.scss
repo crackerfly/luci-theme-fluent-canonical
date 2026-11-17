@@ -22,7 +22,7 @@ body.login-page {
 
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
   }
 }
 // ============================================================
@@ -44,11 +44,15 @@ body.login-page {
   overflow: hidden !important;
   box-sizing: border-box !important;
 
-  // Microsoft-style radial gradient background
+  // Fallback radial gradient background; switches to flat --fluent-bg-page canvas when Medusae is active
   background: radial-gradient(circle at 50% 50%, var(--fluent-bg-card) 0%, var(--fluent-bg-page) 100%) !important;
 
+  &:has(.login-medusae > canvas:not([hidden])) {
+    background: var(--fluent-bg-page) !important;
+  }
+
   // ============================================================
-  // BACKGROUND LAYERS (Static Image / Video)
+  // BACKGROUND LAYERS (Medusae Particle Canvas / Static Image / Video)
   // ============================================================
   .main-bg {
     position: absolute !important;
@@ -59,6 +63,31 @@ body.login-page {
     background-position: center !important;
     background-size: cover !important;
     z-index: 1 !important;
+  }
+
+  .login-medusae {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+
+    &[hidden] {
+      display: none !important;
+    }
+
+    > canvas {
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+      pointer-events: none !important;
+
+      &[hidden] {
+        display: none !important;
+      }
+    }
   }
 
   .video {
@@ -119,8 +148,8 @@ body.login-page {
 
   // LOGIN CONTAINER - Centers the login box within the remaining viewport
   .login-container {
-    -webkit-backdrop-filter: blur(var(--fluent-blur-radius)) !important;
-    backdrop-filter: blur(var(--fluent-blur-radius)) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
     position: relative !important;
     top: auto !important;
     inset-inline-start: auto !important;
@@ -152,8 +181,10 @@ body.login-page {
       box-sizing: border-box !important;
       position: relative !important;
 
-      // Microsoft sign-in card token alignment
+      // Microsoft sign-in card token alignment (blur scoped to card, never outer 488px column)
       background: color-mix(in srgb, var(--fluent-bg-card) calc(var(--fluent-blur-opacity) * 100%), transparent) !important;
+      -webkit-backdrop-filter: blur(var(--fluent-blur-radius)) !important;
+      backdrop-filter: blur(var(--fluent-blur-radius)) !important;
       // Elevated surface over the wallpaper: depth comes from the shadow token
       // alone, so no persistent rim is stacked under it.
       border: 1px solid transparent !important;
@@ -663,12 +694,18 @@ body.login-page {
 @mixin login-page-dark-styles {
   background: radial-gradient(circle at 50% 50%, var(--fluent-bg) 0%, var(--fluent-bg-page) 100%) !important;
 
+  &:has(.login-medusae > canvas:not([hidden])) {
+    background: var(--fluent-bg-page) !important;
+  }
+
   .login-container {
-    -webkit-backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
-    backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
 
     .login-form {
       background: color-mix(in srgb, var(--fluent-bg-card) calc(var(--fluent-blur-opacity-dark) * 100%), transparent) !important;
+      -webkit-backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
+      backdrop-filter: blur(var(--fluent-blur-radius-dark)) !important;
       // Elevated surface: shadow only, no persistent rim stacked under it.
       border-color: transparent !important;
       box-shadow: var(--fluent-shadow-lg) !important;
@@ -741,6 +778,8 @@ body.login-page {
         border-radius: 0 !important;
         box-shadow: none !important;
         background: var(--fluent-bg-card) !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
 
         .ms-card-header {
           margin-bottom: 24px !important;
@@ -778,5 +817,11 @@ body.login-page {
         width: 100% !important;
       }
     }
+  }
+}
+
+@media print {
+  .login-page .login-medusae {
+    display: none !important;
   }
 }

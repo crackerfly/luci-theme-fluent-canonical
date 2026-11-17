@@ -144,6 +144,8 @@ cbi-dropdown,
       padding-inline-start: 0 !important;
 
       &::before {
+        content: none !important;
+        display: none !important;
         mask-image: none !important;
         background-color: transparent !important;
       }
@@ -158,7 +160,8 @@ cbi-dropdown,
       // Separate multiple selected items in the preview list with a comma and space
       &[display] ~ li[selected] {
         &::before {
-          content: ",\00a0";
+          content: ",\00a0" !important;
+          display: inline !important;
           margin-inline-end: 2px;
           color: var(--fluent-text-secondary);
         }
@@ -829,8 +832,8 @@ cbi-dropdown,
     }
   }
 
-  // Single-select dropdown option checkmark
-  &:not([multiple]) > ul.dropdown:not(.preview) > li:not(.fluent-select-group) {
+  // Single-select dropdown option checkmark (only when listbox is [open], never on closed ComboButton face)
+  &[open]:not([multiple]) > ul.dropdown:not(.preview) > li:not(.fluent-select-group) {
     position: relative !important;
     padding-inline-start: 32px;
 

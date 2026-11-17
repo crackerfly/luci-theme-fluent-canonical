@@ -22,7 +22,7 @@
     "i18n:extract": "pnpm run i18n:extract-ucode -- --generate && luci-types i18n --no-translate",
     "i18n:build": "pnpm run i18n:extract-ucode -- --generate && dotenvx run -- luci-types i18n",
     "i18n:dashboard": "luci-types i18n --config luci-dashboard-i18n.config.ts --no-translate",
-    "test": "pnpm run test:menu-layout && pnpm run test:apply-change-preview && pnpm run test:dashboard && pnpm run test:update",
+    "test": "pnpm run test:menu-layout && pnpm run test:apply-change-preview && pnpm run test:dashboard && pnpm run test:update && pnpm run test:medusae",
     "test:menu-layout": "tsx --test src/web/resources/menu-layout.test.ts",
     "test:apply-change-preview": "tsx --test src/web/resources/utils/apply-change-preview.test.ts",
     "test:dashboard": "tsx --test src/web/fluentdashboard/model.test.ts",
@@ -37,7 +37,8 @@
     "screenshot:showcase:zh-Hans": "tsx src/script/screenshot/generate-showcase.ts -- --lang=zh-Hans",
     "typecheck": "cd src && pnpm exec tsc -p tsconfig.json --noEmit",
     "prepare": "husky",
-    "test:update": "tsx --test src/web/resources/utils/update.test.ts"
+    "test:update": "tsx --test src/web/resources/utils/update.test.ts",
+    "test:medusae": "tsx --test src/web/resources/login-medusae.test.ts"
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx,jsx,json}": [

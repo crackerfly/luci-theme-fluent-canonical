@@ -99,15 +99,21 @@
 	<meta name="theme-color" content="{{ bar_color }}">
 	<script type="text/javascript">
 		(function() {
-			var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-			document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#080B12' : '{{ bar_color }}');
+			var mq = window.matchMedia('(prefers-color-scheme: dark)');
+			function applyTheme(e) {
+				var isDark = e.matches;
+				document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+				document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#080B12' : '{{ bar_color }}');
+			}
+			applyTheme(mq);
+			if (mq.addEventListener) mq.addEventListener('change', applyTheme);
+			else if (mq.addListener) mq.addListener(applyTheme);
 		})();
 	</script>
 	{% } else if (mode === 'dark') { %}
 	<meta name="theme-color" content="#080B12">
 	<script type="text/javascript">document.documentElement.setAttribute('data-theme', 'dark');</script>
-	{% } else if (mode === 'light') { %}
+	{% } else { %}
 	<meta name="theme-color" content="{{ bar_color }}">
 	<script type="text/javascript">document.documentElement.setAttribute('data-theme', 'light');</script>
 	{% } %}

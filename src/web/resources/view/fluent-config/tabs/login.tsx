@@ -204,16 +204,16 @@ export const registerLoginTab = (section: LuCI.form.TypedSection): void => {
   section.tab("login", _("Login page"), _("Customize the login page background, card opacity, and blur radius for light and dark modes."));
 
   {
-    const option = section.taboption("login", form.ListValue, "login_bg", "Background source", "Select the background image source for the login page.");
-    option.value("microsoft", "Microsoft dynamic canvas");
-    option.value("custom", "Custom background");
-    option.value("bing", "Bing daily wallpaper");
+    const option = section.taboption("login", form.ListValue, "login_bg", _("Background source"), _("Select the background image source for the login page."));
+    option.value("microsoft", _("Medusae particle canvas"));
+    option.value("custom", _("Custom background"));
+    option.value("bing", _("Bing daily wallpaper"));
     option.default = FLUENT_DEFAULTS.login_bg;
     omitDefaultValue(option);
   }
 
   {
-    const option = section.taboption("login", CBIWallpaperManager, "_bg_mgr", "Custom backgrounds", "Upload and manage custom background images for the login page.");
+    const option = section.taboption("login", CBIWallpaperManager, "_bg_mgr", _("Custom backgrounds"), _("Upload and manage custom background images for the login page."));
     option.depends("login_bg", "custom");
   }
 

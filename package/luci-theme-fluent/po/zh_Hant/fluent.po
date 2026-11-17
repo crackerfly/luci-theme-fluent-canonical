@@ -748,3 +748,24 @@ msgstr "無法取得更新狀態，請重新載入並登入以確認結果。"
 
 msgid "GitHub token"
 msgstr "GitHub 權杖"
+
+msgid "Background source"
+msgstr "背景來源"
+
+msgid "Bing daily wallpaper"
+msgstr "Bing 每日桌布"
+
+msgid "Custom background"
+msgstr "自訂背景"
+
+msgid "Custom backgrounds"
+msgstr "自訂背景管理"
+
+msgid "Medusae particle canvas"
+msgstr "水母呼吸粒子動效"
+
+msgid "Select the background image source for the login page."
+msgstr "選擇登入頁的背景來源。"
+
+msgid "Upload and manage custom background images for the login page."
+msgstr "上傳並管理登入頁的自訂背景圖片或影片。"

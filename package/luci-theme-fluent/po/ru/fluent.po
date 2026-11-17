@@ -813,3 +813,24 @@ msgstr ""
 
 msgid "GitHub token"
 msgstr ""
+
+msgid "Background source"
+msgstr ""
+
+msgid "Bing daily wallpaper"
+msgstr ""
+
+msgid "Custom background"
+msgstr ""
+
+msgid "Custom backgrounds"
+msgstr ""
+
+msgid "Medusae particle canvas"
+msgstr ""
+
+msgid "Select the background image source for the login page."
+msgstr ""
+
+msgid "Upload and manage custom background images for the login page."
+msgstr ""
