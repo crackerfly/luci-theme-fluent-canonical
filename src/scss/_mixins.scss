@@ -176,6 +176,10 @@ $breakpoint-xxl: 1400px;
   font-size: var(--fluent-font-size-base);
   font-weight: var(--fluent-font-weight-regular);
   line-height: var(--fluent-line-height-normal);
+  // Every button is a fixed 32px single-line control; allowing text to wrap
+  // inside a flex row (e.g. "Add key" next to a 100%-width input) overflows
+  // the 32px box vertically and crushes the button down to its shortest word.
+  white-space: nowrap;
   border: 0;
   border-radius: var(--fluent-radius-md);
   cursor: pointer;

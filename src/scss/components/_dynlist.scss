@@ -16,10 +16,19 @@
   position: relative;
   cursor: text;
 
-  &[name="sshkeys"] {
+  // SSH-Keys and Repo Public Keys views emit `.cbi-dynlist > .add-item[ondrop]`
+  // (often without `name="sshkeys"`). Allow added key chips to span full width
+  // while keeping the input + "Add key" toolbar compact like System -> Software.
+  &[name="sshkeys"],
+  &:has(> .add-item[ondrop]) {
     max-width: none;
+
     > .item {
       max-width: none;
+    }
+
+    > .add-item {
+      max-width: 440px;
     }
   }
 
@@ -124,20 +133,26 @@
     }
   }
 
-  // Add item input group
+  // Add item input group:
+  // - Standalone text-button rows (e.g. System -> Administration -> SSH-Keys /
+  //   Repo Public Keys `<input><button class="btn">Add key</button>`) follow
+  //   the System -> Software `.control-group` spec: 8px gap, full 4-sided
+  //   rounded input border, and a non-shrinking single-line button.
+  // - Standard CBI `ui.DynamicList` rows (`:has(> .cbi-button-add)`) merge the
+  //   trailing 32x32 `+` icon button flush against the input (`gap: 0`).
   > .add-item {
     display: flex;
     align-items: center;
     width: 100%;
     max-width: 100%;
-    gap: 0;
+    gap: var(--fluent-space-sm);
     box-sizing: border-box;
     min-width: 0;
 
     > input,
     > .cbi-dropdown {
-      flex: 1 1 auto;
-      width: 100%;
+      flex: 1 1 0%;
+      width: auto;
       min-width: 0;
       max-width: 100%;
       box-sizing: border-box;
@@ -147,23 +162,27 @@
       @include input-base;
       @include input-focus-ripple-v2;
 
-      border-start-end-radius: 0;
-      border-end-end-radius: 0;
-      border-inline-end: none;
-
-      &:focus {
-        border-inline-end: none;
-      }
+      border-radius: var(--fluent-radius-md);
 
       &.drag-over {
         border-top: 1px solid var(--fluent-primary);
       }
     }
 
+    // Prevent labeled action buttons (such as "Add key") from shrinking or wrapping onto 2 lines
+    > button,
+    > .btn,
+    > .cbi-button:not(.cbi-button-add) {
+      flex: 0 0 auto;
+      width: auto;
+      white-space: nowrap;
+    }
+
     // treat as input when present to maintain consistent appearance and behavior, especially with add button
     > .cbi-dropdown {
       height: var(--fluent-input-height);
       min-height: var(--fluent-input-height);
+      border-radius: var(--fluent-radius-md);
     }
 
     // Fixed width add button when present to prevent layout shift and ensure consistent appearance
@@ -208,20 +227,22 @@
       }
     }
 
-    // Remove inline-end border radius when add button is present to create a connected appearance
+    // Connected group appearance strictly when the square `.cbi-button-add` (`+`) button is present
     &:has(> .cbi-button-add) {
+      gap: 0;
+
       > input,
       > .cbi-dropdown {
         border-start-end-radius: 0;
         border-end-end-radius: 0;
       }
-    }
 
-    // Keep full border radius while no add button
-    &:not(:has(> .cbi-button-add)) {
-      > input,
-      > .cbi-dropdown {
-        border-radius: var(--fluent-radius-md);
+      > input {
+        border-inline-end: none;
+
+        &:focus {
+          border-inline-end: none;
+        }
       }
     }
   }

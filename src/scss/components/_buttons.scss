@@ -165,4 +165,11 @@
   align-items: center;
   gap: var(--fluent-space-sm);
   max-width: 100%;
+
+  > button,
+  > .btn,
+  > .cbi-button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 }

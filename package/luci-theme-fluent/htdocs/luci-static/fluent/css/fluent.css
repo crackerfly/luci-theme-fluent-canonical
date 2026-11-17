@@ -8,6 +8,7 @@
   font-size: var(--fluent-font-size-base);
   font-weight: var(--fluent-font-weight-regular);
   line-height: var(--fluent-line-height-normal);
+  white-space: nowrap;
   border-radius: var(--fluent-radius-md);
   cursor: pointer;
   -webkit-user-select: none;
@@ -28,6 +29,7 @@ input[type="file"]::file-selector-button {
   font-size: var(--fluent-font-size-base);
   font-weight: var(--fluent-font-weight-regular);
   line-height: var(--fluent-line-height-normal);
+  white-space: nowrap;
   border-radius: var(--fluent-radius-md);
   cursor: pointer;
   -webkit-user-select: none;
@@ -8516,8 +8518,12 @@ html[dir="rtl"] .cbi-dropdown.cbi-button, body[data-fluent-dir="rtl"] .cbi-dropd
   position: relative;
 }
 
-.cbi-dynlist[name="sshkeys"], .cbi-dynlist[name="sshkeys"] > .item {
+.cbi-dynlist[name="sshkeys"], .cbi-dynlist[name="sshkeys"] > .item, .cbi-dynlist:has(> .add-item[ondrop]), .cbi-dynlist:has(> .add-item[ondrop]) > .item {
   max-width: none;
+}
+
+.cbi-dynlist[name="sshkeys"] > .add-item, .cbi-dynlist:has(> .add-item[ondrop]) > .add-item {
+  max-width: 440px;
 }
 
 .cbi-dynlist > .item {
@@ -8621,7 +8627,7 @@ html[dir="rtl"] .cbi-dropdown.cbi-button, body[data-fluent-dir="rtl"] .cbi-dropd
 .cbi-dynlist > .add-item {
   box-sizing: border-box;
   align-items: center;
-  gap: 0;
+  gap: var(--fluent-space-sm);
   width: 100%;
   min-width: 0;
   max-width: 100%;
@@ -8630,20 +8636,20 @@ html[dir="rtl"] .cbi-dropdown.cbi-button, body[data-fluent-dir="rtl"] .cbi-dropd
 
 .cbi-dynlist > .add-item > input, .cbi-dynlist > .add-item > .cbi-dropdown {
   box-sizing: border-box;
-  flex: auto;
-  width: 100%;
+  flex: 1 1 0%;
+  width: auto;
   min-width: 0;
   max-width: 100%;
 }
 
 .cbi-dynlist > .add-item > input {
-  border-inline-end: none;
-  border-start-end-radius: 0;
-  border-end-end-radius: 0;
+  border-radius: var(--fluent-radius-md);
 }
 
-.cbi-dynlist > .add-item > input:focus {
-  border-inline-end: none;
+.cbi-dynlist > .add-item > button, .cbi-dynlist > .add-item > .btn, .cbi-dynlist > .add-item > .cbi-button:not(.cbi-button-add), .control-group > button, .control-group > .btn, .control-group > .cbi-button {
+  flex: 0 0 auto;
+  width: auto;
+  white-space: nowrap;
 }
 
 .cbi-dynlist > .add-item > input.drag-over {
@@ -8705,9 +8711,18 @@ html[dir="rtl"] .cbi-dropdown.cbi-button, body[data-fluent-dir="rtl"] .cbi-dropd
   border-top: 1px solid var(--fluent-primary);
 }
 
+.cbi-dynlist > .add-item:has( > .cbi-button-add) {
+  gap: 0;
+}
+
 .cbi-dynlist > .add-item:has( > .cbi-button-add) > input {
+  border-inline-end: none;
   border-start-end-radius: 0;
   border-end-end-radius: 0;
+}
+
+.cbi-dynlist > .add-item:has( > .cbi-button-add) > input:focus {
+  border-inline-end: none;
 }
 
 .cbi-dynlist > .add-item:has( > .cbi-button-add) > .cbi-dropdown {
@@ -15639,18 +15654,10 @@ select[size] option:checked {
   min-height: 32px;
 }
 
-.cbi-dynlist > .item {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--fluent-control-height, 32px);
+.cbi-dynlist > .item > span {
+  height: auto;
+  min-height: var(--fluent-input-height);
   padding-block: var(--fluent-space-xs);
-  box-sizing: border-box;
-}
-
-.cbi-dynlist > .add-item {
-  display: flex;
-  align-items: center;
-  gap: var(--fluent-space-sm);
 }
 
 /* _dropdown.scss: Upstream b3a9d9c Optgroup + Issue #15 Modal Floating + Valid Transform Origins */
