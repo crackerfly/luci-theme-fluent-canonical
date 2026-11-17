@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { FLUENT_UPDATE_REPO, fetchLatestRelease, matchI18nAsset, type ReleaseAsset, updateManifest } from "./update";
+import type { ReleaseAsset } from "./update";
+
+Object.assign(globalThis, {
+  L: {
+    rpc: {
+      declare: () => () => Promise.resolve(),
+    },
+  },
+});
 
 const SAMPLE_ASSETS: ReleaseAsset[] = [
   {
@@ -27,11 +35,13 @@ const SAMPLE_ASSETS: ReleaseAsset[] = [
 
 describe("update utilities", () => {
   it("disables upstream repository overwrite by default on Canonical builds", async () => {
+    const { FLUENT_UPDATE_REPO, fetchLatestRelease } = await import("./update");
     assert.equal(FLUENT_UPDATE_REPO, "");
     await assert.rejects(() => fetchLatestRelease("stable", "apk", [], undefined, ""), /not configured/);
   });
 
-  it("matches apk and ipk translation assets accurately", () => {
+  it("matches apk and ipk translation assets accurately", async () => {
+    const { matchI18nAsset } = await import("./update");
     const apk = matchI18nAsset(SAMPLE_ASSETS, "zh-cn", "apk");
     assert.equal(apk?.name, "luci-i18n-fluent-zh-cn-1.0.10-r1.apk");
 
@@ -41,14 +51,16 @@ describe("update utilities", () => {
     assert.equal(matchI18nAsset(SAMPLE_ASSETS, "ja", "apk"), null);
   });
 
-  it("builds verified SHA-256 update manifests with optional mirror prefix", () => {
+  it("builds verified SHA-256 update manifests with optional mirror prefix", async () => {
+    const { updateManifest } = await import("./update");
     const manifest = JSON.parse(updateManifest([SAMPLE_ASSETS[1], SAMPLE_ASSETS[3]], "https://ghfast.top/"));
     assert.equal(manifest.packages.length, 2);
     assert.equal(manifest.packages[0].sha256, "b".repeat(64));
     assert.ok(manifest.packages[0].url.startsWith("https://ghfast.top/https://github.com/"));
   });
 
-  it("rejects assets missing sha256 digests or non-https URLs", () => {
+  it("rejects assets missing sha256 digests or non-https URLs", async () => {
+    const { updateManifest } = await import("./update");
     assert.throws(() =>
       updateManifest([
         {
