@@ -1,1 +1,7 @@
-pnpm exec commitlint --edit $1
+if command -v pnpm >/dev/null 2>&1; then
+  pnpm exec commitlint --edit "$1"
+elif command -v corepack >/dev/null 2>&1; then
+  corepack pnpm exec commitlint --edit "$1"
+else
+  ./node_modules/.bin/commitlint --edit "$1"
+fi

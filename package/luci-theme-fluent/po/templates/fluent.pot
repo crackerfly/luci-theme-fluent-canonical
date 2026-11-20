@@ -767,3 +767,75 @@ msgstr ""
 
 msgid "Upload and manage custom background images for the login page."
 msgstr ""
+
+msgid "All CPUs"
+msgstr ""
+
+msgid "Always enabled"
+msgstr ""
+
+msgid "Automatic (hide when standalone plugin is installed)"
+msgstr ""
+
+msgid "Compact"
+msgstr ""
+
+msgid "Core"
+msgstr ""
+
+msgid "Cores"
+msgstr ""
+
+msgid "CPU display mode"
+msgstr ""
+
+msgid "CPU Load"
+msgstr ""
+
+msgid "Crit"
+msgstr ""
+
+msgid "Critical"
+msgstr ""
+
+msgid "Display hardware thermal and hwmon sensor readings on the Status -> Overview page."
+msgstr ""
+
+msgid "Display total and per-core CPU utilization with live clock frequency on the Status -> Overview page."
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "Overview CPU status"
+msgstr ""
+
+msgid "Overview temperature status"
+msgstr ""
+
+msgid "Peak"
+msgstr ""
+
+msgid "Sampling…"
+msgstr ""
+
+msgid "Sensor"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "Temperature"
+msgstr ""
+
+msgid "Temperature unit"
+msgstr ""
+
+msgid "Total load"
+msgstr ""
+
+msgid "Total only"
+msgstr ""
+
+msgid "Warn"
+msgstr ""

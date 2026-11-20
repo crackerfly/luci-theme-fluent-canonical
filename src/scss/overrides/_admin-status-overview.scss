@@ -117,3 +117,398 @@
     gap: var(--fluent-space-sm);
   }
 }
+
+// ============================================================
+// Native Fluent CPU & Temperature status widgets
+// (18_fluent_cpu.js, 27_fluent_temp.js)
+// ============================================================
+@include plugin-prefix("admin-status-overview") {
+  .fluent-status-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fluent-space-sm);
+    margin-bottom: var(--fluent-space-md);
+  }
+
+  .fluent-status-toolbar__meta {
+    color: var(--fluent-text-muted);
+    font-size: var(--fluent-font-size-sm);
+    font-weight: var(--fluent-font-weight-regular);
+    line-height: 18px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Segmented fieldset + native radio inputs (Canonical §8.7.2: 400 weight,
+  // persistent selected boundary + brand tint, concentric inner radius,
+  // 44px touch / 36px desktop). Inputs are siblings of <label> so global
+  // `label:has(input[type="radio"])` rules in _checkboxes.scss do not match.
+  .fluent-status-segmented {
+    position: relative;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fluent-space-xxs);
+    min-width: 0;
+    margin: 0;
+    padding: 2px;
+    border: 0;
+    border-radius: var(--fluent-radius-md);
+    background-color: var(--fluent-bg-secondary);
+  }
+
+  .fluent-status-segmented__legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  // Narrow !important overrides required to defeat bare `input[type="radio"]`
+  // `width/height/inline-size/block-size: 16px !important` in _checkboxes.scss.
+  .fluent-status-segmented__input {
+    position: absolute;
+    width: 1px !important;
+    height: 1px !important;
+    inline-size: 1px !important;
+    block-size: 1px !important;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    pointer-events: none;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .fluent-status-segmented__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 var(--fluent-space-md);
+    border: 0;
+    border-radius: max(2px, calc(var(--fluent-radius-md) - 2px));
+    background-color: transparent;
+    color: var(--fluent-text-secondary);
+    font-family: var(--fluent-font-family);
+    font-size: var(--fluent-font-size-base);
+    font-weight: var(--fluent-font-weight-regular);
+    line-height: 20px;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color var(--fluent-duration-fast) var(--fluent-easing-standard),
+      box-shadow var(--fluent-duration-fast) var(--fluent-easing-standard),
+      color var(--fluent-duration-fast) var(--fluent-easing-standard),
+      transform var(--fluent-duration-fast) var(--fluent-easing-out-strong);
+
+    @include respond-to("md") {
+      min-height: 36px;
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  .fluent-status-segmented__input:checked + .fluent-status-segmented__item {
+    background-color: var(--fluent-primary-lightest);
+    box-shadow: inset 0 0 0 1px var(--fluent-primary);
+    color: var(--fluent-accent-text);
+  }
+
+  .fluent-status-segmented__input:focus-visible + .fluent-status-segmented__item {
+    outline: 2px solid var(--fluent-focus-color);
+    outline-offset: 2px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .fluent-status-segmented__input:not(:checked) + .fluent-status-segmented__item:hover {
+      background-color: var(--fluent-bg-hover);
+      color: var(--fluent-text);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fluent-status-segmented__item {
+      transition: none;
+
+      &:active {
+        transform: none;
+      }
+    }
+  }
+
+  // CPU table label + live frequency badge
+  .fluent-cpu-status__label-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--fluent-space-sm);
+  }
+
+  .fluent-cpu-status__name {
+    color: var(--fluent-text);
+    font-size: var(--fluent-font-size-base);
+    font-weight: var(--fluent-font-weight-regular);
+    line-height: 22px;
+  }
+
+  .fluent-cpu-status__freq {
+    color: var(--fluent-text-muted);
+    font-size: var(--fluent-font-size-sm);
+    font-weight: var(--fluent-font-weight-regular);
+    line-height: 18px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Compact multi-core grid (Tonal nested surface, zero outer shadow/border)
+  .fluent-cpu-status__table:last-child tbody > tr:last-child > .td {
+    border-bottom: 0;
+  }
+
+  .fluent-cpu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--fluent-space-md);
+    margin-top: var(--fluent-space-md);
+  }
+
+  .fluent-cpu-tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fluent-space-sm);
+    min-width: 0;
+    padding: var(--fluent-space-md);
+    border-radius: var(--fluent-radius-md);
+    background-color: var(--fluent-bg-secondary);
+  }
+
+  .fluent-cpu-tile__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--fluent-space-sm);
+  }
+
+  .fluent-cpu-tile__meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .fluent-cpu-tile__title {
+    color: var(--fluent-text);
+    font-size: var(--fluent-font-size-base);
+    font-weight: var(--fluent-font-weight-semibold);
+    line-height: 20px;
+  }
+
+  .fluent-cpu-tile__freq {
+    color: var(--fluent-text-muted);
+    font-size: var(--fluent-font-size-sm);
+    font-weight: var(--fluent-font-weight-regular);
+    line-height: 18px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fluent-cpu-tile__value {
+    color: var(--fluent-text);
+    font-size: var(--fluent-font-size-base);
+    font-weight: var(--fluent-font-weight-semibold);
+    line-height: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fluent-cpu-tile__value--warning {
+    color: var(--fluent-warning-text);
+  }
+
+  .fluent-cpu-tile__value--critical {
+    color: var(--fluent-error-text);
+  }
+
+  // Temperature sensor grid (Tonal nested cards)
+  .fluent-temp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--fluent-space-md);
+
+    @include respond-to("sm") {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+  }
+
+  .fluent-temp-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    padding: 14px var(--fluent-space-lg);
+    border-radius: var(--fluent-radius-md);
+    background-color: var(--fluent-bg-secondary);
+  }
+
+  .fluent-temp-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--fluent-space-sm);
+  }
+
+  .fluent-temp-card__identity {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fluent-space-xxs);
+    min-width: 0;
+  }
+
+  .fluent-temp-card__label {
+    color: var(--fluent-text);
+    font-size: var(--fluent-font-size-base);
+    font-weight: var(--fluent-font-weight-semibold);
+    line-height: 20px;
+    overflow-wrap: anywhere;
+  }
+
+  .fluent-temp-card__source {
+    color: var(--fluent-text-muted);
+    font-size: var(--fluent-font-size-sm);
+    font-weight: var(--fluent-font-weight-regular);
+    line-height: 18px;
+    overflow-wrap: anywhere;
+  }
+
+  .fluent-temp-card__metrics {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--fluent-space-sm);
+    margin-top: auto;
+  }
+
+  .fluent-temp-card__value {
+    color: var(--fluent-text);
+    font-size: var(--fluent-font-size-lg);
+    font-weight: var(--fluent-font-weight-semibold);
+    line-height: 26px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fluent-temp-card__value--warning {
+    color: var(--fluent-warning-text);
+  }
+
+  .fluent-temp-card__value--critical {
+    color: var(--fluent-error-text);
+  }
+
+  .fluent-temp-card__limits {
+    color: var(--fluent-text-muted);
+    font-size: var(--fluent-font-size-sm);
+    font-weight: var(--fluent-font-weight-regular);
+    line-height: 18px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Borderless semantic status chip (Canonical §8.9: border: 0, 14px icon, 12/18px 400)
+  .fluent-status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 22px;
+    padding: 2px var(--fluent-space-sm);
+    border: 0;
+    border-radius: var(--fluent-radius-circular);
+    font-size: var(--fluent-font-size-sm);
+    font-weight: var(--fluent-font-weight-regular);
+    line-height: 18px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .fluent-status-chip--normal {
+    background-color: var(--fluent-success-light);
+    color: var(--fluent-success-text);
+  }
+
+  .fluent-status-chip--warning {
+    background-color: var(--fluent-warning-light);
+    color: var(--fluent-warning-text);
+  }
+
+  .fluent-status-chip--critical {
+    background-color: var(--fluent-error-light);
+    color: var(--fluent-error-text);
+  }
+
+  .fluent-status-chip__icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  .fluent-status-chip__icon--normal {
+    @include fluent-mask-icon-by-name("checkmark-circle-20-regular", 14px, var(--fluent-success));
+  }
+
+  .fluent-status-chip__icon--warning {
+    @include fluent-mask-icon-by-name("warning-20-regular", 14px, var(--fluent-warning));
+  }
+
+  .fluent-status-chip__icon--critical {
+    @include fluent-mask-icon-by-name("fluent:error-circle-16-regular", 14px, var(--fluent-error));
+  }
+
+  // Shared tonal progress track for compact CPU tiles & temperature cards
+  .fluent-status-track {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    border: 0;
+    border-radius: var(--fluent-radius-circular);
+    background-color: var(--fluent-progress-bg);
+    overflow: hidden;
+  }
+
+  .fluent-status-track__fill {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    border-radius: var(--fluent-radius-circular);
+    background-color: var(--fluent-progress-bar-bg);
+    transition: width var(--fluent-duration-normal) var(--fluent-easing-decelerate);
+  }
+
+  .fluent-status-track--warning .fluent-status-track__fill {
+    background-color: var(--fluent-warning);
+  }
+
+  .fluent-status-track--critical .fluent-status-track__fill {
+    background-color: var(--fluent-error);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fluent-status-track__fill {
+      transition: none;
+    }
+  }
+}

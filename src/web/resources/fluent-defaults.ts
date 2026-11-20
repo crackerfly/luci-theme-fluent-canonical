@@ -33,6 +33,8 @@ export const FLUENT_DEFAULTS = {
   uci_changes_preview: "1",
   direction_mode: "auto",
   progressbar_text_position: "top-start",
+  cpu_status: "auto",
+  temp_status: "auto",
 } as const;
 
 export const fluentFlagDefault = (value: string): boolean => value === "1";

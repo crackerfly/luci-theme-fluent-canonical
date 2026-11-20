@@ -1,7 +1,7 @@
+import { gzipSync } from "node:zlib";
 import { defineConfig, rspack } from "@rsbuild/core";
 import { pluginSass } from "@rsbuild/plugin-sass";
 import { type Compiler, SwcJsMinimizerRspackPlugin } from "@rspack/core";
-import { gzipSync } from "node:zlib";
 import { generateIcons } from "./script/generate-fluent-icons";
 import { generateThemeDefaults } from "./script/generate-theme-defaults";
 
@@ -9,6 +9,7 @@ const luciRequires = `"use strict";
 "require baseclass";
 "require ui";
 "require dom";
+"require rpc";
 `;
 const minify = process.env.RSBUILD_MINIFY === "true" || process.env.RSBUILD_MINIFY === "1";
 
@@ -24,6 +25,12 @@ export default defineConfig(({ envMode }) => {
           entry: {
             "menu-fluent": "./web/resources/menu-fluent.tsx",
             "view/fluent-config": variant === "lite" ? "./web/resources/view/fluent-config-lite.tsx" : "./web/resources/view/fluent-config.tsx",
+            ...(variant === "lite"
+              ? {}
+              : {
+                  "view/status/include/18_fluent_cpu": "./web/resources/view/status/include/18_fluent_cpu.tsx",
+                  "view/status/include/27_fluent_temp": "./web/resources/view/status/include/27_fluent_temp.tsx",
+                }),
           },
           tsconfigPath: "./tsconfig.json",
         },

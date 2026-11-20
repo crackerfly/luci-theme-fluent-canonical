@@ -1,0 +1,236 @@
+#!/usr/bin/env ucode
+'use strict';
+
+import { glob, readfile, readlink } from 'fs';
+
+function read_trimmed(path) {
+	let content = readfile(path);
+	if (content == null)
+		return null;
+	let s = trim(content);
+	return length(s) > 0 ? s : null;
+}
+
+function basename_of(path) {
+	if (!path)
+		return '';
+	let clean = replace(path, /\/+$/, '');
+	let parts = split(clean, '/');
+	return length(parts) > 0 ? parts[length(parts) - 1] : clean;
+}
+
+function parse_millideg(raw) {
+	if (raw == null || !match(raw, /^-?\d+$/))
+		return null;
+	let val = +raw;
+	if (val <= -100000 || val >= 250000)
+		return null;
+	return val / 1000.0;
+}
+
+function parse_threshold(raw) {
+	let deg = parse_millideg(raw);
+	if (deg == null || deg <= 0 || deg > 200)
+		return null;
+	return deg;
+}
+
+function natural_num(str) {
+	let m = match(str, /(\d+)/);
+	return m ? +m[1] : 9999;
+}
+
+function collect_cpu() {
+	let raw = readfile('/proc/stat');
+	let cpus = [];
+	if (!raw)
+		return { cpus };
+
+	for (let line in split(raw, '\n')) {
+		let m = match(line, /^(cpu\d*)\s+(.+)$/);
+		if (!m)
+			continue;
+
+		let id = m[1];
+		let cols = split(trim(m[2]), /\s+/);
+		if (length(cols) < 4)
+			continue;
+
+		// Sum user..steal (columns 0..7). Kernel already includes guest/guest_nice in user/nice.
+		let limit = length(cols) < 8 ? length(cols) : 8;
+		let total = 0;
+		for (let i = 0; i < limit; i++)
+			total += (+cols[i] || 0);
+
+		let idle = (+cols[3] || 0) + (length(cols) > 4 ? (+cols[4] || 0) : 0);
+		let entry = { id, total, idle };
+
+		if (id != 'cpu') {
+			let freq_str = read_trimmed(`/sys/devices/system/cpu/${id}/cpufreq/scaling_cur_freq`)
+				|| read_trimmed(`/sys/devices/system/cpu/${id}/cpufreq/cpuinfo_cur_freq`);
+			if (freq_str != null && match(freq_str, /^\d+$/) && +freq_str > 0)
+				entry.freq_khz = +freq_str;
+		}
+
+		push(cpus, entry);
+	}
+
+	return { cpus };
+}
+
+function collect_temp() {
+	let sensors = [];
+	let seen_hwmon = {};
+	let seen_tz = {};
+
+	let hwmon_dirs = glob('/sys/class/hwmon/hwmon*') || [];
+	sort(hwmon_dirs, (a, b) => natural_num(basename_of(a)) - natural_num(basename_of(b)));
+
+	for (let hw in hwmon_dirs) {
+		let hw_id = basename_of(hw);
+		let chip_name = read_trimmed(`${hw}/name`) || hw_id;
+		let dev_link = readlink(`${hw}/device`);
+		let dev_base = dev_link ? basename_of(dev_link) : '';
+
+		if (match(dev_base, /^thermal_zone\d+$/))
+			seen_tz[dev_base] = true;
+
+		let model = read_trimmed(`${hw}/device/model`);
+		let source = chip_name;
+		if (model) {
+			source = `${chip_name} (${model})`;
+		} else if (dev_base && dev_base != chip_name && !match(dev_base, /^(platform|virtual|hwmon\d+|thermal_zone\d+)$/)) {
+			source = `${chip_name} (${dev_base})`;
+		}
+
+		let inputs = glob(`${hw}/temp*_input`) || [];
+		sort(inputs, (a, b) => natural_num(basename_of(a)) - natural_num(basename_of(b)));
+
+		let added_for_hw = false;
+		for (let inp in inputs) {
+			let m = match(basename_of(inp), /^temp(\d+)_input$/);
+			if (!m)
+				continue;
+			let idx = m[1];
+			let temp_c = parse_millideg(read_trimmed(inp));
+			if (temp_c == null)
+				continue;
+
+			let ch_label = read_trimmed(`${hw}/temp${idx}_label`);
+			if (!ch_label)
+				ch_label = length(inputs) > 1 ? `Sensor ${idx}` : chip_name;
+
+			let crit = parse_threshold(read_trimmed(`${hw}/temp${idx}_crit`))
+				?? parse_threshold(read_trimmed(`${hw}/temp${idx}_emergency`));
+			let warn = parse_threshold(read_trimmed(`${hw}/temp${idx}_max`));
+			if (warn != null && crit != null && warn >= crit)
+				warn = null;
+
+			let item = {
+				id: `${hw_id}_temp${idx}`,
+				source,
+				label: ch_label,
+				temp_c
+			};
+			if (warn != null)
+				item.warn_c = warn;
+			if (crit != null)
+				item.crit_c = crit;
+
+			push(sensors, item);
+			added_for_hw = true;
+		}
+
+		if (added_for_hw)
+			seen_hwmon[hw_id] = true;
+	}
+
+	let tz_dirs = glob('/sys/class/thermal/thermal_zone*') || [];
+	sort(tz_dirs, (a, b) => natural_num(basename_of(a)) - natural_num(basename_of(b)));
+
+	for (let tz in tz_dirs) {
+		let tz_id = basename_of(tz);
+		if (seen_tz[tz_id])
+			continue;
+
+		let linked_hwmons = glob(`${tz}/hwmon*`) || [];
+		let mirrored = false;
+		for (let lhw in linked_hwmons) {
+			if (seen_hwmon[basename_of(lhw)]) {
+				mirrored = true;
+				break;
+			}
+		}
+		if (mirrored)
+			continue;
+
+		let temp_c = parse_millideg(read_trimmed(`${tz}/temp`));
+		if (temp_c == null)
+			continue;
+
+		let tz_type = read_trimmed(`${tz}/type`) || tz_id;
+		let warn = null;
+		let passive = null;
+		let crit = null;
+
+		let trip_types = glob(`${tz}/trip_point_*_type`) || [];
+		for (let tt_path in trip_types) {
+			let m = match(basename_of(tt_path), /^trip_point_(\d+)_type$/);
+			if (!m)
+				continue;
+			let ttype = lc(read_trimmed(tt_path) || '');
+			let tdeg = parse_threshold(read_trimmed(`${tz}/trip_point_${m[1]}_temp`));
+			if (tdeg == null)
+				continue;
+
+			if (ttype == 'critical') {
+				if (crit == null || tdeg < crit)
+					crit = tdeg;
+			} else if (ttype == 'hot' || ttype == 'max') {
+				if (warn == null || tdeg < warn)
+					warn = tdeg;
+			} else if (ttype == 'passive' && tdeg >= 55) {
+				if (passive == null || tdeg < passive)
+					passive = tdeg;
+			}
+		}
+
+		if (warn == null && passive != null)
+			warn = passive;
+		if (warn != null && crit != null && warn >= crit)
+			warn = null;
+
+		let item = {
+			id: tz_id,
+			source: 'Thermal',
+			label: tz_type,
+			temp_c
+		};
+		if (warn != null)
+			item.warn_c = warn;
+		if (crit != null)
+			item.crit_c = crit;
+
+		push(sensors, item);
+	}
+
+	return { sensors };
+}
+
+let cmd = ARGV[0];
+if (cmd == 'list') {
+	printf('%J\n', {
+		get_cpu: {},
+		get_temp: {}
+	});
+} else if (cmd == 'call') {
+	let method = ARGV[1];
+	if (method == 'get_cpu') {
+		printf('%J\n', collect_cpu());
+	} else if (method == 'get_temp') {
+		printf('%J\n', collect_temp());
+	} else {
+		printf('%J\n', { error: 'Method not found' });
+		exit(1);
+	}
+}

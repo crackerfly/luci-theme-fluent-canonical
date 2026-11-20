@@ -50,6 +50,32 @@ export const registerGeneralTab = (section: LuCI.form.TypedSection, includeCusto
     const option = section.taboption("general", form.Flag, "custom_select", _("Use Fluent custom select dropdowns"), _("Replace native select elements with the theme's custom dropdown widget."));
     option.default = fluentFlagDefault(FLUENT_DEFAULTS.custom_select) ? option.enabled : option.disabled;
     omitDefaultValue(option);
+
+    const cpuOption = section.taboption(
+      "general",
+      form.ListValue,
+      "cpu_status",
+      _("Overview CPU status"),
+      _("Display total and per-core CPU utilization with live clock frequency on the Status -> Overview page."),
+    );
+    cpuOption.value("auto", _("Automatic (hide when standalone plugin is installed)"));
+    cpuOption.value("1", _("Always enabled"));
+    cpuOption.value("0", _("Disabled"));
+    cpuOption.default = FLUENT_DEFAULTS.cpu_status;
+    omitDefaultValue(cpuOption);
+
+    const tempOption = section.taboption(
+      "general",
+      form.ListValue,
+      "temp_status",
+      _("Overview temperature status"),
+      _("Display hardware thermal and hwmon sensor readings on the Status -> Overview page."),
+    );
+    tempOption.value("auto", _("Automatic (hide when standalone plugin is installed)"));
+    tempOption.value("1", _("Always enabled"));
+    tempOption.value("0", _("Disabled"));
+    tempOption.default = FLUENT_DEFAULTS.temp_status;
+    omitDefaultValue(tempOption);
   }
 
   {

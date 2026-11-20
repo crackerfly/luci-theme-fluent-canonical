@@ -769,3 +769,75 @@ msgstr "选择登录页的背景来源。"
 
 msgid "Upload and manage custom background images for the login page."
 msgstr "上传并管理登录页的自定义背景图片或视频。"
+
+msgid "All CPUs"
+msgstr "全部核心"
+
+msgid "Always enabled"
+msgstr "始终启用"
+
+msgid "Automatic (hide when standalone plugin is installed)"
+msgstr "自动（已安装独立插件时隐藏）"
+
+msgid "Compact"
+msgstr "紧凑网格"
+
+msgid "Core"
+msgstr "核心"
+
+msgid "Cores"
+msgstr "核心"
+
+msgid "CPU display mode"
+msgstr "CPU 显示模式"
+
+msgid "CPU Load"
+msgstr "CPU 负载"
+
+msgid "Crit"
+msgstr "临界"
+
+msgid "Critical"
+msgstr "过热"
+
+msgid "Display hardware thermal and hwmon sensor readings on the Status -> Overview page."
+msgstr "在「状态 -> 概览」页面显示硬件热区与 hwmon 传感器温度读数。"
+
+msgid "Display total and per-core CPU utilization with live clock frequency on the Status -> Overview page."
+msgstr "在「状态 -> 概览」页面显示总 CPU 与各核心实时占用率及主频。"
+
+msgid "High"
+msgstr "偏高"
+
+msgid "Overview CPU status"
+msgstr "概览页 CPU 状态"
+
+msgid "Overview temperature status"
+msgstr "概览页温度监控"
+
+msgid "Peak"
+msgstr "峰值"
+
+msgid "Sampling…"
+msgstr "采样中…"
+
+msgid "Sensor"
+msgstr "个传感器"
+
+msgid "Sensors"
+msgstr "个传感器"
+
+msgid "Temperature"
+msgstr "硬件温度"
+
+msgid "Temperature unit"
+msgstr "温度单位"
+
+msgid "Total load"
+msgstr "总负载"
+
+msgid "Total only"
+msgstr "仅总负载"
+
+msgid "Warn"
+msgstr "预警"

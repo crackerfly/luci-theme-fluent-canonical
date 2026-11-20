@@ -1,4 +1,12 @@
 {
+	"luci-mod-status-index": {
+		"description": "Grant read access to Fluent CPU and temperature status helpers on Overview",
+		"read": {
+			"ubus": {
+				"luci.fluent_status": [ "get_cpu", "get_temp" ]
+			}
+		}
+	},
 	"luci-theme-fluent": {
 		"description": "Grant UCI and file access for luci-theme-fluent config view",
 		"read": {
@@ -6,7 +14,8 @@
 				"/www/luci-static/fluent/background/*": [ "list" ]
 			},
 			"ubus": {
-				"luci.fluent": [ "avail", "get_version", "update_status" ]
+				"luci.fluent": [ "avail", "get_version", "update_status" ],
+				"luci.fluent_status": [ "get_cpu", "get_temp" ]
 			},
 			"uci": [ "fluent" ]
 		},

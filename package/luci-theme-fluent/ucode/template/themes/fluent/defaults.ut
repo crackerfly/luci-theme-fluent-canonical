@@ -33,4 +33,6 @@
   defaults.uci_changes_preview = "1";
   defaults.direction_mode = "auto";
   defaults.progressbar_text_position = "top-start";
+  defaults.cpu_status = "auto";
+  defaults.temp_status = "auto";
 %}
