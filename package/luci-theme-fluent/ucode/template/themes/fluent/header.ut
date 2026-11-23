@@ -145,6 +145,16 @@
   let has_upstream_temp = access('/www/luci-static/resources/view/status/include/27_temperature.js') || access('/www/luci-static/resources/view/status/include/60_temp.js');
   let cpu_status_enabled = (cpu_status === '1' || (cpu_status !== '0' && !has_upstream_cpu)) ? '1' : '0';
   let temp_status_enabled = (temp_status === '1' || (temp_status !== '0' && !has_upstream_temp)) ? '1' : '0';
+  let has_dispatch_path = (type(ctx.path) === 'array' && length(ctx.path) > 0);
+  let dispatch_path = has_dispatch_path ? ctx.path : ((type(ctx.request_path) === 'array') ? ctx.request_path : []);
+  let page_path = [];
+  for (let seg in dispatch_path)
+    push(page_path, seg);
+  if (has_dispatch_path && type(ctx.request_args) === 'array') {
+    for (let arg in ctx.request_args)
+      push(page_path, arg);
+  }
+  let page_id = join('-', page_path);
   let brand_name = hostname;
   let page_title = striptags(hostname + (node && node.title ? ' - ' + _(node.title) : ''));
 %} {% if (ctx.authsession) { %}
@@ -528,11 +538,11 @@
 
 <body
   class="lang_{{ dispatcher.lang }} {{ node ? entityencode(node.title, true) : '' }} {{ ctx.authsession ? 'logged-in' : '' }}"
-  data-page="{{ entityencode(join('-', ctx.request_path), true) }}"
+  data-page="{{ entityencode(page_id, true) }}"
   data-theme-mode="{{ mode }}"
   data-menu-layout="{{ entityencode(menu_layout ? sprintf('%J', menu_layout) : '', true) }}"
   data-menu-cache-scope="{{ entityencode(ctx.authsession, true) }}"
-  data-tab-cache-path="{{ entityencode(sprintf('%J', ctx.request_path), true) }}"
+  data-tab-cache-path="{{ entityencode(sprintf('%J', dispatch_path), true) }}"
   data-fluent-dir="{{ direction.resolved }}"
   data-theme-custom-select="{{ custom_select }}"
   data-view-transition="{{ view_transition }}"
@@ -645,7 +655,7 @@
       <div class="darkMask"></div>
       <div id="maincontent">
         <div class="container">
-          {% if (getuid() == 0 && getspnam('root') && getspnam('root').pwdp === '' && join('-', ctx.request_path) != 'admin-system-admin') { %}
+          {% if (getuid() == 0 && getspnam('root') && getspnam('root').pwdp === '' && page_id != 'admin-system-admin') { %}
           <div class="alert-message error">
             <h4>{{ _('No password set!') }}</h4>
             <p>{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p>
