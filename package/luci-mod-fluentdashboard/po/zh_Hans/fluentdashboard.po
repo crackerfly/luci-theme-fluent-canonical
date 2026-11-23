@@ -1,36 +1,269 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: luci-mod-fluentdashboard\n"
-"POT-Creation-Date: 2026-08-24 00:20+0800\n"
+"POT-Creation-Date: 2026-11-23 19:25+0800\n"
 "PO-Revision-Date: \n"
-"Last-Translator: LazuliKao\n"
-"Language-Team: LuCI Fluent Dashboard\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "A live overview of this OpenWrt device."
-msgstr "此 OpenWrt 设备的实时概览。"
+msgid "1 / 5 / 15 minutes"
+msgstr "1 / 5 / 15 分钟"
+
+
+msgid "Actions"
+msgstr "操作"
+
+
+msgid "Active connections"
+msgstr "活动连接数"
+
 
 msgid "Active DHCP Leases"
 msgstr "活动的 DHCP 租约"
 
+msgid "Active interfaces"
+msgstr "活动接口"
+
+
+msgid "Active Wi-Fi networks"
+msgstr "活动无线网络"
+
+
+msgid "Add group"
+msgstr "添加分组"
+
+
 msgid "Address"
 msgstr "地址"
+
+msgid "All network interfaces, devices, addresses, and traffic counters"
+msgstr "所有网络接口、设备、地址与流量计数"
+
+
+msgid "All ports down"
+msgstr "所有端口未连接"
+
 
 msgid "Architecture"
 msgstr "架构"
 
+msgid "Arrangement & actions"
+msgstr "排列与操作"
+
+
+msgid "Associated Wi-Fi stations, signal strength, and PHY rates"
+msgstr "已关联无线终端、信号强度与协商速率"
+
+
+msgid "Automatic (first interface)"
+msgstr "自动（首个接口）"
+
+
+msgid "Automatic (first radio)"
+msgstr "自动（首个射频）"
+
+
+msgid "Automatic width"
+msgstr "自适应宽度"
+
+
+msgid "Available"
+msgstr "可用"
+
+
+msgid "Available memory"
+msgstr "可用内存"
+
+
+msgid "Average Wi-Fi signal"
+msgstr "平均无线信号"
+
+
+msgid "Broadcast SSIDs"
+msgstr "广播 SSID"
+
+
+msgid "Browser draft storage is unavailable. Export your changes before leaving."
+msgstr "浏览器草稿存储不可用，离开前请先导出更改。"
+
+
+msgid "Cancel"
+msgstr "取消"
+
+
 msgid "Channel"
 msgstr "信道"
+
+msgid "Clear"
+msgstr "清除"
+
+
+msgid "clients"
+msgstr "台终端"
+
+
+msgid "Clients"
+msgstr "终端"
+
+
+msgid "Collapse"
+msgstr "收起"
+
+
+msgid "Collapse / expand"
+msgstr "收起 / 展开"
+
+
+msgid "Connected DHCPv4 and DHCPv6 client leases and expiry times"
+msgstr "已连接 DHCPv4 与 DHCPv6 租约及剩余时间"
+
+
+msgid "Connected Ethernet ports"
+msgstr "已连接网口"
+
+
+msgid "Connected network interfaces"
+msgstr "已连接网络接口"
+
+
+msgid "Connection tracking"
+msgstr "连接跟踪"
+
+
+msgid "Container group"
+msgstr "容器分组"
+
+
+msgid "Copy"
+msgstr "复制"
+
+
+msgid "CPU / SoC temperature"
+msgstr "CPU / SoC 温度"
+
+
+msgid "Cumulative counters"
+msgstr "累计流量计数"
+
+
+msgid "Dashboard"
+msgstr "仪表盘"
+
+
+msgid "Dashboard name"
+msgstr "仪表盘名称"
+
+
+msgid "Dashboard settings"
+msgstr "仪表盘设置"
+
+
+msgid "Data is stale or unavailable."
+msgstr "数据已过期或暂不可用。"
+
+
+msgid "Data is stale. Refresh to retry."
+msgstr "数据已过期，请刷新重试。"
+
+
+msgid "Default collapsed / expanded"
+msgstr "默认收起 / 展开"
+
+
+msgid "Default dashboard"
+msgstr "默认仪表盘"
+
+
+msgid "Default order"
+msgstr "默认顺序"
+
+
+msgid "Delete dashboard"
+msgstr "删除仪表盘"
+
+
+msgid "Descending"
+msgstr "降序排列"
+
+
+msgid "Description"
+msgstr "描述"
+
+
+msgid "Desktop"
+msgstr "桌面端"
+
 
 msgid "Device"
 msgstr "设备"
 
+msgid "Device name"
+msgstr "设备名称"
+
+
+msgid "DHCP and DNS"
+msgstr "DHCP 与 DNS"
+
+
+msgid "DHCP lease count"
+msgstr "DHCP 租约数"
+
+
+msgid "Diagnostics"
+msgstr "网络诊断"
+
+
+msgid "Disk Mount Points"
+msgstr "磁盘挂载点"
+
+
+msgid "Displayed shortcuts"
+msgstr "显示的快捷入口"
+
+
+msgid "Dissolve and keep contents"
+msgstr "解散分组并保留内容"
+
+
+msgid "Down"
+msgstr "未连接"
+
+
+msgid "Duplex"
+msgstr "双工模式"
+
+
+msgid "Duplicate dashboard"
+msgstr "复制仪表盘"
+
+
+msgid "Duplicate tile"
+msgstr "复制卡片"
+
+
+msgid "Earlier"
+msgstr "前移"
+
+
+msgid "Edit"
+msgstr "编辑布局"
+
+
 msgid "Encryption"
 msgstr "加密"
+
+msgid "Ethernet Port Status"
+msgstr "网口物理状态"
+
+
+msgid "Expand"
+msgstr "展开"
+
 
 msgid "Expired"
 msgstr "已过期"
@@ -38,8 +271,32 @@ msgstr "已过期"
 msgid "Expires"
 msgstr "到期时间"
 
+msgid "Export"
+msgstr "导出"
+
+
 msgid "Family"
 msgstr "协议族"
+
+msgid "Filesystem mount points, capacity, used percentage, and free space"
+msgstr "文件系统挂载点、总容量、使用率与剩余空间"
+
+
+msgid "Filter text"
+msgstr "筛选关键字"
+
+
+msgid "Filter widgets…"
+msgstr "搜索组件…"
+
+
+msgid "Firewall"
+msgstr "防火墙"
+
+
+msgid "Firmware"
+msgstr "固件版本"
+
 
 msgid "Firmware Version"
 msgstr "固件版本"
@@ -47,8 +304,48 @@ msgstr "固件版本"
 msgid "Fluent Dashboard"
 msgstr "Fluent 状态概览"
 
+msgid "Full (12 col)"
+msgstr "通栏（12 列）"
+
+
+msgid "Fullscreen"
+msgstr "全屏"
+
+
+msgid "Fullscreen is unavailable."
+msgstr "当前环境不支持全屏模式。"
+
+
 msgid "Gateway"
 msgstr "网关"
+
+msgid "Group"
+msgstr "分组"
+
+
+msgid "Group properties"
+msgstr "分组属性"
+
+
+msgid "Group width"
+msgstr "分组宽度"
+
+
+msgid "Half (6 col)"
+msgstr "半宽（6 列）"
+
+
+msgid "Hardware model, firmware, kernel, uptime, and load overview"
+msgstr "设备型号、固件、内核、运行时间与系统负载概览"
+
+
+msgid "Hidden"
+msgstr "已隐藏"
+
+
+msgid "History samples (10–120)"
+msgstr "历史采样点数（10–120）"
+
 
 msgid "Host"
 msgstr "主机"
@@ -56,8 +353,36 @@ msgstr "主机"
 msgid "Hostname"
 msgstr "主机名"
 
+msgid "Import"
+msgstr "导入"
+
+
 msgid "Interface"
 msgstr "接口"
+
+msgid "Interface address"
+msgstr "接口地址"
+
+
+msgid "Interface bytes"
+msgstr "接口流量"
+
+
+msgid "Interface gateway"
+msgstr "接口网关"
+
+
+msgid "Interface protocol"
+msgstr "接口协议"
+
+
+msgid "Interface status"
+msgstr "接口状态"
+
+
+msgid "Interface uptime"
+msgstr "接口在线时长"
+
 
 msgid "Interfaces"
 msgstr "接口"
@@ -65,14 +390,58 @@ msgstr "接口"
 msgid "Internet"
 msgstr "互联网"
 
+msgid "Invalid widget configuration."
+msgstr "组件配置无效。"
+
+
+msgid "IPv4 and IPv6 WAN upstream connectivity and gateways"
+msgstr "IPv4 与 IPv6 外网连接状态及网关"
+
+
+msgid "IPv4 lease count"
+msgstr "IPv4 租约数"
+
+
+msgid "IPv6 lease count"
+msgstr "IPv6 租约数"
+
+
+msgid "Kernel"
+msgstr "内核版本"
+
+
 msgid "Kernel Version"
 msgstr "内核版本"
+
+msgid "Later"
+msgstr "后移"
+
+
+msgid "Layout file is too large."
+msgstr "布局文件体积过大。"
+
+
+msgid "Live traffic trend"
+msgstr "实时流量趋势"
+
 
 msgid "Load Average"
 msgstr "平均负载"
 
+msgid "Loading…"
+msgstr "正在加载…"
+
+
 msgid "Local Time"
 msgstr "本地时间"
+
+msgid "Lock / unlock"
+msgstr "锁定 / 解锁"
+
+
+msgid "Locked"
+msgstr "已锁定"
+
 
 msgid "LuCI Version"
 msgstr "LuCI 版本"
@@ -83,11 +452,19 @@ msgstr "MAC / DUID"
 msgid "MAC address"
 msgstr "MAC 地址"
 
+msgid "Maximum rows"
+msgstr "最大显示行数"
+
+
 msgid "Mbit/s"
 msgstr "Mbit/s"
 
 msgid "Memory"
 msgstr "内存"
+
+msgid "Memory, swap, root, and temporary storage utilization bars"
+msgstr "内存、交换分区、根分区与临时空间占用进度条"
+
 
 msgid "Mode"
 msgstr "模式"
@@ -95,14 +472,62 @@ msgstr "模式"
 msgid "Model"
 msgstr "型号"
 
+msgid "Mount Point"
+msgstr "挂载点"
+
+
+msgid "Move to group"
+msgstr "移入分组"
+
+
+msgid "Navigation"
+msgstr "快捷导航"
+
+
 msgid "Network"
 msgstr "网络"
+
+msgid "Network interface"
+msgstr "网络接口"
+
+
+msgid "New dashboard"
+msgstr "新建仪表盘"
+
+
+msgid "No clients"
+msgstr "暂无终端"
+
+
+msgid "No interface available"
+msgstr "无可用接口"
+
 
 msgid "No Internet connection information is available."
 msgstr "没有可用的互联网连接信息。"
 
+msgid "No matching widgets found."
+msgstr "未找到匹配的组件。"
+
+
 msgid "No network interfaces were found."
 msgstr "未找到网络接口。"
+
+msgid "No network port status information is available."
+msgstr "暂无可用的网口物理状态信息。"
+
+
+msgid "No ports detected"
+msgstr "未检测到物理网口"
+
+
+msgid "No storage mount points were found."
+msgstr "未找到存储挂载点。"
+
+
+msgid "No thermal sensors detected"
+msgstr "未检测到温度传感器"
+
 
 msgid "No wireless clients are connected."
 msgstr "没有已连接的无线客户端。"
@@ -110,32 +535,172 @@ msgstr "没有已连接的无线客户端。"
 msgid "No wireless radios were found."
 msgstr "未找到无线射频。"
 
+msgid "Not available"
+msgstr "不可用"
+
+
 msgid "Offline"
 msgstr "离线"
 
 msgid "Online"
 msgstr "在线"
 
+msgid "Open common LuCI pages"
+msgstr "快速打开常用 LuCI 管理页面"
+
+
+msgid "Optional group subtitle…"
+msgstr "可选分组副标题…"
+
+
+msgid "Pause"
+msgstr "暂停刷新"
+
+
+msgid "Phone"
+msgstr "手机端"
+
+
+msgid "Physical network device carrier status, link speed, and duplex"
+msgstr "物理网口载波状态、协商速率与双工模式"
+
+
+msgid "Port"
+msgstr "端口"
+
+
+msgid "Preview width"
+msgstr "预览视口宽度"
+
+
+msgid "Processes"
+msgstr "系统进程"
+
+
+msgid "Properties"
+msgstr "属性面板"
+
+
 msgid "Protocol"
 msgstr "协议"
+
+msgid "Quick links"
+msgstr "快捷入口"
+
 
 msgid "Radio"
 msgstr "射频"
 
+msgid "Radio status"
+msgstr "射频状态"
+
+
+msgid "Reboot"
+msgstr "重启系统"
+
+
+msgid "Receive and transmit bytes per second"
+msgstr "每秒接收与发送速率"
+
+
+msgid "Receive and transmit throughput history"
+msgstr "接收与发送吞吐量历史曲线"
+
+
 msgid "Received"
 msgstr "已接收"
+
+msgid "Redo"
+msgstr "重做"
+
+
+msgid "Refresh"
+msgstr "立即刷新"
+
+
+msgid "Remove selected and contents"
+msgstr "删除所选项及内部内容"
+
+
+msgid "Rename"
+msgstr "重命名"
+
 
 msgid "Resources"
 msgstr "资源"
 
+msgid "Restore defaults"
+msgstr "恢复默认布局"
+
+
+msgid "Restore draft"
+msgstr "恢复草稿"
+
+
+msgid "Resume"
+msgstr "恢复刷新"
+
+
+msgid "Root canvas"
+msgstr "顶层画布"
+
+
 msgid "Root storage"
 msgstr "根存储"
+
+msgid "Routes"
+msgstr "路由表"
+
 
 msgid "RX / TX Rate"
 msgstr "接收 / 发送速率"
 
+msgid "RX Rate"
+msgstr "接收速率"
+
+
+msgid "Save"
+msgstr "保存布局"
+
+
+msgid "Search rows…"
+msgstr "搜索记录…"
+
+
+msgid "Select tile headers to edit one or more tiles."
+msgstr "点击卡片标题栏可选中一个或多个卡片进行编辑。"
+
+
+msgid "Selected tiles"
+msgstr "已选卡片"
+
+
+msgid "Set as default"
+msgstr "设为默认"
+
+
+msgid "Shared layout saved."
+msgstr "共享仪表盘布局已保存。"
+
+
+msgid "Show"
+msgstr "显示"
+
+
+msgid "Show / hide"
+msgstr "显示 / 隐藏"
+
+
 msgid "Signal"
 msgstr "信号"
+
+msgid "Sort field"
+msgstr "排序字段"
+
+
+msgid "Speed"
+msgstr "协商速率"
+
 
 msgid "SSID"
 msgstr "SSID"
@@ -143,11 +708,31 @@ msgstr "SSID"
 msgid "Status"
 msgstr "状态"
 
+msgid "Strongest Wi-Fi signal"
+msgstr "最强无线信号"
+
+
 msgid "Swap"
 msgstr "交换空间"
 
 msgid "System"
 msgstr "系统"
+
+msgid "System load"
+msgstr "系统负载"
+
+
+msgid "System settings"
+msgstr "系统设置"
+
+
+msgid "System status"
+msgstr "系统状态"
+
+
+msgid "Tablet"
+msgstr "平板端"
+
 
 msgid "Target Platform"
 msgstr "目标平台"
@@ -158,20 +743,118 @@ msgstr "临时存储"
 msgid "There are no active DHCP leases."
 msgstr "没有活动的 DHCP 租约。"
 
+msgid ""
+"This draft belongs to an older revision. It has been exported so you can "
+"review it before importing."
+msgstr "当前草稿基于旧版本生成，已为你自动导出以便核对后再导入。"
+
+
+msgid "Tile size preset"
+msgstr "尺寸预设"
+
+
+msgid "Title"
+msgstr "标题"
+
+
+msgid "Total"
+msgstr "总容量"
+
+
+msgid "Tracked flows"
+msgstr "跟踪连接"
+
+
 msgid "Transmitted"
 msgstr "已发送"
+
+msgid "TX Rate"
+msgstr "发送速率"
+
+
+msgid "Unable to load data. Refresh to retry."
+msgstr "无法加载数据，请刷新重试。"
+
+
+msgid "Undo"
+msgstr "撤销"
+
 
 msgid "Unlimited"
 msgstr "无限制"
 
-msgid "Updated"
-msgstr "更新时间"
+msgid "Unlock"
+msgstr "解锁"
+
+
+msgid "Unsupported widget configuration version."
+msgstr "不支持的组件配置版本。"
+
+
+msgid "Up"
+msgstr "已连接"
+
 
 msgid "Uptime"
 msgstr "运行时间"
 
+msgid "Usage"
+msgstr "使用情况"
+
+
+msgid "Used"
+msgstr "已用"
+
+
+msgid "Used %"
+msgstr "使用率"
+
+
+msgid "Waiting for second sample…"
+msgstr "正在等待第二次采样…"
+
+
+msgid "WAN IPv6 status"
+msgstr "WAN IPv6 状态"
+
+
+msgid "WAN status"
+msgstr "WAN 状态"
+
+
+msgid "Wi-Fi channel"
+msgstr "无线信道"
+
+
+msgid "Wi-Fi radios, SSIDs, operating modes, channels, and encryption"
+msgstr "无线射频、SSID、工作模式、信道与加密方式"
+
+
+msgid "Widget extension unavailable. Configuration has been preserved."
+msgstr "扩展组件暂不可用，原配置已保留。"
+
+
+msgid "Widget library"
+msgstr "组件库"
+
+
+msgid "Widget parameters"
+msgstr "组件参数"
+
+
+msgid "Widget properties"
+msgstr "组件属性"
+
+
 msgid "Wireless"
 msgstr "无线"
 
+msgid "Wireless client count"
+msgstr "无线终端数"
+
+
 msgid "Wireless Clients"
 msgstr "无线客户端"
+
+msgid "Wireless radio"
+msgstr "无线射频"

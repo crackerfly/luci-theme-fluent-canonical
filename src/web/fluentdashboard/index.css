@@ -4,11 +4,7 @@
   --fluent-dashboard-muted: var(--fluent-text-secondary, #3d3d3d);
   --fluent-dashboard-surface: var(--fluent-card-bg, #ffffff);
   --fluent-dashboard-surface-subtle: var(--fluent-bg-secondary, #f2fbff);
-  --fluent-dashboard-shadow: var(
-    --fluent-card-shadow,
-    0 1px 2px rgba(38, 48, 78, 0.04),
-    0 6px 18px rgba(38, 48, 78, 0.06)
-  );
+  --fluent-dashboard-shadow: var(--fluent-card-shadow, 0 1px 2px rgba(38, 48, 78, 0.04), 0 6px 18px rgba(38, 48, 78, 0.06));
   --fluent-dashboard-brand: var(--fluent-btn-primary-bg, #024ad8);
   --fluent-dashboard-brand-hover: var(--fluent-btn-primary-bg-hover, #103fb2);
   --fluent-dashboard-accent: var(--fluent-primary, #024ad8);
@@ -37,11 +33,7 @@
   overflow: hidden;
   color: var(--fluent-dashboard-on-brand);
   position: relative;
-  background: linear-gradient(
-    120deg,
-    var(--fluent-dashboard-brand),
-    var(--fluent-dashboard-brand-hover)
-  );
+  background: linear-gradient(120deg, var(--fluent-dashboard-brand), var(--fluent-dashboard-brand-hover));
   border-radius: var(--fluent-radius-lg, 12px);
   box-shadow: var(--fluent-shadow-brand-button, 0 2px 4px rgba(2, 74, 216, 0.14), 0 8px 18px rgba(2, 74, 216, 0.24));
 }

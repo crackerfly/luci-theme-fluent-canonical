@@ -1,0 +1,965 @@
+/* Canonical v3.2 / v3.5.2 Workbench Styles for luci-mod-fluentdashboard */
+.fluent-dashboard {
+  --dash-card-bg: var(--fluent-card-bg, #ffffff);
+  --dash-card-border: var(--fluent-card-border, transparent);
+  --dash-subtle-bg: var(--fluent-bg-secondary, #f2fbff);
+  --dash-hover-bg: var(--fluent-bg-hover, rgba(133, 133, 133, 0.1));
+  --dash-input-bg: var(--fluent-input-bg, #ffffff);
+  --dash-input-border: var(--fluent-input-border, rgba(37, 44, 69, 0.1));
+  --dash-input-border-hover: var(--fluent-input-border-hover, rgba(37, 44, 69, 0.18));
+  --dash-field-focus-border: var(--fluent-field-focus-border, #024ad8);
+  --dash-field-focus-ring: var(--fluent-field-focus-ring, #e4eefa);
+  --dash-text: var(--fluent-text, #1a1a1a);
+  --dash-text-secondary: var(--fluent-text-secondary, #3d3d3d);
+  --dash-muted: var(--fluent-text-muted, #636363);
+  --dash-border: var(--fluent-border, rgba(37, 44, 69, 0.1));
+  --dash-border-strong: var(--fluent-border-strong, rgba(37, 44, 69, 0.18));
+  --dash-primary: var(--fluent-primary, #024ad8);
+  --dash-accent-text: var(--fluent-accent-text, #024ad8);
+  --dash-accent-soft: var(--fluent-primary-lightest, #e4eefa);
+  --dash-btn-primary-bg: var(--fluent-btn-primary-bg, #024ad8);
+  --dash-btn-primary-hover: var(--fluent-btn-primary-bg-hover, #103fb2);
+  --dash-btn-primary-active: var(--fluent-btn-primary-bg-active, #0e3191);
+  --dash-btn-primary-fg: var(--fluent-text-on-primary, #ffffff);
+  --dash-btn-secondary-bg: var(--fluent-btn-secondary-bg, #ffffff);
+  --dash-btn-secondary-border: var(--fluent-btn-secondary-border, rgba(37, 44, 69, 0.1));
+  --dash-btn-secondary-border-hover: var(--fluent-btn-secondary-border-hover, rgba(37, 44, 69, 0.18));
+  --dash-delete-bg: var(--fluent-delete-bg, #ffe5e0);
+  --dash-delete-fg: var(--fluent-delete-fg, #c92b28);
+  --dash-delete-bg-hover: var(--fluent-delete-bg-hover, #ffcdc4);
+  --dash-delete-fg-hover: var(--fluent-delete-fg-hover, #ae2320);
+  --dash-warning-bg: var(--fluent-warning-light, #ffe9d9);
+  --dash-warning-fg: var(--fluent-warning-text, #602700);
+  --dash-series-rx: var(--fluent-chart-2, #1d4fa8);
+  --dash-series-tx: var(--fluent-chart-3, #0b6473);
+  --dash-gap: 12px;
+  --dash-panel-gap: 16px;
+  --dash-radius: var(--fluent-radius-lg, 12px);
+  --dash-control-radius: var(--fluent-radius-md, 8px);
+  --dash-ease-standard: var(--fluent-easing-standard, cubic-bezier(0.2, 0.8, 0.2, 1));
+  --dash-ease-out: var(--fluent-easing-out-strong, cubic-bezier(0.23, 1, 0.32, 1));
+  color: var(--dash-text);
+}
+
+[data-theme="dark"] .fluent-dashboard {
+  --dash-card-bg: var(--fluent-card-bg, #101622);
+  --dash-card-border: var(--fluent-card-border, rgba(153, 168, 204, 0.14));
+  --dash-subtle-bg: var(--fluent-bg-secondary, #0b0f18);
+  --dash-hover-bg: var(--fluent-bg-hover, rgba(153, 168, 204, 0.1));
+  --dash-input-bg: var(--fluent-input-bg, #141b29);
+  --dash-input-border: var(--fluent-input-border, #69748b);
+  --dash-input-border-hover: var(--fluent-input-border-hover, #8d97ab);
+  --dash-field-focus-border: var(--fluent-field-focus-border, #9058fc);
+  --dash-field-focus-ring: var(--fluent-field-focus-ring, rgba(144, 88, 252, 0.2));
+  --dash-text: var(--fluent-text, #eef1ff);
+  --dash-text-secondary: var(--fluent-text-secondary, #b2bad0);
+  --dash-muted: var(--fluent-text-muted, #8d97ab);
+  --dash-border: var(--fluent-border, rgba(153, 168, 204, 0.14));
+  --dash-border-strong: var(--fluent-border-strong, rgba(153, 168, 204, 0.25));
+  --dash-primary: var(--fluent-primary, #9058fc);
+  --dash-accent-text: var(--fluent-accent-text, #9385ff);
+  --dash-accent-soft: var(--fluent-primary-lightest, rgba(144, 88, 252, 0.16));
+  --dash-btn-primary-bg: var(--fluent-btn-primary-bg, #8a52f2);
+  --dash-btn-primary-hover: var(--fluent-btn-primary-bg-hover, #7d45de);
+  --dash-btn-primary-active: var(--fluent-btn-primary-bg-active, #6f37c9);
+  --dash-btn-primary-fg: var(--fluent-text-on-primary, #ffffff);
+  --dash-btn-secondary-bg: var(--fluent-btn-secondary-bg, #141b29);
+  --dash-btn-secondary-border: var(--fluent-btn-secondary-border, rgba(153, 168, 204, 0.14));
+  --dash-btn-secondary-border-hover: var(--fluent-btn-secondary-border-hover, rgba(153, 168, 204, 0.25));
+  --dash-delete-bg: var(--fluent-delete-bg, rgba(255, 111, 127, 0.12));
+  --dash-delete-fg: var(--fluent-delete-fg, #ff6f7f);
+  --dash-delete-bg-hover: var(--fluent-delete-bg-hover, rgba(255, 111, 127, 0.15));
+  --dash-delete-fg-hover: var(--fluent-delete-fg-hover, #ff6f7f);
+  --dash-warning-bg: var(--fluent-warning-light, rgba(255, 152, 101, 0.12));
+  --dash-warning-fg: var(--fluent-warning-text, #ff9865);
+  --dash-series-rx: var(--fluent-chart-2, #5d8eff);
+  --dash-series-tx: var(--fluent-chart-3, #49d7e7);
+}
+
+/* Topbar & Dashboard Switcher Tabs */
+.fluent-dashboard__topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding-block: 4px 12px;
+  margin-block-end: 12px;
+  border-block-end: 1px solid var(--dash-border);
+}
+
+.fluent-dashboard__brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  min-width: 0;
+}
+
+.fluent-dashboard__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 30px;
+  letter-spacing: -0.02em;
+}
+
+.fluent-dashboard__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.fluent-dashboard__tab {
+  appearance: none;
+  min-height: 36px;
+  background: transparent;
+  color: var(--dash-text-secondary);
+  border: 0;
+  border-radius: var(--dash-control-radius);
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--dash-ease-standard),
+    color 120ms var(--dash-ease-standard),
+    box-shadow 120ms var(--dash-ease-standard);
+}
+
+.fluent-dashboard__tab:focus-visible {
+  outline: 2px solid var(--dash-primary);
+  outline-offset: 2px;
+}
+
+.fluent-dashboard__tab--active {
+  background: var(--dash-accent-soft);
+  color: var(--dash-accent-text);
+  box-shadow: inset 0 0 0 1px var(--dash-primary);
+}
+
+.fluent-dashboard__topbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Edit Mode Toolbar */
+.fluent-dashboard__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  background: var(--dash-card-bg);
+  border: 1px solid var(--dash-card-border);
+  border-radius: var(--dash-radius);
+  padding: 10px 14px;
+  margin: 0 0 var(--dash-panel-gap) 0;
+  box-shadow: var(--fluent-dashboard-shadow);
+}
+
+.fluent-dashboard__toolbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.fluent-dashboard__toolbar-group--end {
+  margin-inline-start: auto;
+}
+
+/* Buttons & Form Controls (Canonical §5.2: 14/20px, constant 400 weight) */
+.fluent-dashboard__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--dash-text);
+  background: var(--dash-btn-secondary-bg);
+  border: 1px solid var(--dash-btn-secondary-border);
+  border-radius: var(--dash-control-radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 120ms var(--dash-ease-standard),
+    border-color 120ms var(--dash-ease-standard),
+    color 120ms var(--dash-ease-standard),
+    transform 120ms var(--dash-ease-out);
+}
+
+.fluent-dashboard__btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.fluent-dashboard__btn:focus-visible {
+  outline: 2px solid var(--dash-primary);
+  outline-offset: 2px;
+}
+
+.fluent-dashboard__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.fluent-dashboard__btn--primary {
+  background: var(--dash-btn-primary-bg);
+  color: var(--dash-btn-primary-fg);
+  border-color: transparent;
+}
+
+.fluent-dashboard__btn--primary:active:not(:disabled) {
+  background: var(--dash-btn-primary-active);
+  color: var(--dash-btn-primary-fg);
+}
+
+.fluent-dashboard__btn--active {
+  background: var(--dash-accent-soft);
+  color: var(--dash-accent-text);
+  border-color: var(--dash-primary);
+}
+
+.fluent-dashboard__btn--danger {
+  background: var(--dash-delete-bg);
+  color: var(--dash-delete-fg);
+  border-color: transparent;
+}
+
+.fluent-dashboard__btn--warning {
+  background: var(--dash-warning-bg);
+  color: var(--dash-warning-fg);
+  border-color: transparent;
+}
+
+.fluent-dashboard__btn--subtle {
+  background: transparent;
+  border-color: transparent;
+  color: var(--dash-text-secondary);
+}
+
+.fluent-dashboard__btn--block {
+  width: 100%;
+}
+
+.fluent-dashboard__select,
+.fluent-dashboard__input {
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--dash-text);
+  background: var(--dash-input-bg);
+  border: 1px solid var(--dash-input-border);
+  border-radius: var(--dash-control-radius);
+  transition:
+    border-color 120ms var(--dash-ease-standard),
+    box-shadow 120ms var(--dash-ease-standard);
+}
+
+/* Global editable-field focus recipe (Canonical §5.0.2 MUST) */
+.fluent-dashboard__select:focus,
+.fluent-dashboard__input:focus {
+  outline: none;
+  border-color: var(--dash-field-focus-border);
+  box-shadow: 0 0 0 3px var(--dash-field-focus-ring);
+}
+
+/* Status Notice */
+.fluent-dashboard__notice {
+  margin: 0 0 var(--dash-panel-gap) 0;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--dash-text);
+  background: var(--dash-accent-soft);
+  border: 0;
+  border-radius: var(--dash-control-radius);
+}
+
+.fluent-dashboard__notice:empty {
+  display: none;
+}
+
+/* Workspace Layout */
+.fluent-dashboard__workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--dash-panel-gap);
+  align-items: start;
+}
+
+.fluent-dashboard__canvas {
+  min-width: 0;
+  min-height: 224px;
+}
+
+/* Side Panels (Library & Properties) */
+.fluent-dashboard__library,
+.fluent-dashboard__properties {
+  min-width: 0;
+  margin: 0;
+  background: var(--dash-card-bg);
+  border: 1px solid var(--dash-card-border);
+  border-radius: var(--dash-radius);
+  padding: 14px;
+  box-shadow: var(--fluent-dashboard-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fluent-dashboard__panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-block-end: 8px;
+  border-block-end: 1px solid var(--dash-border);
+}
+
+.fluent-dashboard__panel-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.fluent-dashboard__library-search > .fluent-dashboard__input {
+  width: 100%;
+}
+
+.fluent-dashboard__library-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 62vh;
+  padding-inline-end: 2px;
+}
+
+@supports (max-height: 100dvh) {
+  .fluent-dashboard__library-list {
+    max-height: 62dvh;
+  }
+}
+
+.fluent-dashboard__category {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: var(--dash-control-radius);
+  background: var(--dash-subtle-bg);
+  overflow: hidden;
+}
+
+.fluent-dashboard__category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.fluent-dashboard__category-header::-webkit-details-marker {
+  display: none;
+}
+
+.fluent-dashboard__category-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 8px 8px;
+  border-block-start: 1px solid var(--dash-border);
+  background: var(--dash-card-bg);
+}
+
+.fluent-dashboard__palette-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 8px 10px;
+  text-align: start;
+  color: var(--dash-text);
+  background: var(--dash-subtle-bg);
+  border: 1px solid transparent;
+  border-radius: var(--dash-control-radius);
+  cursor: pointer;
+  transition:
+    border-color 120ms var(--dash-ease-standard),
+    background-color 120ms var(--dash-ease-standard),
+    transform 120ms var(--dash-ease-out);
+}
+
+.fluent-dashboard__palette-item:active {
+  transform: scale(0.985);
+}
+
+.fluent-dashboard__palette-item:focus-visible {
+  outline: 2px solid var(--dash-primary);
+  outline-offset: 2px;
+}
+
+.fluent-dashboard__palette-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.fluent-dashboard__palette-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.fluent-dashboard__palette-item-desc {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--dash-muted);
+  line-height: 18px;
+}
+
+/* Badges (Canonical §8.9: border: 0, min-height 22px, 12/18px, 400 weight) */
+.fluent-dashboard__badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 2px 8px;
+  border: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  border-radius: 9999px;
+  color: var(--dash-accent-text);
+  background: var(--dash-accent-soft);
+  white-space: nowrap;
+  flex: none;
+}
+
+.fluent-dashboard__badge--muted,
+.fluent-dashboard__badge--count {
+  color: var(--dash-muted);
+  background: var(--dash-subtle-bg);
+}
+
+/* Inspector Controls */
+.fluent-dashboard__inspector-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.fluent-dashboard__inspector-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-block-start: 10px;
+  border-block-start: 1px solid var(--dash-border);
+}
+
+.fluent-dashboard__panel-header + .fluent-dashboard__inspector-section,
+.fluent-dashboard__inspector-meta + .fluent-dashboard__inspector-section {
+  padding-block-start: 4px;
+  border-block-start: 0;
+}
+
+.fluent-dashboard__section-title {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--dash-muted);
+}
+
+.fluent-dashboard__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+}
+
+.fluent-dashboard__field-label {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--dash-text-secondary);
+}
+
+.fluent-dashboard__field > .fluent-dashboard__input,
+.fluent-dashboard__field > .fluent-dashboard__select {
+  width: 100%;
+}
+
+.fluent-dashboard__checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fluent-dashboard__multiselect {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: var(--dash-subtle-bg);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-control-radius);
+  max-height: 176px;
+  overflow-y: auto;
+}
+
+.fluent-dashboard__preset-bar,
+.fluent-dashboard__button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fluent-dashboard__inspector-hint,
+.fluent-dashboard__empty-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--dash-muted);
+  line-height: 18px;
+}
+
+/* Cards & Grid Tiles */
+.fluent-dashboard .grid-stack-item-content > .fluent-dashboard__card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition:
+    border-color 140ms var(--dash-ease-standard),
+    box-shadow 140ms var(--dash-ease-standard);
+}
+
+.fluent-dashboard__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex: none;
+  min-height: 40px;
+  padding-inline-end: 8px;
+  border-block-end: 1px solid var(--dash-border);
+}
+
+.fluent-dashboard__card-header:focus-visible {
+  outline: 2px solid var(--dash-primary);
+  outline-offset: -2px;
+}
+
+.fluent-dashboard__card-header .fluent-dashboard__card-title {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  padding: 10px 8px 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fluent-dashboard__card-header .fluent-dashboard__card-title::before {
+  inset-block: auto;
+  top: 50%;
+  inset-inline-start: 10px;
+  height: 16px;
+  transform: translateY(-50%);
+  background: var(--dash-primary);
+}
+
+.fluent-dashboard__card-actions,
+.fluent-dashboard__card-badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+
+.fluent-dashboard__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--dash-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--dash-control-radius);
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--dash-ease-standard),
+    color 120ms var(--dash-ease-standard),
+    transform 120ms var(--dash-ease-out);
+}
+
+.fluent-dashboard__icon-btn:active {
+  transform: scale(0.97);
+}
+
+.fluent-dashboard__icon-btn:focus-visible {
+  outline: 2px solid var(--dash-primary);
+  outline-offset: 2px;
+}
+
+.fluent-dashboard__card-content {
+  overflow: auto;
+  min-height: 0;
+  flex: 1;
+}
+
+.fluent-dashboard__table th,
+.fluent-dashboard__table td {
+  white-space: nowrap;
+}
+
+.fluent-dashboard__widget-status {
+  margin: 0;
+  padding: 6px var(--dash-gap);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dash-muted);
+  border-block-end: 1px solid var(--dash-border);
+}
+
+.fluent-dashboard__card--editing .fluent-dashboard__card-header {
+  cursor: grab;
+}
+
+.fluent-dashboard__card--editing .fluent-dashboard__card-header:active {
+  cursor: grabbing;
+}
+
+.fluent-dashboard__card--hidden {
+  opacity: 0.52;
+}
+
+.fluent-dashboard__card--locked .fluent-dashboard__card-header {
+  cursor: default;
+}
+
+/* Groups */
+.fluent-dashboard__group {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--dash-card-border);
+  border-radius: var(--dash-radius);
+  background: var(--dash-card-bg);
+  box-shadow: var(--fluent-dashboard-shadow);
+}
+
+.fluent-dashboard__tile--selected > .grid-stack-item-content > .fluent-dashboard__card,
+.fluent-dashboard__tile--selected > .grid-stack-item-content > .fluent-dashboard__group {
+  border-color: var(--dash-primary);
+  box-shadow:
+    0 0 0 2px var(--dash-accent-soft),
+    var(--fluent-dashboard-shadow);
+}
+
+.fluent-dashboard__group-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.fluent-dashboard__group-description {
+  margin: 0;
+  padding: 6px 16px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dash-muted);
+  border-block-end: 1px solid var(--dash-border);
+}
+
+.fluent-dashboard__group-body {
+  min-height: 80px;
+  flex: 1;
+}
+
+/* Metrics, Traffic & Shortcuts */
+.fluent-dashboard__metric,
+.fluent-dashboard__traffic {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  padding: var(--dash-gap);
+  overflow: auto;
+}
+
+.fluent-dashboard__metric-value {
+  font-size: clamp(20px, 1.6vw, 28px);
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.fluent-dashboard__metric-detail {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dash-muted);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* Canonical §8.11.5: borderless tonal progress reset */
+.fluent-dashboard__metric progress {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--fluent-progress-bg, var(--dash-subtle-bg));
+  overflow: hidden;
+}
+
+.fluent-dashboard__metric progress::-webkit-progress-bar {
+  background: var(--fluent-progress-bg, var(--dash-subtle-bg));
+  border: 0;
+  border-radius: 9999px;
+}
+
+.fluent-dashboard__metric progress::-webkit-progress-value {
+  background: var(--fluent-progress-bar-bg, var(--dash-primary));
+  border: 0;
+  border-radius: 9999px;
+}
+
+.fluent-dashboard__metric progress::-moz-progress-bar {
+  background: var(--fluent-progress-bar-bg, var(--dash-primary));
+  border: 0;
+  border-radius: 9999px;
+}
+
+.fluent-dashboard__traffic svg {
+  width: 100%;
+  height: 72px;
+  min-height: 32px;
+  background: var(--dash-subtle-bg);
+  border-radius: var(--dash-control-radius);
+}
+
+.fluent-dashboard__traffic polyline {
+  fill: none;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.fluent-dashboard__traffic-rx {
+  stroke: var(--dash-series-rx);
+}
+
+.fluent-dashboard__traffic-tx {
+  stroke: var(--dash-series-tx);
+}
+
+.fluent-dashboard__shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: var(--dash-gap);
+}
+
+.fluent-dashboard__shortcuts a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  background: var(--dash-subtle-bg);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-control-radius);
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--dash-text);
+  text-decoration: none;
+  transition:
+    border-color 120ms var(--dash-ease-standard),
+    background-color 120ms var(--dash-ease-standard),
+    color 120ms var(--dash-ease-standard);
+}
+
+.fluent-dashboard__shortcuts a:focus-visible {
+  outline: 2px solid var(--dash-primary);
+  outline-offset: 2px;
+}
+
+.fluent-dashboard [hidden],
+.fluent-dashboard__workspace > [hidden] {
+  display: none;
+}
+
+.fluent-dashboard .grid-stack-item-content {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.fluent-dashboard__canvas .grid-stack-item > .grid-stack-item-content {
+  overflow: visible;
+}
+
+.fluent-dashboard__group-body.grid-stack {
+  min-width: 0;
+  width: 100%;
+}
+
+.fluent-dashboard__workspace--editing .fluent-dashboard__canvas > .grid-stack-item {
+  touch-action: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fluent-dashboard__tab:not(.fluent-dashboard__tab--active):hover {
+    background: var(--dash-hover-bg);
+    color: var(--dash-text);
+  }
+
+  .fluent-dashboard__btn:hover:not(:disabled) {
+    background: var(--dash-hover-bg);
+    border-color: var(--dash-btn-secondary-border-hover);
+  }
+
+  .fluent-dashboard__btn--primary:hover:not(:disabled) {
+    background: var(--dash-btn-primary-hover);
+    border-color: transparent;
+    color: var(--dash-btn-primary-fg);
+  }
+
+  .fluent-dashboard__btn--danger:hover:not(:disabled) {
+    background: var(--dash-delete-bg-hover);
+    color: var(--dash-delete-fg-hover);
+    border-color: transparent;
+  }
+
+  .fluent-dashboard__btn--subtle:hover:not(:disabled) {
+    background: var(--dash-hover-bg);
+    border-color: transparent;
+    color: var(--dash-text);
+  }
+
+  .fluent-dashboard__select:hover,
+  .fluent-dashboard__input:hover {
+    border-color: var(--dash-input-border-hover);
+  }
+
+  .fluent-dashboard__palette-item:hover {
+    background: var(--dash-hover-bg);
+    border-color: var(--dash-primary);
+  }
+
+  .fluent-dashboard__icon-btn:hover {
+    background: var(--dash-hover-bg);
+    color: var(--dash-text);
+  }
+
+  .fluent-dashboard__shortcuts a:hover {
+    background: var(--dash-hover-bg);
+    border-color: var(--dash-primary);
+    color: var(--dash-accent-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fluent-dashboard__tab,
+  .fluent-dashboard__btn,
+  .fluent-dashboard__select,
+  .fluent-dashboard__input,
+  .fluent-dashboard__palette-item,
+  .fluent-dashboard__icon-btn,
+  .fluent-dashboard__shortcuts a,
+  .fluent-dashboard .grid-stack-item-content > .fluent-dashboard__card {
+    transition: none;
+  }
+
+  .fluent-dashboard__btn:active:not(:disabled),
+  .fluent-dashboard__palette-item:active,
+  .fluent-dashboard__icon-btn:active {
+    transform: none;
+  }
+}
+
+@media (pointer: coarse), (max-width: 767px) {
+  .fluent-dashboard__tab,
+  .fluent-dashboard__btn,
+  .fluent-dashboard__shortcuts a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .fluent-dashboard__icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .fluent-dashboard__select,
+  .fluent-dashboard__input {
+    min-height: 44px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1180px) {
+  .fluent-dashboard__workspace--editing {
+    grid-template-columns: 256px minmax(0, 1fr) 288px;
+  }
+
+  .fluent-dashboard__workspace--editing.fluent-dashboard__workspace--no-library {
+    grid-template-columns: minmax(0, 1fr) 288px;
+  }
+
+  .fluent-dashboard__workspace--editing.fluent-dashboard__workspace--no-properties {
+    grid-template-columns: 256px minmax(0, 1fr);
+  }
+
+  .fluent-dashboard__workspace--editing.fluent-dashboard__workspace--no-library.fluent-dashboard__workspace--no-properties {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fluent-dashboard__library,
+  .fluent-dashboard__properties {
+    position: sticky;
+    top: 12px;
+    max-height: calc(100vh - 88px);
+    overflow-y: auto;
+  }
+
+  @supports (max-height: 100dvh) {
+    .fluent-dashboard__library,
+    .fluent-dashboard__properties {
+      max-height: calc(100dvh - 88px);
+    }
+  }
+}

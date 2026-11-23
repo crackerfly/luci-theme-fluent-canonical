@@ -4,9 +4,18 @@
 		"read": {
 			"ubus": {
 				"iwinfo": [ "assoclist" ],
-				"luci": [ "getVersion" ],
+				"luci": [ "getVersion", "getMountPoints" ],
 				"luci-rpc": [ "getDHCPLeases" ],
+				"luci.fluentdashboard": [ "load", "metrics" ],
 				"system": [ "board", "info" ]
+			}
+		}
+	},
+	"luci-mod-fluentdashboard-edit": {
+		"description": "Grant permission to publish the shared Fluent dashboard layout",
+		"write": {
+			"ubus": {
+				"luci.fluentdashboard": [ "save" ]
 			}
 		}
 	}

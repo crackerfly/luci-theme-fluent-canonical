@@ -8,12 +8,9 @@ const pkg = "package/luci-mod-fluentdashboard";
 config.localDistPaths = [
   resolve(pkg, "htdocs/luci-static/resources/view/fluentdashboard"),
   resolve(pkg, "root/usr/share/luci/menu.d"),
+  resolve(pkg, "root/usr/share/rpcd/ucode"),
   resolve(pkg, "root/usr/share/rpcd/acl.d"),
 ];
-config.remotePaths = [
-  "/www/luci-static/resources/view/fluentdashboard",
-  "/usr/share/luci/menu.d",
-  "/usr/share/rpcd/acl.d",
-];
+config.remotePaths = ["/www/luci-static/resources/view/fluentdashboard", "/usr/share/luci/menu.d", "/usr/share/rpcd/ucode", "/usr/share/rpcd/acl.d"];
 
 await devRemote(config);

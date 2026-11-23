@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: luci-mod-fluentdashboard\n"
-"POT-Creation-Date: 2026-08-24 00:20+0800\n"
+"POT-Creation-Date: 2026-11-23 19:25+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -11,25 +11,199 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "A live overview of this OpenWrt device."
+msgid "1 / 5 / 15 minutes"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Active connections"
 msgstr ""
 
 msgid "Active DHCP Leases"
 msgstr ""
 
+msgid "Active interfaces"
+msgstr ""
+
+msgid "Active Wi-Fi networks"
+msgstr ""
+
+msgid "Add group"
+msgstr ""
+
 msgid "Address"
+msgstr ""
+
+msgid "All network interfaces, devices, addresses, and traffic counters"
+msgstr ""
+
+msgid "All ports down"
 msgstr ""
 
 msgid "Architecture"
 msgstr ""
 
+msgid "Arrangement & actions"
+msgstr ""
+
+msgid "Associated Wi-Fi stations, signal strength, and PHY rates"
+msgstr ""
+
+msgid "Automatic (first interface)"
+msgstr ""
+
+msgid "Automatic (first radio)"
+msgstr ""
+
+msgid "Automatic width"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Available memory"
+msgstr ""
+
+msgid "Average Wi-Fi signal"
+msgstr ""
+
+msgid "Broadcast SSIDs"
+msgstr ""
+
+msgid "Browser draft storage is unavailable. Export your changes before leaving."
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
 msgid "Channel"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "clients"
+msgstr ""
+
+msgid "Clients"
+msgstr ""
+
+msgid "Collapse"
+msgstr ""
+
+msgid "Collapse / expand"
+msgstr ""
+
+msgid "Connected DHCPv4 and DHCPv6 client leases and expiry times"
+msgstr ""
+
+msgid "Connected Ethernet ports"
+msgstr ""
+
+msgid "Connected network interfaces"
+msgstr ""
+
+msgid "Connection tracking"
+msgstr ""
+
+msgid "Container group"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "CPU / SoC temperature"
+msgstr ""
+
+msgid "Cumulative counters"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "Dashboard name"
+msgstr ""
+
+msgid "Dashboard settings"
+msgstr ""
+
+msgid "Data is stale or unavailable."
+msgstr ""
+
+msgid "Data is stale. Refresh to retry."
+msgstr ""
+
+msgid "Default collapsed / expanded"
+msgstr ""
+
+msgid "Default dashboard"
+msgstr ""
+
+msgid "Default order"
+msgstr ""
+
+msgid "Delete dashboard"
+msgstr ""
+
+msgid "Descending"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Desktop"
 msgstr ""
 
 msgid "Device"
 msgstr ""
 
+msgid "Device name"
+msgstr ""
+
+msgid "DHCP and DNS"
+msgstr ""
+
+msgid "DHCP lease count"
+msgstr ""
+
+msgid "Diagnostics"
+msgstr ""
+
+msgid "Disk Mount Points"
+msgstr ""
+
+msgid "Displayed shortcuts"
+msgstr ""
+
+msgid "Dissolve and keep contents"
+msgstr ""
+
+msgid "Down"
+msgstr ""
+
+msgid "Duplex"
+msgstr ""
+
+msgid "Duplicate dashboard"
+msgstr ""
+
+msgid "Duplicate tile"
+msgstr ""
+
+msgid "Earlier"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
 msgid "Encryption"
+msgstr ""
+
+msgid "Ethernet Port Status"
+msgstr ""
+
+msgid "Expand"
 msgstr ""
 
 msgid "Expired"
@@ -38,7 +212,25 @@ msgstr ""
 msgid "Expires"
 msgstr ""
 
+msgid "Export"
+msgstr ""
+
 msgid "Family"
+msgstr ""
+
+msgid "Filesystem mount points, capacity, used percentage, and free space"
+msgstr ""
+
+msgid "Filter text"
+msgstr ""
+
+msgid "Filter widgets…"
+msgstr ""
+
+msgid "Firewall"
+msgstr ""
+
+msgid "Firmware"
 msgstr ""
 
 msgid "Firmware Version"
@@ -47,7 +239,37 @@ msgstr ""
 msgid "Fluent Dashboard"
 msgstr ""
 
+msgid "Full (12 col)"
+msgstr ""
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "Fullscreen is unavailable."
+msgstr ""
+
 msgid "Gateway"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "Group properties"
+msgstr ""
+
+msgid "Group width"
+msgstr ""
+
+msgid "Half (6 col)"
+msgstr ""
+
+msgid "Hardware model, firmware, kernel, uptime, and load overview"
+msgstr ""
+
+msgid "Hidden"
+msgstr ""
+
+msgid "History samples (10–120)"
 msgstr ""
 
 msgid "Host"
@@ -56,7 +278,28 @@ msgstr ""
 msgid "Hostname"
 msgstr ""
 
+msgid "Import"
+msgstr ""
+
 msgid "Interface"
+msgstr ""
+
+msgid "Interface address"
+msgstr ""
+
+msgid "Interface bytes"
+msgstr ""
+
+msgid "Interface gateway"
+msgstr ""
+
+msgid "Interface protocol"
+msgstr ""
+
+msgid "Interface status"
+msgstr ""
+
+msgid "Interface uptime"
 msgstr ""
 
 msgid "Interfaces"
@@ -65,13 +308,46 @@ msgstr ""
 msgid "Internet"
 msgstr ""
 
+msgid "Invalid widget configuration."
+msgstr ""
+
+msgid "IPv4 and IPv6 WAN upstream connectivity and gateways"
+msgstr ""
+
+msgid "IPv4 lease count"
+msgstr ""
+
+msgid "IPv6 lease count"
+msgstr ""
+
+msgid "Kernel"
+msgstr ""
+
 msgid "Kernel Version"
+msgstr ""
+
+msgid "Later"
+msgstr ""
+
+msgid "Layout file is too large."
+msgstr ""
+
+msgid "Live traffic trend"
 msgstr ""
 
 msgid "Load Average"
 msgstr ""
 
+msgid "Loading…"
+msgstr ""
+
 msgid "Local Time"
+msgstr ""
+
+msgid "Lock / unlock"
+msgstr ""
+
+msgid "Locked"
 msgstr ""
 
 msgid "LuCI Version"
@@ -83,10 +359,16 @@ msgstr ""
 msgid "MAC address"
 msgstr ""
 
+msgid "Maximum rows"
+msgstr ""
+
 msgid "Mbit/s"
 msgstr ""
 
 msgid "Memory"
+msgstr ""
+
+msgid "Memory, swap, root, and temporary storage utilization bars"
 msgstr ""
 
 msgid "Mode"
@@ -95,13 +377,49 @@ msgstr ""
 msgid "Model"
 msgstr ""
 
+msgid "Mount Point"
+msgstr ""
+
+msgid "Move to group"
+msgstr ""
+
+msgid "Navigation"
+msgstr ""
+
 msgid "Network"
+msgstr ""
+
+msgid "Network interface"
+msgstr ""
+
+msgid "New dashboard"
+msgstr ""
+
+msgid "No clients"
+msgstr ""
+
+msgid "No interface available"
 msgstr ""
 
 msgid "No Internet connection information is available."
 msgstr ""
 
+msgid "No matching widgets found."
+msgstr ""
+
 msgid "No network interfaces were found."
+msgstr ""
+
+msgid "No network port status information is available."
+msgstr ""
+
+msgid "No ports detected"
+msgstr ""
+
+msgid "No storage mount points were found."
+msgstr ""
+
+msgid "No thermal sensors detected"
 msgstr ""
 
 msgid "No wireless clients are connected."
@@ -110,31 +428,136 @@ msgstr ""
 msgid "No wireless radios were found."
 msgstr ""
 
+msgid "Not available"
+msgstr ""
+
 msgid "Offline"
 msgstr ""
 
 msgid "Online"
 msgstr ""
 
+msgid "Open common LuCI pages"
+msgstr ""
+
+msgid "Optional group subtitle…"
+msgstr ""
+
+msgid "Pause"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Physical network device carrier status, link speed, and duplex"
+msgstr ""
+
+msgid "Port"
+msgstr ""
+
+msgid "Preview width"
+msgstr ""
+
+msgid "Processes"
+msgstr ""
+
+msgid "Properties"
+msgstr ""
+
 msgid "Protocol"
+msgstr ""
+
+msgid "Quick links"
 msgstr ""
 
 msgid "Radio"
 msgstr ""
 
+msgid "Radio status"
+msgstr ""
+
+msgid "Reboot"
+msgstr ""
+
+msgid "Receive and transmit bytes per second"
+msgstr ""
+
+msgid "Receive and transmit throughput history"
+msgstr ""
+
 msgid "Received"
+msgstr ""
+
+msgid "Redo"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Remove selected and contents"
+msgstr ""
+
+msgid "Rename"
 msgstr ""
 
 msgid "Resources"
 msgstr ""
 
+msgid "Restore defaults"
+msgstr ""
+
+msgid "Restore draft"
+msgstr ""
+
+msgid "Resume"
+msgstr ""
+
+msgid "Root canvas"
+msgstr ""
+
 msgid "Root storage"
+msgstr ""
+
+msgid "Routes"
 msgstr ""
 
 msgid "RX / TX Rate"
 msgstr ""
 
+msgid "RX Rate"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Search rows…"
+msgstr ""
+
+msgid "Select tile headers to edit one or more tiles."
+msgstr ""
+
+msgid "Selected tiles"
+msgstr ""
+
+msgid "Set as default"
+msgstr ""
+
+msgid "Shared layout saved."
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Show / hide"
+msgstr ""
+
 msgid "Signal"
+msgstr ""
+
+msgid "Sort field"
+msgstr ""
+
+msgid "Speed"
 msgstr ""
 
 msgid "SSID"
@@ -143,10 +566,25 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+msgid "Strongest Wi-Fi signal"
+msgstr ""
+
 msgid "Swap"
 msgstr ""
 
 msgid "System"
+msgstr ""
+
+msgid "System load"
+msgstr ""
+
+msgid "System settings"
+msgstr ""
+
+msgid "System status"
+msgstr ""
+
+msgid "Tablet"
 msgstr ""
 
 msgid "Target Platform"
@@ -158,20 +596,94 @@ msgstr ""
 msgid "There are no active DHCP leases."
 msgstr ""
 
+msgid ""
+"This draft belongs to an older revision. It has been exported so you can "
+"review it before importing."
+msgstr ""
+
+msgid "Tile size preset"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "Tracked flows"
+msgstr ""
+
 msgid "Transmitted"
+msgstr ""
+
+msgid "TX Rate"
+msgstr ""
+
+msgid "Unable to load data. Refresh to retry."
+msgstr ""
+
+msgid "Undo"
 msgstr ""
 
 msgid "Unlimited"
 msgstr ""
 
-msgid "Updated"
+msgid "Unlock"
+msgstr ""
+
+msgid "Unsupported widget configuration version."
+msgstr ""
+
+msgid "Up"
 msgstr ""
 
 msgid "Uptime"
 msgstr ""
 
+msgid "Usage"
+msgstr ""
+
+msgid "Used"
+msgstr ""
+
+msgid "Used %"
+msgstr ""
+
+msgid "Waiting for second sample…"
+msgstr ""
+
+msgid "WAN IPv6 status"
+msgstr ""
+
+msgid "WAN status"
+msgstr ""
+
+msgid "Wi-Fi channel"
+msgstr ""
+
+msgid "Wi-Fi radios, SSIDs, operating modes, channels, and encryption"
+msgstr ""
+
+msgid "Widget extension unavailable. Configuration has been preserved."
+msgstr ""
+
+msgid "Widget library"
+msgstr ""
+
+msgid "Widget parameters"
+msgstr ""
+
+msgid "Widget properties"
+msgstr ""
+
 msgid "Wireless"
 msgstr ""
 
+msgid "Wireless client count"
+msgstr ""
+
 msgid "Wireless Clients"
+msgstr ""
+
+msgid "Wireless radio"
 msgstr ""
